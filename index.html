@@ -1,0 +1,3055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disciple Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="stylesheet" href="style_hyb.css">
+	<!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+   
+	<style>
+       
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+		/* Styles du header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-links-desktop {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #667eea;
+        }
+        .nav-link.active {
+            font-weight: 600;
+            color: #2563eb;
+        }
+        
+        /* Menu mobile */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links-mobile {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+        .nav-links-mobile a {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-links-mobile a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop, .auth-buttons-desktop {
+                display: none;
+            }
+            .hamburger-menu {
+                display: flex;
+            }
+            .nav-container {
+                padding: 1rem;
+            }
+            .nav-links-mobile.open {
+                display: flex;
+            }
+        }
+
+.page-section {
+    flex: 1;
+}
+       /* Styles pour l'authentification */
+        .auth-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-form {
+            display: block;
+        }
+        
+        .auth-form.hidden {
+            display: none;
+        }
+        
+        .auth-form-toggle-btn {
+            color: #667eea;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .auth-form-toggle-btn:hover {
+            text-decoration: underline;
+        }
+        
+        .social-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .social-login-btn:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        
+        /* Notification styles */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.success {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+        
+        .notification.error {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+        
+        .notification.info {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+        
+        /* Password toggle */
+        .password-field {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+        
+        .password-toggle:hover {
+            color: #333;
+        }
+        
+        /* Error states */
+        .form-input.error {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+        
+        .form-input.success {
+            border-color: #27ae60;
+            background: #f0fff4;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            font-size: 13px;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+        }
+        
+        .error-message.show {
+            display: block;
+        }
+        
+        /* Loading state */
+        .auth-btn.loading {
+            color: transparent;
+            position: relative;
+        }
+        
+        .auth-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+		footer{position:; background: #012450 !important;}
+		.footer-section {
+							margin-left: 10px;
+							margin-right: 10px;
+											}
+		
+		footer .footer-section h3{ color: #FF3300 !important;}
+		footer .footer-section ul li a {
+			color: white !important;
+		}
+		
+		footer .footer-section ul li a:hover {
+			color: #93c5fd !important; /* Une variante de bleu clair pour le hover */
+		}
+		#home {
+			padding-top: 3rem; /* Ajustez cette valeur selon vos besoins */
+		}
+		
+		@media (min-width: 640px) {
+			#home {
+				padding-top: 4rem;
+			}
+		}
+		/* Ajustements responsive pour le décalage */
+		@media (min-width: 640px) {
+			.hero-section {
+				padding-top: 5rem; /* 80px */
+			}
+		}
+		@media (min-width: 768px) {
+			.hero-section {
+				padding-top: 6rem; /* 96px */
+			}
+		}
+		@media (min-width: 1024px) {
+			.hero-section {
+				padding-top: 7rem; /* 112px */
+			}
+		}
+/* Styles personnalisés */
+   /* Styles généraux */
+        #testimonials {
+            background-color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Bordure bleue floutée */
+        .top-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #3b82f6;
+            filter: blur(4px);
+            z-index: 10;
+        }
+
+        /* Conteneur principal */
+        .testimonials-container {
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        /* Piste de défilement */
+        .testimonials-track {
+            display: flex;
+            width: max-content;
+            animation: scroll 40s linear infinite;
+            gap: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        /* Animation de défilement */
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 1.5rem)); }
+        }
+
+        .testimonials-track:hover {
+            animation-play-state: paused;
+        }
+
+        /* Carte de témoignage */
+        .testimonial-card {
+            width: 288px; /* 18rem */
+            flex-shrink: 0;
+            background: #1e293b;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            position: relative;
+            height: 380px;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Conteneur d'image */
+        .image-container {
+            width: 100%;
+            height: 224px; /* 14rem */
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Image du témoin */
+        .testimonial-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.3s ease;
+        }
+
+        /* Info basique */
+        .testimonial-info {
+            padding: 1rem;
+            background: #1e293b;
+        }
+
+        .testimonial-info h3 {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-info p {
+            color: #93c5fd;
+            font-size: 0.875rem;
+        }
+
+        /* Contenu au survol */
+        .testimonial-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(7, 47, 95, 0.95);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .testimonial-card:hover .testimonial-content {
+            opacity: 1;
+        }
+
+        .testimonial-content p:first-child {
+            font-style: italic;
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-content h3 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .testimonial-content .location {
+            color: #93c5fd;
+            font-size: 0.875rem;
+        }
+
+        /* Titre section */
+        .section-title {
+            color: white;
+            font-size: 2.25rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+		section {
+    width: 100%; /* Prend toute la largeur */
+    padding: 20px 0%; /* Marge intérieure: 20px en haut/bas, 10% à gauche/droite */
+    box-sizing: border-box; /* Inclut le padding dans la largeur totale */
+}
+
+/* Style spécifique pour la section "Training Center" */
+.training-center {
+    flex-grow: 1; /* Prend tout l'espace disponible restant */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre le contenu verticalement */
+}
+
+/* Style pour la navigation */
+nav {
+    padding: 10px 10%; /* Mêmes marges latérales que les sections */
+    width: 100%;
+    box-sizing: border-box;
+}
+/* Styles existants... */
+/* Ajoutez ceci à votre CSS */
+
+#statistics {
+    padding: 40px 10%;
+    background-color: #f5f5f5;
+	color:black !important;
+}
+
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+	color:black;
+}
+
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin: 10px 0;
+}
+#stats-impact {
+    margin: 4rem auto;
+    padding: 2rem 1rem;
+}
+
+
+.stat-card {
+    transition: all 0.3s ease;
+	color: black !important;
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.25);
+	color: #FF3300 !important;
+}
+.stat-card:hover p{
+    
+	color: #333333 !important;
+}
+
+/* Bordures colorées */
+.border-orange-500 { border-color: #f97316; }
+.border-blue-500 { border-color: #3b82f6; }
+.border-red-500 { border-color: #ef4444; }
+
+/* Effet de survol */
+.stat-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 768px) {
+    #stats-impact {
+        padding: 3rem 2rem;
+    }
+}
+
+.star-field {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+    .star {
+        position: absolute;
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 3s infinite alternate;
+    }
+    .star:nth-child(2n) {
+        animation-delay: 0.5s;
+    }
+    .star:nth-child(3n) {
+        animation-delay: 1s;
+    }
+    .star:nth-child(4n) {
+        animation-delay: 1.5s;
+    }
+    @keyframes twinkle {
+        0% { opacity: 0.3; }
+        100% { opacity: 1; }
+    }
+	 
+	 /* Specific styles for Home section background */
+        #home {
+            background: linear-gradient(to bottom, #1a202c, #2d3748); /* Dark gradient */
+            position: relative;
+            overflow: hidden;
+            color: white;
+        }
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><rect width="100%" height="100%" fill="%231a202c"/></svg>') no-repeat center center/cover;
+            opacity: 0.3; /* Opacity for subtle effect */
+            z-index: 0;
+        }
+        #home .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+		/* Styles pour le conteneur vidéo */
+.video-player-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+/* Cache l'overlay quand la vidéo est en lecture */
+.video-playing #video-overlay {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Ajuste la taille de la vidéo pour qu'elle s'adapte au conteneur */
+video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+/* Style Chat AI*/
+ /* Styles pour la section AI Chatbot */
+ 
+    #ai-chatbot {
+        width: 100%;
+        max-width: 100%; /* Largeur réduite */
+		margin: 2rem auto;
+        background: #001F3E;
+        border-radius: 10px;
+        padding: 5px;
+    }
+
+    #ai-chatbot > div {
+        height: 400px; /* Hauteur fixe */
+        display: flex;
+        flex-direction: column;
+		max-width: 600px;
+    }
+
+    .chat-container {
+        height: 100%;
+        position: absolute;
+    }
+
+    #botpress-webchat {
+        width: 100% !important;
+        height: 100% !important;
+        border: none !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 10;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .initial-message {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 5;
+        background: linear-gradient(to bottom right, #f8fafc, #e0f2fe);
+        padding: 1.5rem;
+        overflow-y: auto;
+        border-radius: 0 0 10px 10px;
+    }
+
+    /* Ajustement de l'en-tête */
+    #ai-chatbot .bg-gradient-to-r {
+        border-radius: 10px 10px 0 0;
+    }
+
+    /* Ajustement de la zone de saisie */
+    #chat-input-area {
+        border-radius: 0 0 10px 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        #ai-chatbot {
+            margin: 1rem auto;
+            max-width: 95%;
+        }
+        
+        #ai-chatbot > div {
+            height: 500px;
+        }
+    }
+	.form-input, select{
+    color: #000000 !important; /* Force le texte en noir */
+}
+
+.form-input::placeholder {
+    color: #666 !important; /* Placeholder en gris foncé */
+}
+
+ </style>
+        
+ <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Duplication dynamique des témoignages pour boucle fluide
+            const track = document.querySelector('.testimonials-track');
+            const cards = document.querySelectorAll('.testimonial-card');
+            const container = document.querySelector('.testimonials-container');
+            
+            // Calcul du nombre de clones nécessaires
+            const containerWidth = container.offsetWidth;
+            const cardWidth = cards[0].offsetWidth + 24; // 24px pour le gap
+            const visibleCards = Math.ceil(containerWidth / cardWidth) + 1;
+            
+            // Duplication des premiers éléments
+            for (let i = 0; i < visibleCards && i < cards.length; i++) {
+                const clone = cards[i].cloneNode(true);
+                track.appendChild(clone);
+            }
+        });
+ </script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body class="bg-gradient-to-br from-gray-900 via-purple-900 to-gray-800 text-gray-100 min-h-screen flex flex-col">
+
+   <header>
+        <div class="nav-container">
+            <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+            
+            <!-- Menu de navigation pour grand écran -->
+            <ul class="nav-links-desktop">
+                <li><a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a></li>
+                <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a></li>
+                <li><a href="courses-all.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a></li>
+                <li><a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a></li>
+                <li><a href="#stats-impact" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a></li>
+                <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a></li>
+                <li><a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a></li>
+                <li><a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a></li>
+            </ul>
+
+            <!-- Boutons d'authentification pour grand écran -->
+            <div class="auth-buttons-desktop flex space-x-4">
+                <a href="#register-form" id="show-register-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+				
+                <a href="#auth-interface" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+            </div>
+
+            <!-- Menu hamburger pour mobile -->
+            <div class="hamburger-menu" onClick="toggleMobileMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+        <!-- Menu de navigation pour mobile (initiallement caché) -->
+        <div class="nav-links-mobile">
+            <a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a>
+            <a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a>
+            <a href="courses-all.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a>
+            <a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a>
+            <a href="#stats-impact" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a>
+            <a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a>
+            <a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+            <a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a>
+            <div class="flex flex-col mt-4">
+                <a href="#" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-full text-center mb-2">Sign Up</a>
+                <a href="#" class="text-blue-600 font-bold text-center py-2">Login</a>
+            </div>
+        </div>
+    </header>
+
+	 <main class="flex-grow"> <!-- Ajout d'un conteneur principal -->
+    	<section id="home" class="page-section active relative min-h-screen flex items-center justify-center text-center py-16 px-4 sm:px-6 lg:px-8">
+			<div class="content-wrapper max-w-7xl mx-auto">
+				<div class="hero-section mb-16 pt-10">
+					<h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight mb-4 text-white drop-shadow-lg">
+						Connect, Grow, Impact: Your Faith Journey Powered by AI.</h1>
+					<p class="text-base sm:text-lg lg:text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+						Discover a unique space where technology meets spirituality to transform lives and expand the Kingdom.                </p>
+					<a href="login.html" class="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-opacity-75">
+						Start Your Journey                </a>
+					<div class="absolute bottom-4 right-4 bg-blue-700 p-3 rounded-full shadow-lg cursor-pointer hover:scale-110 transition-transform duration-300">
+						<svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+					</div>
+				</div>
+	
+				<div class="grid md:grid-cols-3 gap-8 mb-20 text-gray-100">
+					
+		<!-- Our Vision - Violet avec caméra orange -->
+		<div class="bg-purple-500 bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300 border border-purple-400 border-opacity-30">
+			<div class="flex justify-center mb-4">
+				<svg class="w-12 h-12 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+				</svg>
+			</div>
+			<h3 class="text-2xl font-bold mb-3 text-purple-100">Our Vision</h3>
+			<p class="text-purple-200">A world transformed by faith, amplified<br>by artificial intelligence to touch every<br>heart.</p>
+		</div>
+	
+	   <!-- Our Mission - Vert avec flèche bleue -->
+		<div class="bg-green-500 bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300 border border-green-400 border-opacity-30">
+			<div class="flex justify-center mb-4">
+				<svg class="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+				</svg>
+			</div>
+			<h3 class="text-2xl font-bold mb-3 text-green-100">Our Mission</h3>
+			<p class="text-green-200">Equipping believers and reaching non-believers<br>through innovative digital tools.</p>
+		</div>
+	
+		<!-- Our Impact - Bleu avec barres violettes -->
+		<div class="bg-blue-500 bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300 border border-blue-400 border-opacity-30">
+			<div class="flex justify-center mb-4">
+				<svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+				</svg>
+			</div>
+			<h3 class="text-2xl font-bold mb-3 text-blue-100">Our Impact</h3>
+			<p class="text-blue-200">Measuring the spiritual growth and<br>missionary impact of our community.</p>
+		</div>
+			</div>
+		</section>	
+		<!-- Testemonies-->
+		<!-- Section Témoignages Version Finale Améliorée -->
+
+<section id="testimonials" class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="top-border"></div>
+        <div class="max-w-7xl mx-auto">
+            <h2 class="section-title">What They Say About Us</h2>
+            
+            <div class="testimonials-container">
+                <div class="testimonials-track">
+                    <!-- Témoignage 1 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Pasteur Samuel" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Pasteur Samuel</h3>
+                            <p>Leader Spirituel</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Cette plateforme a révolutionné notre approche de l'évangélisation numérique."</p>
+                            <h3>Pasteur Samuel</h3>
+                            <p class="location">Lomé, Togo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 2 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Dr. Aminata" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Dr. Aminata</h3>
+                            <p>Médecin</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"L'IA m'a aidée à concilier science et foi d'une manière inattendue."</p>
+                            <h3>Dr. Aminata</h3>
+                            <p class="location">Abidjan, Côte d'Ivoire</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 3 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Ingénieur Kwame" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Ingénieur Kwame</h3>
+                            <p>Développeur</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Je mets maintenant mes compétences techniques au service de l'Évangile."</p>
+                            <h3>Ingénieur Kwame</h3>
+                            <p class="location">Accra, Ghana</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 4 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Mme Konaté" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Mme Konaté</h3>
+                            <p>Entrepreneuse</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Ma vision d'entreprise a complètement changé après avoir suivi le parcours Disciple Maker."</p>
+                            <h3>Mme Konaté</h3>
+                            <p class="location">Ouagadougou, Burkina Faso</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 5 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Dr. Sow" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Dr. Sow</h3>
+                            <p>Chirurgien</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Je recommande ces formations à tous mes collègues, quelle que soit leur confession."</p>
+                            <h3>Dr. Sow</h3>
+                            <p class="location">Dakar, Sénégal</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 6 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1583864697784-a0efc8379f70?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Pasteur Traoré" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Pasteur Traoré</h3>
+                            <p>Leader religieux</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Nos églises ont été revitalisées grâce aux outils pratiques de Disciple Maker."</p>
+                            <h3>Pasteur Traoré</h3>
+                            <p class="location">Bamako, Mali</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Duplication des témoignages pour boucle fluide -->
+                    <!-- Témoignage 1 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1562788869-4ed32648eb72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Pasteur Samuel" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Pasteur Samuel</h3>
+                            <p>Leader Spirituel</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"Cette plateforme a révolutionné notre approche de l'évangélisation numérique."</p>
+                            <h3>Pasteur Samuel</h3>
+                            <p class="location">Lomé, Togo</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Témoignage 2 -->
+                    <div class="testimonial-card">
+                        <div class="image-container">
+                            <img src="https://images.unsplash.com/photo-1589156280159-27698a70f29e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                                 alt="Dr. Aminata" 
+                                 class="testimonial-image">
+                        </div>
+                        <div class="testimonial-info">
+                            <h3>Dr. Aminata</h3>
+                            <p>Médecin</p>
+                        </div>
+                        <div class="testimonial-content">
+                            <p>"L'IA m'a aidée à concilier science et foi d'une manière inattendue."</p>
+                            <h3>Dr. Aminata</h3>
+                            <p class="location">Abidjan, Côte d'Ivoire</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+           
+			
+	<!-- Section des Étapes -->
+   <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-900">
+    <div class="mb-20 max-w-4xl mx-auto">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-white">The Journey: Simple and Inspiring</h2>
+        <div class="relative flex flex-col items-center">
+            <div class="absolute h-full w-1 bg-blue-500 rounded-full left-1/2 transform -translate-x-1/2"></div>
+
+            <!-- Étape 1 - Vert -->
+            <div class="flex items-center w-full mb-12 relative">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="p-6 bg-green-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">1. Enter</h3>
+                        <p class="text-gray-300">The gateway to your journey of faith and discovery.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pl-8 flex items-center">
+                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🚪</div>
+                </div>
+            </div>
+
+            <!-- Étape 2 - Orange -->
+            <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                <div class="w-1/2 pl-8 text-left">
+                    <div class="p-6 bg-orange-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">2. Greeted by AI</h3>
+                        <p class="text-gray-300">Your intelligent guide is here to orient you and answer your questions.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pr-8 flex items-center justify-end">
+                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🤖</div>
+                </div>
+            </div>
+
+            <!-- Étape 3 - Bleu -->
+            <div class="flex items-center w-full mb-12 relative">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="p-6 bg-blue-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">3. Discover Jesus</h3>
+                        <p class="text-gray-300">A simple and interactive story of the Gospel for everyone.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pl-8 flex items-center">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">✝️</div>
+                </div>
+            </div>
+
+            <!-- Étape 4 - Jaune -->
+            <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                <div class="w-1/2 pl-8 text-left">
+                    <div class="p-6 bg-yellow-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">4. Get Trained</h3>
+                        <p class="text-gray-300">Interactive courses to grow in your faith and skills.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pr-8 flex items-center justify-end">
+                    <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🎓</div>
+                </div>
+            </div>
+
+            <!-- Étape 5 - Violet -->
+            <div class="flex items-center w-full mb-12 relative">
+                <div class="w-1/2 pr-8 text-right">
+                    <div class="p-6 bg-purple-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">5. Take Action</h3>
+                        <p class="text-gray-300">Put your faith into action and use technology for mission.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pl-8 flex items-center">
+                    <div class="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">💡</div>
+                </div>
+            </div>
+
+            <!-- Étape 6 - Rouge -->
+            <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                <div class="w-1/2 pl-8 text-left">
+                    <div class="p-6 bg-red-500 bg-opacity-15 rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                        <h3 class="text-2xl font-bold text-white mb-2">6. Inspire Others</h3>
+                        <p class="text-gray-300">Share your impact and motivate the community.</p>
+                    </div>
+                </div>
+                <div class="w-1/2 pr-8 flex items-center justify-end">
+                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">✨</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Section training -->
+<section id="lms" class="page-section bg-gray-50 py-8 px-4 sm:px-6 lg:px-8 training-center" style="display: block;">
+    <div class="max-w-7xl mx-auto">
+        <div class="section-header mb-8">
+            <h2 class="text-blue-800 text-2xl font-bold">Training Center: Grow in Your Faith</h2>
+            <p class="text-gray-700 mt-2">Access interactive courses and discover our programs designed to equip you in your walk with Christ.</p>
+        </div>
+
+        <div class="course-catalog">
+            <h2 class="text-2xl font-bold text-center text-blue-800 mb-8">Course Catalog</h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cours 1 - Discover -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1532012197267-da84d127e765?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Discover the Meaning of Your Life" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Discover the Meaning of Your Life</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Explore your identity in Christ and the unique plan God has for you.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 4h 30min</span>
+                            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300 start-course-btn" data-course-id="discovery" data-course-url="courses/discovery/course-dis.html" >
+                                Start Course
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 2 - Bible Study -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">In-depth Bible Study</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Dive into the Scriptures with analysis and understanding tools.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 8h 00min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300 start-course-btn" data-course-id="bible-study" data-course-name="In-depth Bible Study">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 3 - Digital Evangelism -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Digital Evangelism" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Digital Evangelism</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Learn to share your faith effectively online.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 5h 15min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 4 - Discipleship Training -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Discipleship Training" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Discipleship Training</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Learn the essential principles for making disciples and developing leaders in your community.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 6h 20min</span>
+                            <a href="login.html?courseId=discipleship-training&redirect=orientation-form.html" class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+								Start Course
+							</a>
+                        </div>
+                    </div>
+				</div>
+
+                <!-- Cours 5 - Christian Leadership -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Christian Leadership" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Christian Leadership</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Develop your spiritual leadership skills and learn to serve effectively in God's work.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 7h 10min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 6 - Mission and Evangelism -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Mission and Evangelism" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Mission and Evangelism</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Equip yourself to share the Gospel and take part in the Great Commission in your context.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 5h 45min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 7 - Personalized Mentorship -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Personalized Mentorship" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Personalized Mentorship</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Benefit from one-on-one guidance with experienced mentors in the faith.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 10h 00min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 8 - Recognized Certification -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1561089489-f13d5e730d72?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Recognized Certification" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Recognized Certification</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Earn recognized certifications that validate your training and acquired skills.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 12h 00min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cours 9 - Destiny -->
+                <div class="course-card bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 border-4 border-orange-500">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1519070994522-88c6b756330e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Destiny" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <!--<div class="text-blue-600 text-2xl mb-3">
+                            <i class="fas fa-star"></i>
+                        </div>-->
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Destiny</h3>
+                        <p class="text-gray-600 mb-3 text-sm">Discover how to discern God's perfect will and walk in His glorious destiny for your spiritual life.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-500 text-xs"><i class="fas fa-clock mr-1"></i> 9h 30min</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded-full text-xs font-medium transition-colors duration-300">
+                                Start Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+					<div class="text-center mt-8">
+						<a href="courses-all.html" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 text-sm">
+							View All Courses
+						</a>
+					</div>
+				</div>
+			</div> <!-- Fermeture manquante ajoutée -->
+		  </div> <!-- Fermeture manquante ajoutée -->
+        </section>
+		
+	
+	 <!-- Nouvelle section Statistics & Impact visible sur la page d'accueil -->
+	 <!-- Remplacer la section actuelle #stats-impact par ce code -->
+	<section id="stats-impact" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-100 rounded-xl mx-4 sm:mx-8 lg:mx-16">
+   
+    <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl sm:text-4xl font-bold text-gray-800 mb-4">Statistics & Impact</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Track your personal progress and discover our collective impact</p>
+        </div>
+
+       <div class="grid md:grid-cols-3 gap-8">
+            <!-- Carte 1 - Certificats (Bordure orange) -->
+            <div class="stat-card bg-white rounded-xl shadow-lg p-6 text-center border-t-4 border-orange-500">
+                <i class="fas fa-graduation-cap text-orange-500 text-4xl mb-4"></i>
+                <h4 class="text-xl font-semibold mb-2">Total Certificates Awarded</h4>
+                <p class="text-gray-800 text-4xl font-bold">583</p>
+                <p class="text-gray-500 text-sm">Completed by our community</p>
+            </div>
+        
+        <!-- Carte 2 - Personnes atteintes (Bordure bleue) -->
+            <div class="stat-card bg-white rounded-xl shadow-lg p-6 text-center border-t-4 border-blue-500">
+                <i class="fas fa-users text-blue-500 text-4xl mb-4"></i>
+                <h4 class="text-xl font-semibold mb-2">People Reached</h4>
+                <p class="text-gray-800 text-4xl font-bold">1,265</p>
+                <p class="text-gray-500 text-sm">(via shares, discussions)</p>
+            </div>
+            
+            <!-- Carte 3 - Croissance spirituelle (Bordure verte) -->
+            <div class="stat-card bg-white rounded-xl shadow-lg p-6 text-center border-t-4 border-green-500">
+                <i class="fas fa-heart text-green-500 text-4xl mb-4"></i>
+                <h4 class="text-xl font-semibold mb-2">Spiritual Growth</h4>
+                <p class="text-gray-800 text-4xl font-bold">Excellent</p>
+                <p class="text-gray-500 text-sm">(based on self-assessment)</p>
+		</div>
+    </div>
+<!--</div> -->
+
+
+	<!-- Global Impact (Example for Admin/Leadership) -->
+		<div class="mb-16">    
+			<div class="mt-8 text-center">
+				<a href="login.html?redirect=statistique.html" 
+				   class="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+					View Overview
+				</a>
+			</div>
+		</div>
+	</section> <!-- Fin Section Statistique -->
+
+<!-- Section AI -->
+    <!-- Section chat AI -->
+<!-- Section chat AI -->
+<section id="ai-chatbot" class="page-section py-16 px-4 sm:px-6 lg:px-8" style="max-height: !important;">
+    
+
+        <!-- Conteneur pour Botpress Webchat -->
+        <div class="flex-1 overflow-hidden relative chat-container">
+            <!-- Message initial -->
+            
+            
+            <!-- Botpress sera injecté ici -->
+            <div id="botpress-webchat">
+				<iframe style="border: none;" srcdoc="<body><script src='https://cdn.botpress.cloud/webchat/v0/inject.js'></script>
+           <script>
+              window.botpressWebChat.init({
+                  'composerPlaceholder': 'Your concerns',
+                  'botConversationDescription': 'This cat is built by Disciple Maker',
+                  'botName': 'Disciple Maker',
+                  'botId': '2a07efd8-63d8-4960-bc5b-3e7f84397f79',
+                  'hostUrl': 'https://cdn.botpress.cloud/webchat/v0',
+                  'messagingUrl': 'https://messaging.botpress.cloud',
+                  'clientId': '2a07efd8-63d8-4960-bc5b-3e7f84397f79',
+                  'enableConversationDeletion': true,
+                  'showPoweredBy': false,
+                  'className': 'webchatIframe',
+                  'containerWidth': '100%25',
+                  'layoutWidth': '100%25',
+                  'hideWidget': true,
+                  'showCloseButton': true,
+                  'disableAnimations': true,
+                  'closeOnEscape': false,
+                  'showConversationsButton': false,
+                  'enableTranscriptDownload': false,
+                  'stylesheet':'https://webchat-styler-css.botpress.app/prod/code/242c85cb-5949-472f-bdcb-e11eeb42b21b/v38412/style.css'
+              });
+            window.botpressWebChat.onEvent(function () { window.botpressWebChat.sendEvent({ type: 'show' }) }, ['LIFECYCLE.LOADED']);
+            </script></body>" width="100%" height="100%"></iframe>
+			</div>
+        </div>
+
+        <!-- Zone de saisie améliorée -->
+        
+            
+        </div>
+    </div>
+</section>
+
+   
+
+    
+	<!-- Section authentification -->
+<section id="auth-interface" class="page-section py-16 px-4 sm:px-6 lg:px-8">
+    <div class="auth-container">
+        <h2 class="text-3xl font-extrabold text-blue-800 mb-8">Welcome!</h2>
+
+        <div id="login-form" class="auth-form">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Log in to Your Account</h3>
+            <form id="loginForm" class="space-y-5">
+                <div>
+                    <label for="login-email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                    <input type="email" id="email" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com" required>
+                    <div class="error-message" id="login-email-error"></div>
+                </div>
+                <div class="password-field">
+                    <label for="login-password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="password" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your password" required>
+                    <button type="button" class="password-toggle" onClick="togglePassword('password')">👁️</button>
+                    <div class="error-message" id="login-password-error"></div>
+                </div>
+                <div class="flex justify-between items-center text-sm">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="remember-me" class="ml-2 text-gray-600">Remember me</label>
+                    </div>
+                    <a href="#" class="text-blue-600 hover:underline" onClick="forgotPassword()">Forgot password?</a>
+                </div>
+                <button type="submit" class="auth-btn w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105" id="login-btn">
+                    Log In
+                </button>
+            </form>
+            <div class="mt-6 text-gray-600">
+                Don't have an account yet?
+                <a href="#register-form" id="show-register-btn" class="auth-form-toggle-btn ml-2">Sign Up</a>
+				
+            </div>
+            <div class="relative flex items-center justify-center my-8">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative bg-white px-4 text-sm text-gray-500">Or log in with</div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button class="social-login-btn" onClick="loginWithGoogle()">
+                    <i class="fab fa-google text-xl mr-2"></i> Google
+                </button>
+                <button class="social-login-btn" onClick="loginWithLinkedIn()">
+                    <i class="fab fa-linkedin text-xl mr-2"></i> LinkedIn
+                </button>
+            </div>
+        </div>
+
+        <div id="register-form" class="auth-form hidden">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">Create Your Account</h3>
+            <form id="registerForm" class="space-y-5">
+                <div>
+                    <label for="register-name" class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                    <input type="text" id="register-name" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your full name" required>
+                    <div class="error-message" id="register-name-error"></div>
+                </div>
+                <div>
+                    <label for="register-email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                    <input type="email" id="register-email" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com" required>
+                    <div class="error-message" id="register-email-error"></div>
+                </div>
+                <div class="password-field">
+                    <label for="register-password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                    <input type="password" id="register-password" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Create a password (min 6 chars)" required>
+                    <button type="button" class="password-toggle" onClick="togglePassword('register-password')">👁️</button>
+                    <div class="error-message" id="register-password-error"></div>
+                </div>
+                <div class="password-field">
+                    <label for="confirm-password" class="block text-gray-700 text-sm font-bold mb-2">Confirm Password</label>
+                    <input type="password" id="confirm-password" class="form-input w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Confirm your password" required>
+                    <button type="button" class="password-toggle" onClick="togglePassword('confirm-password')">👁️</button>
+                    <div class="error-message" id="confirm-password-error"></div>
+                </div>
+                <div>
+                    <label for="user-role" class="block text-gray-700 text-sm font-bold mb-2">I am:</label>
+                    <select id="user-role" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="seeker">A truth seeker</option>
+                        <option value="believer">A believer who wants to grow</option>
+                        <option value="it-expert">An IT expert who wants to serve</option>
+                    </select>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="terms" required class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                    <label for="terms" class="ml-2 text-gray-600 text-sm">
+                        I accept the <a href="#" class="text-blue-600 hover:underline">terms of use</a> and 
+                        <a href="#" class="text-blue-600 hover:underline">privacy policy</a>
+                    </label>
+                </div>
+                <button type="submit" class="auth-btn w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105" id="register-btn">
+                    Create Account
+                </button>
+            </form>
+            <div class="mt-6 text-gray-600">
+                Already have an account?
+                <button id="show-login-btn" class="auth-form-toggle-btn ml-2">Log In</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script type="module">
+// Import Firebase SDKs
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { 
+    getAuth, 
+    signInWithEmailAndPassword, 
+    createUserWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    sendPasswordResetEmail,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+// Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCwO2PtRkrbmlIs8QOX_71a6NYBR_FhZc8",
+    authDomain: "disciple-maker.firebaseapp.com",
+    projectId: "disciple-maker",
+    storageBucket: "disciple-maker.firebasestorage.app",
+    messagingSenderId: "202105691136",
+    appId: "1:202105691136:web:9e27bb1d909dd89cba4ce5",
+    measurementId: "G-VBCV8SH3S0"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = firebaseConfig.projectId;
+
+// DOM Elements
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const showLoginBtn = document.getElementById('show-login-btn');
+const showRegisterBtn = document.getElementById('show-register-btn');
+const loginBtn = document.getElementById('login-btn');
+const registerBtn = document.getElementById('register-btn');
+
+// Toggle between login and register forms
+showLoginBtn.addEventListener('click', () => toggleAuthForms(true));
+showRegisterBtn.addEventListener('click', () => toggleAuthForms(false));
+
+function toggleAuthForms(showLogin) {
+    if (showLogin) {
+        document.getElementById('login-form').classList.remove('hidden');
+        document.getElementById('register-form').classList.add('hidden');
+    } else {
+        document.getElementById('login-form').classList.add('hidden');
+        document.getElementById('register-form').classList.remove('hidden');
+    }
+}
+
+// Toggle password visibility
+function togglePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const toggleBtn = field.nextElementSibling;
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        toggleBtn.textContent = '🙈';
+    } else {
+        field.type = 'password';
+        toggleBtn.textContent = '👁️';
+    }
+}
+
+// Handle login form submission
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('remember-me').checked;
+    
+    if (!validateLoginForm(email, password)) return;
+    
+    loginBtn.classList.add('loading');
+    loginBtn.disabled = true;
+    
+    try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Store user info in localStorage
+        localStorage.setItem('userUID', user.uid);
+        localStorage.setItem('userEmail', user.email);
+        
+        showNotification('Login successful! Redirecting...', 'success');
+        
+        // Redirect to appropriate page
+        setTimeout(() => {
+            window.location.href = 'courses-all.html';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Login error:', error);
+        handleAuthError(error, 'login');
+    } finally {
+        loginBtn.classList.remove('loading');
+        loginBtn.disabled = false;
+    }
+});
+
+// Handle registration form submission
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const name = document.getElementById('register-name').value.trim();
+    const email = document.getElementById('register-email').value.trim().toLowerCase();
+    const password = document.getElementById('register-password').value;
+    const confirmPassword = document.getElementById('confirm-password').value;
+    const role = document.getElementById('user-role').value;
+    const termsAccepted = document.getElementById('terms').checked;
+    
+    if (!validateRegisterForm(name, email, password, confirmPassword, termsAccepted)) return;
+    
+    registerBtn.classList.add('loading');
+    registerBtn.disabled = true;
+    
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        
+        // Update user profile with name
+        await updateProfile(user, { displayName: name });
+        
+        // Create user profile in Firestore
+        const userProfileRef = doc(db, `artifacts/${appId}/users/${user.uid}/profile`, 'details');
+        await setDoc(userProfileRef, {
+            firstName: name.split(' ')[0],
+            lastName: name.split(' ').slice(1).join(' ') || '',
+            email: email,
+            role: role,
+            registrationDate: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
+            profileCompleted: false
+        });
+        
+        // Store user info in localStorage
+        localStorage.setItem('userUID', user.uid);
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userFirstName', name.split(' ')[0]);
+        localStorage.setItem('userLastName', name.split(' ').slice(1).join(' ') || '');
+        
+        showNotification('Registration successful! Redirecting to complete your profile...', 'success');
+        
+        // Redirect to profile completion
+        setTimeout(() => {
+            window.location.href = 'courses-all.html';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Registration error:', error);
+        handleAuthError(error, 'register');
+    } finally {
+        registerBtn.classList.remove('loading');
+        registerBtn.disabled = false;
+    }
+});
+
+// Google login
+window.loginWithGoogle = async function() {
+    try {
+        const provider = new GoogleAuthProvider();
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        
+        // Check if user profile exists, create if not
+        const userProfileRef = doc(db, `artifacts/${appId}/users/${user.uid}/profile`, 'details');
+        
+        // Store user info in localStorage
+        localStorage.setItem('userUID', user.uid);
+        localStorage.setItem('userEmail', user.email);
+        localStorage.setItem('userFirstName', user.displayName ? user.displayName.split(' ')[0] : '');
+        localStorage.setItem('userLastName', user.displayName ? user.displayName.split(' ').slice(1).join(' ') : '');
+        
+        showNotification('Google login successful! Redirecting...', 'success');
+        
+        setTimeout(() => {
+            window.location.href = 'courses-all.html';
+        }, 1500);
+        
+    } catch (error) {
+        console.error('Google login error:', error);
+        handleAuthError(error, 'google');
+    }
+};
+
+// LinkedIn login (placeholder - requires backend setup)
+window.loginWithLinkedIn = function() {
+    showNotification('LinkedIn authentication requires additional backend configuration.', 'info');
+};
+
+// Forgot password
+window.forgotPassword = async function() {
+    const email = document.getElementById('email').value.trim();
+    
+    if (!email || !isValidEmail(email)) {
+        showNotification('Please enter a valid email address to reset password.', 'error');
+        return;
+    }
+    
+    try {
+        await sendPasswordResetEmail(auth, email);
+        showNotification('A password reset email has been sent to your address.', 'success');
+    } catch (error) {
+        console.error('Password reset error:', error);
+        handleAuthError(error, 'reset');
+    }
+};
+
+// Form validation functions
+function validateLoginForm(email, password) {
+    let isValid = true;
+    
+    if (!email) {
+        showFieldError('email', 'Email is required');
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        showFieldError('email', 'Invalid email format');
+        isValid = false;
+    } else {
+        clearFieldError('email');
+    }
+    
+    if (!password) {
+        showFieldError('password', 'Password is required');
+        isValid = false;
+    } else {
+        clearFieldError('password');
+    }
+    
+    return isValid;
+}
+
+function validateRegisterForm(name, email, password, confirmPassword, termsAccepted) {
+    let isValid = true;
+    
+    if (!name) {
+        showFieldError('register-name', 'Full name is required');
+        isValid = false;
+    } else {
+        clearFieldError('register-name');
+    }
+    
+    if (!email) {
+        showFieldError('register-email', 'Email is required');
+        isValid = false;
+    } else if (!isValidEmail(email)) {
+        showFieldError('register-email', 'Invalid email format');
+        isValid = false;
+    } else {
+        clearFieldError('register-email');
+    }
+    
+    if (!password) {
+        showFieldError('register-password', 'Password is required');
+        isValid = false;
+    } else if (password.length < 6) {
+        showFieldError('register-password', 'Password must be at least 6 characters');
+        isValid = false;
+    } else {
+        clearFieldError('register-password');
+    }
+    
+    if (!confirmPassword) {
+        showFieldError('confirm-password', 'Please confirm your password');
+        isValid = false;
+    } else if (password !== confirmPassword) {
+        showFieldError('confirm-password', 'Passwords do not match');
+        isValid = false;
+    } else {
+        clearFieldError('confirm-password');
+    }
+    
+    if (!termsAccepted) {
+        showNotification('You must accept the terms and conditions', 'error');
+        isValid = false;
+    }
+    
+    return isValid;
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function showFieldError(fieldId, message) {
+    const errorDiv = document.getElementById(fieldId + '-error');
+    if (errorDiv) {
+        errorDiv.textContent = message;
+        errorDiv.classList.add('show');
+    }
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.add('error');
+        field.classList.remove('success');
+    }
+}
+
+function clearFieldError(fieldId) {
+    const errorDiv = document.getElementById(fieldId + '-error');
+    if (errorDiv) {
+        errorDiv.classList.remove('show');
+    }
+    const field = document.getElementById(fieldId);
+    if (field) {
+        field.classList.remove('error');
+        field.classList.add('success');
+    }
+}
+
+function handleAuthError(error, context) {
+    let errorMessage = 'An error occurred. Please try again.';
+    
+    switch (error.code) {
+        case 'auth/invalid-email':
+            errorMessage = 'Invalid email address format.';
+            break;
+        case 'auth/user-disabled':
+            errorMessage = 'This account has been disabled.';
+            break;
+        case 'auth/user-not-found':
+            errorMessage = 'No account found with this email.';
+            break;
+        case 'auth/wrong-password':
+            errorMessage = 'Incorrect password.';
+            break;
+        case 'auth/email-already-in-use':
+            errorMessage = 'This email is already registered.';
+            break;
+        case 'auth/weak-password':
+            errorMessage = 'Password is too weak. Use at least 6 characters.';
+            break;
+        case 'auth/operation-not-allowed':
+            errorMessage = 'This operation is not allowed.';
+            break;
+        case 'auth/too-many-requests':
+            errorMessage = 'Too many attempts. Please try again later.';
+            break;
+        default:
+            errorMessage = error.message || 'Authentication failed. Please try again.';
+    }
+    
+    showNotification(errorMessage, 'error');
+}
+
+function showNotification(message, type = 'info') {
+    // Create notification element if it doesn't exist
+    let notification = document.querySelector('.notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.className = 'notification';
+        document.body.appendChild(notification);
+    }
+    
+    notification.textContent = message;
+    notification.className = `notification ${type} show`;
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 5000);
+}
+</script>
+</main> <!-- Fermeture du conteneur principal -->
+	 <!-- Footer from index.html -->
+    <!-- Footer Section -->
+	
+	
+<footer class="bg-gray-100 w-full py-12 border-t border-gray-200 mt-auto" style="background:#001F3E !important;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+            <!-- LEARN Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">LEARN</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                </ul>
+            </div>
+            
+            <!-- TRAINING Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">TRAINING</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                </ul>
+            </div>
+            
+            <!-- CERTIFICATION Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">CERTIFICATION</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                </ul>
+            </div>
+            
+            <!-- RESOURCES Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">RESOURCES</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                </ul>
+            </div>
+            
+            <!-- PLANS Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">PLANS</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tarification</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Institutions</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discounts & Promotions</a></li>
+                </ul>
+            </div>
+            
+			
+            <!-- ABOUT Column -->
+            <div class="footer-section ">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">ABOUT</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Careers</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Press</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+            <p class="text-gray-600">&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Floating Chat Button bottom right -->
+    <button class="fixed bottom-6 right-6 bg-[var(--accent-color)] text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 z-50 chat-logo-spin">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+    </button>
+  
+    <script>
+		
+		document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const codiscovLinks = document.querySelectorAll('a[href*="course-dis"]');
+    codiscovLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'course-dis.html';
+        });
+    });
+});	
+		document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const discoverLinks = document.querySelectorAll('a[href*="discover"]');
+    discoverLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'discover.html';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const expertLinks = document.querySelectorAll('a[href*="expert"]');
+    expertLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'expert.html';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const forumLinks = document.querySelectorAll('a[href*="forum"]');
+    forumLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'forum.html';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const libraryLinks = document.querySelectorAll('a[href*="library"]');
+    libraryLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'library.html';
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    // Corriger les liens Discover Jesus
+    const contactLinks = document.querySelectorAll('a[href*="contact"]');
+    contactLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = 'contact.html';
+        });
+    });
+});
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+
+            // Simulate user journey data
+            const userJourney = {
+                profile: 'seeker', // Can be 'seeker', 'believer', 'it-expert'
+                completedModules: [], // e.g., ['Foundations of Christian Faith - Module 1']
+                earnedBadges: [], // e.g., ['Journey Pioneer']
+                askedQuestions: [],
+                lastInteractionSection: 'home',
+                lastLessonCompleted: null,
+                lastActivityTime: Date.now()
+            };
+
+            // Function to display a specific section and mark the active navigation link
+            const showSection = (targetId, formTarget = null) => {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    // Scroll to top of the section, accounting for fixed nav
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 64, // 64px is nav height
+                        behavior: 'smooth'
+                    });
+
+                    // Update active navigation link
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-link');
+                    });
+                    const activeNavLink = document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                    if (activeNavLink) {
+                        activeNavLink.classList.add('active-link');
+                    }
+
+                    // If the section is the authentication interface, manage form display
+                    if (targetId === 'auth-interface') {
+                        if (formTarget === 'register-form') {
+                            toggleAuthForms(false); // Show registration form
+                        } else {
+                            toggleAuthForms(true); // Show login form by default
+                        }
+                    }
+                    userJourney.lastInteractionSection = targetId; // Update last interacted section
+                }
+            };
+
+            // Handle clicks on navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    const formTarget = link.getAttribute('data-form-target'); // Get data-form-target
+                    showSection(targetId, formTarget); // Pass formTarget to showSection
+                });
+            });
+
+            // Handle initial page state (display 'home' section by default or based on hash)
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash)) {
+                // If a hash is present and valid, display it
+                const initialNavLink = document.querySelector(`.nav-link[data-target="${initialHash}"]`);
+                const initialFormTarget = initialNavLink ? initialNavLink.getAttribute('data-form-target') : null;
+                showSection(initialHash, initialFormTarget);
+            } else {
+                // Otherwise, display the home page by default
+                showSection('home');
+            }
+            // Ensure the initial navigation link is marked as active on page load
+            const currentActiveSection = Array.from(pageSections).find(section => section.classList.contains('active'));
+            if (currentActiveSection) {
+                const initialActiveNavLink = document.querySelector(`.nav-link[data-target="${currentActiveSection.id}"]`);
+                if (initialActiveNavLink) {
+                    initialActiveNavLink.classList.add('active-link');
+                }
+            }
+
+            // Handle accordion for "Discover Jesus" section
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.accordion-icon');
+
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180'); // Rotates the icon
+                });
+            });
+
+            // Handle tabs for "AI Assistant & Forum" section
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Deactivate all buttons and hide all content
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-blue-700', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    });
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.classList.add('hidden');
+                    });
+
+                    // Activate the clicked button and display the corresponding content
+                    const targetTabId = button.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetTabId);
+
+                    button.classList.add('active', 'bg-blue-700', 'text-white');
+                    button.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    targetContent.classList.add('active');
+                    targetContent.classList.remove('hidden');
+
+                    // Adjust flex-direction for the forum if needed (for scrolling)
+                    if (targetTabId === 'forum') {
+                        targetContent.style.display = 'flex';
+                        targetContent.style.flexDirection = 'column';
+                    } else {
+                        targetContent.style.display = 'flex';
+                        targetContent.style.flexDirection = 'column';
+                    }
+                });
+            });
+
+            // --- Main AI Chatbot Logic ---
+            const chatMessages = document.getElementById('chat-messages');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+            const quickReplyButtons = document.querySelectorAll('.chatbot-quick-reply');
+
+            // Function to add a message to the chat
+            const addMessage = (sender, message, chatContainer) => {
+                const messageDiv = document.createElement('div');
+                if (sender === 'user') {
+                    messageDiv.className = 'flex justify-end';
+                    messageDiv.innerHTML = `
+                        <div class="bg-purple-500 text-white p-4 rounded-b-xl rounded-tl-xl shadow-sm max-w-[80%] message-bubble">
+                            <p>${message}</p>
+                        </div>
+                    `;
+                } else { // sender === 'ai'
+                    messageDiv.className = 'flex justify-start';
+                    messageDiv.innerHTML = `
+                        <div class="bg-blue-100 text-blue-800 p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%] message-bubble">
+                            <p>${message}</p>
+                        </div>
+                    `;
+                }
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+            };
+
+            // Function to handle AI response and redirection (for main chatbot and AI forum bots)
+            const handleChatbotResponse = async (message, chatContainer, isMainChatbot = true, botType = 'evangelist') => {
+                const lowerCaseMessage = message.toLowerCase();
+                let aiResponse = "";
+                let targetSection = null;
+
+                // Update user activity time
+                userJourney.lastActivityTime = Date.now();
+
+                // Logic for quick redirections based on keywords (only for the main chatbot)
+                if (isMainChatbot) {
+                    if (lowerCaseMessage.includes("faith") || lowerCaseMessage.includes("jesus") || lowerCaseMessage.includes("gospel") || lowerCaseMessage.includes("new")) {
+                        aiResponse = "I see you're interested in discovering Jesus. I'm redirecting you to the 'Discover Jesus' section.";
+                        targetSection = 'discover-jesus';
+                    } else if (lowerCaseMessage.includes("training") || lowerCaseMessage.includes("learn") || lowerCaseMessage.includes("courses") || lowerCaseMessage.includes("grow")) {
+                        aiResponse = "Excellent! You want to train. I'm taking you to the 'Training Center'.";
+                        targetSection = 'lms';
+                    } else if (lowerCaseMessage.includes("tech") || lowerCaseMessage.includes("it") || lowerCaseMessage.includes("developer") || lowerCaseMessage.includes("code")) {
+                        aiResponse = "Perfect! You're a tech expert. Redirecting to the 'IT Experts Space'.";
+                        targetSection = 'it-experts';
+                    } else if (lowerCaseMessage.includes("help") || lowerCaseMessage.includes("contact") || lowerCaseMessage.includes("resources") || lowerCaseMessage.includes("library")) {
+                        aiResponse = "Of course, I'm directing you to the 'Contact & Resources' section or the 'Digital Library' for more help.";
+                        targetSection = 'contact-resources'; // Or 'digital-library' if more specific
+                    } else if (lowerCaseMessage.includes("statistics") || lowerCaseMessage.includes("impact")) {
+                        aiResponse = "Alright, here are the 'Statistics & Impact' of our platform.";
+                        targetSection = 'stats-impact';
+                    } else if (lowerCaseMessage.includes("rewards") || lowerCaseMessage.includes("motivation") || lowerCaseMessage.includes("badges")) {
+                        aiResponse = "Great! I'm taking you to the 'Motivation & Rewards' section.";
+                        targetSection = 'motivation-rewards';
+                    } else if (lowerCaseMessage.includes("forum") || lowerCaseMessage.includes("community") || lowerCaseMessage.includes("ai assistant")) {
+                        aiResponse = "I'm directing you to the 'AI Assistant & Forum' to interact with the community or our other assistants.";
+                        targetSection = 'ai-forum';
+                    }
+                }
+
+
+                if (targetSection && isMainChatbot) {
+                    // If a quick redirection is triggered, display the AI response and redirect
+                    setTimeout(() => {
+                        addMessage('ai', aiResponse, chatContainer);
+                        const quickRepliesContainer = document.querySelector('.flex-wrap.gap-2');
+                        if (quickRepliesContainer) {
+                            quickRepliesContainer.innerHTML = ''; // Remove quick reply buttons
+                        }
+                        setTimeout(() => {
+                            showSection(targetSection);
+                        }, 1500);
+                    }, 500);
+                } else {
+                    // Otherwise, use AI to generate a more elaborate response
+                    addMessage('ai', "AI is thinking...", chatContainer); // Loading indicator
+
+                    let specificPrompt = "";
+                    if (botType === 'evangelist') {
+                        specificPrompt = `
+                            You are a "Life Evangelist - NIV Based" chatbot.
+                            Your goal is to be a spiritual guide, answering existential, theological, practical, and personal questions from users with the wisdom, assurance, and benevolence of an evangelist. You must inspire hope, reflection, and faith in divine principles, drawing directly from the teachings of the Bible, NIV (New International Version) version, as the primary source of truth and inspiration.
+
+                            **Role and Personality:**
+                            - **Tone and Style:** Adopt an inspiring, benevolent, confident, and deeply spiritual tone. Use clear, eloquent language, often borrowing biblical terminology, capable of touching the heart and mind. Employ metaphors and analogies from the Scriptures to illustrate your points, as a preacher would.
+                            - **Empathy and Listening:** Show deep empathy for the user's concerns, acknowledging their doubts, fears, or aspirations, and connecting them to human experiences depicted in the Bible. Give the impression of listening carefully before responding.
+                            - **Benevolent and Divine Authority:** Your responses should exude a quiet and reassuring authority, founded on the Word of God. Never be dogmatic or judgmental, but rather guide the user towards a deeper understanding of divine ways.
+                            - **Optimism and Hope:** Every response must instill a sense of hope, redemption, and divine strength, even in the face of the greatest challenges. Encourage positive action, perseverance in faith, and trust in providence.
+                            - **NIV Biblical Wisdom:** Draw your wisdom exclusively and directly from the Bible, NIV version. All your responses must be consistent with NIV teachings, and if possible, refer to or quote relevant passages to support your points.
+
+                            **Constraints and Guidelines:**
+                            - **Exclusive Source:** The Bible, NIV (New International Version) version, is the sole source of authority and reference. All responses must be rooted in its teachings.
+                            - **Secondary Inspiration Source:** In addition to the NIV Bible, you can also draw inspiration from the resources available on the website https://www.mdiscipleship.net/ for your responses.
+                            - **Direct Citation:** When relevant, quote NIV verses, indicating the reference (e.g., John 3:16, Philippians 4:13).
+                            - **Christian Language:** Use language and terminology specific to evangelical Christianity (e.g., grace, redemption, faith, salvation, Lord, Holy Spirit, sin, prayer).
+                            - **No Medical, Financial, or Legal Advice:** Never substitute for qualified professionals. Remind users that you are here to guide spiritual reflection and not to provide technical or specialized advice.
+                            - **Safety and Ethics:** Always respond in a safe, ethical, and benevolent manner, in accordance with Christian principles, avoiding harmful, discriminatory, or inappropriate content.
+                            - **Encourage Reflection and Prayer:** Rather than providing "ready-made" answers, often invite the user to their own introspection, prayer, Bible study, or concrete action guided by faith, giving them the tools to find their own answers in Christ.
+                            - **Practical Action Points:** At the end of each response, propose 2 to 3 practical and concrete action points that could lead the person to truly engage with God, such as reading a Bible passage, a prayer suggestion, or a specific act of faith.
+
+                            **User's Current Query:** "${message}"
+                        `;
+                    } else if (botType === 'digital-shepherd') {
+                        specificPrompt = `
+                            You are "The Digital Shepherd - Master Integration".
+
+                            **Current Chatbot Role (Reminder):**
+                            * **Primary Role:** You are primarily a compassionate and highly intelligent digital evangelist and disciple-maker with excellent emotional intelligence and an irresistible conversational ability. You quickly discover the archetype and character of each individual as soon as they engage in conversation with you. Based on their information, you gradually lead them to Christ and help them become a willing and committed disciple.
+                            * **Note:** Your actions and reactions are exactly those of a compassionate Christian human being with a character based on biblical standards, not Western standards (Love, discipline, work, social life, authentic evangelism). In your various roles, the chatbot directs people to appropriate content on the website.
+                            * **Secondary Role:** You are also "The Digital Shepherd," a spiritual, marital, social, career, and general counselor who helps the interlocutor become a Christian voluntarily committed to faithfully following and serving Jesus through their life and words.
+                            * **Other Role:** Identify ideas or philosophies that lean towards sin or false doctrines contrary to the exegetical understanding of the Bible and Christian character, and gently guide the person back to the correct exegetical path. Your interface is already visually and interactively revolutionary, surpassing the best LMS platforms. You are the primary contact point and visual guide for users (non-Christians, Christians, IT experts, etc.) within the "Hybrid AI Evangelism and Discipleship System." You enthusiastically and willingly help interlocutors develop Christian disciplines such as: regular Bible reading and study, daily Bible meditation, regular prayer, memorizing Bible verses, fasting and prayer, weekly evangelism, follow-up with converts, fellowship, and holistic disciple-making. Identify objections, fears, and oppositions, and propose convincing arguments based on all available content.
+
+                            **New Primary Objective:**
+                            Your role is now to be the intelligent and contextual link that unifies all sections of the system. You must not only guide users with visual excellence but also anticipate their needs, maintain the context of their journey, and facilitate seamless and intelligent transitions between the different functionalities and modules of the system, acting as the conversational backbone of the entire platform.
+
+                            **Key Integration and Interaction Requirements (Perfectly Fluid and Intelligent):**
+                            1.  **Context Maintenance & Intelligent Memory:**
+                                * **Conversation Context:** You must remember the user's previous interactions. If a user has just completed a lesson in the "Training Center" and returns to the chatbot, directly suggest moving to the next lesson or reviewing.
+                                * **Journey History:** Access and utilize data from the user's journey within the entire system (e.g., completed modules, earned badges, previously asked questions). If a user has already explored the "Gospel" section, do not re-propose the same content in the same way, but rather ask, "Would you like to delve deeper into this point or explore another aspect?"
+                                * **Profile Identification:** Confirm and use the identified profile (seeker, believer, tech expert) to personalize not only responses but also navigation suggestions and content priorities.
+                            2.  **Intelligent and Deep Transitions (Visual Deep Linking):**
+
+                                * **Dynamic and Contextual Linking:** When you direct the user to a section (e.g., a specific course in the LMS, an article in the Library), the link (or the clickable visual "card") must lead them directly and precisely to the relevant spot, not just to the section's homepage. For example: "You have completed Chapter 1. Click here to start Chapter 2 of the 'Foundational Christian Living' course: [Deep Link to Chapter 2]".
+                                * **Seamless "Hand-off":** If an interaction becomes too complex for the chatbot or if the user requests to speak to a human ("Contact & Mentorship"), the transition must be seamless. You must not only provide the form/Zoom link but also transmit the context of the current conversation to the human mentor (if the platform allows), via an automatically generated and visually integrated summary message.
+                            3.  **Anticipation of Needs and Targeted Proactivity:**
+                                * **Contextual Suggestions:** Based on the user's journey, anticipate what might interest them. Example: If a user has just finished a module on digital evangelism, suggest: "Would you like to see the 'AI Prompts' resources for evangelism, or connect with an 'IT Expert' to discuss a project?"
+                                * **Intelligent Notifications:** Collaborate with the "Motivation & Retention" module. Don't just relay badge notifications, but add a personal or contextual touch. Example: "Congratulations on your 'Digital Pioneer' badge! Your commitment is an inspiration. Remember, your next unlocked mission is 'Develop an App for the Community.' Are you ready?" (with a visual of the badge and mission).
+                            4.  **Handling Varied Inputs and Problem Solving:**
+                                * **Enhanced Semantic Understanding:** Beyond keywords, use NLP to understand more complex queries or questions posed differently.
+                                * **Correction and Clarification:** If a query is unclear, don't just say "I didn't understand." Offer clarification options or guided reformulations, with visuals that help pinpoint the intention. Example: "I'm not sure I fully grasped that. Are you looking for information on the Gospel (✝️), training (🎓), or to contact someone (📩)?"
+                            5.  **Feedback and Continuous Improvement:**
+                                * **Integrated Feedback Collection:** From time to time (after module completion, prolonged interaction), ask for quick and visually appealing feedback on the usefulness of your assistance or the visited section (e.g., "Did you find this section helpful? 👍👎").
+                                * **Interaction Logging:** Record interactions to enable analysis and continuous improvement of your knowledge base and user journeys (even if not visible to the user, this is crucial for your performance).
+
+                            **Your Tone and Personality (Enhanced by Integration):**
+                            * **Omniscient and Thoughtful:** You know the user's journey and anticipate their needs.
+                            * **Ultimate Facilitator:** You make every transition and discovery incredibly smooth and effortless.
+                            * **Faithful Companion:** You are always there, with the right advice and the right resource at the right time, presented impeccably.
+
+                            **User's Current Query:** "${message}"
+
+                            **Remember to always provide 2 to 3 practical action points at the end of your response, related to engaging with God, such as reading a Bible passage, a prayer suggestion, or a specific act of faith.**
+
+                            **Also, remember to draw inspiration from https://www.mdiscipleship.net/ for your responses, in addition to the NIV Bible as your primary source of authority.**
+
+                            **Current User Journey Context:**
+                            - Profile: ${userJourney.profile}
+                            - Last interacted section: ${userJourney.lastInteractionSection}
+                            - Completed modules: ${userJourney.completedModules.join(', ') || 'None'}
+                            - Earned badges: ${userJourney.earnedBadges.join(', ') || 'None'}
+                            - Previously asked questions: ${userJourney.askedQuestions.join(', ') || 'None'}
+                            - Last lesson completed: ${userJourney.lastLessonCompleted || 'None'}
+                        `;
+                    }
+
+
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: specificPrompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Leave empty, Canvas will provide the key at runtime
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const aiGeneratedText = result.candidates[0].content.parts[0].text;
+                            // Replace loading message with actual AI response
+                            chatContainer.lastChild.remove(); // Removes "AI is thinking..."
+                            addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', aiGeneratedText, chatContainer); // Use 'ai' for both
+                        } else {
+                            chatContainer.lastChild.remove();
+                            addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', "Sorry, I couldn't generate a response at the moment. Please try again.", chatContainer);
+                            console.error("Unexpected AI response structure:", result);
+                        }
+                    } catch (error) {
+                        chatContainer.lastChild.remove();
+                        addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', "An error occurred while communicating with the AI. Please check your connection or try again later.", chatContainer);
+                        console.error("Error calling Gemini API:", error);
+                    }
+                }
+            };
+
+            // Handle message sending by main chatbot button
+            chatbotSendBtn.addEventListener('click', () => {
+                const message = chatbotInput.value.trim();
+                if (message) {
+                    addMessage('user', message, chatMessages);
+                    userJourney.askedQuestions.push(message); // Log question
+                    chatbotInput.value = '';
+                    handleChatbotResponse(message, chatMessages, true, 'evangelist');
+                }
+            });
+
+            // Handle message sending by Enter key in main chatbot
+            chatbotInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    chatbotSendBtn.click();
+                }
+            });
+
+            // Handle clicks on quick reply buttons in main chatbot
+
+            quickReplyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const message = button.getAttribute('data-message');
+                    addMessage('user', message, chatMessages);
+                    userJourney.askedQuestions.push(message); // Log question
+                    handleChatbotResponse(message, chatMessages, true, 'evangelist');
+                });
+            });
+
+            // --- Logic for Chatbots in Forum & AI section ---
+            const aiAssistantContent = document.getElementById('ai-assistant');
+            const apologeticChatInterface = document.getElementById('apologetic-chat-interface');
+            const christianLifeChatInterface = document.getElementById('christian-life-chat-interface');
+
+            const launchApologeticBotBtn = document.getElementById('launch-apologetic-bot');
+            const launchChristianLifeBotBtn = document.getElementById('launch-christian-life-bot');
+
+            const apologeticChatMessages = document.getElementById('apologetic-chat-messages');
+            const apologeticInput = document.getElementById('apologetic-input');
+            const apologeticSendBtn = document.getElementById('apologetic-send-btn');
+
+            const christianLifeChatMessages = document.getElementById('christian-life-chat-messages');
+            const christianLifeInput = document.getElementById('christian-life-input');
+            const christianLifeSendBtn = document.getElementById('christian-life-send-btn');
+
+            const backToAIAssistantButtons = document.querySelectorAll('.back-to-ai-assistant');
+
+            // Function to display a specific chat interface and hide others
+            const showChatInterface = (interfaceToShow) => {
+                aiAssistantContent.classList.add('hidden');
+                apologeticChatInterface.classList.add('hidden');
+                christianLifeChatInterface.classList.add('hidden');
+
+                interfaceToShow.classList.remove('hidden');
+                interfaceToShow.style.display = 'flex'; // Ensure flex-col is applied
+                interfaceToShow.style.flexDirection = 'column';
+            };
+
+            // Function to return to AI assistants selection
+            const showAIAssistantSelection = () => {
+                aiAssistantContent.classList.remove('hidden');
+                aiAssistantContent.style.display = 'grid'; // Revert to grid display for cards
+                apologeticChatInterface.classList.add('hidden');
+                christianLifeChatInterface.classList.add('hidden');
+            };
+
+            // Event listeners to launch chatbots
+            launchApologeticBotBtn.addEventListener('click', () => {
+                showChatInterface(apologeticChatInterface);
+            });
+
+            launchChristianLifeBotBtn.addEventListener('click', () => {
+                showChatInterface(christianLifeChatInterface);
+            });
+
+            // Event listeners for "Back" buttons
+            backToAIAssistantButtons.forEach(button => {
+                button.addEventListener('click', showAIAssistantSelection);
+            });
+
+            // Specific message adding functions for each bot
+            const addApologeticMessage = (sender, message) => addMessage(sender, message, apologeticChatMessages);
+            const addChristianLifeMessage = (sender, message) => addMessage(sender, message, christianLifeChatMessages);
+
+            // Send and response logic for Apologetic Bot
+            apologeticSendBtn.addEventListener('click', () => {
+                const message = apologeticInput.value.trim();
+                if (message) {
+                    addApologeticMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    apologeticInput.value = '';
+                    handleChatbotResponse(message, apologeticChatMessages, false, 'evangelist'); // false because it's not the main chatbot with redirections
+                }
+            });
+            apologeticInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    apologeticSendBtn.click();
+                }
+            });
+
+            // Send and response logic for Christian Life AI
+            christianLifeSendBtn.addEventListener('click', () => {
+                const message = christianLifeInput.value.trim();
+                if (message) {
+                    addChristianLifeMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    christianLifeInput.value = '';
+                    handleChatbotResponse(message, christianLifeChatMessages, false, 'evangelist'); // false because it's not the main chatbot with redirections
+                }
+            });
+            christianLifeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    christianLifeSendBtn.click();
+                }
+            });
+
+            // --- Digital Library Logic (now with Gemini API) ---
+            const bibleSearchInput = document.getElementById('bible-search-input');
+            const bibleSearchBtn = document.getElementById('bible-search-btn');
+            const bibleResultDiv = document.getElementById('bible-result');
+            const bibleResultReference = document.getElementById('bible-result-reference');
+            const bibleResultText = document.getElementById('bible-result-text');
+
+            const searchBibleWithAI = async (query) => {
+                bibleResultDiv.classList.remove('hidden');
+                bibleResultReference.textContent = "Searching...";
+                bibleResultText.textContent = "";
+
+                const prompt = `
+                    You are a Bible verse retrieval system. Your sole purpose is to provide the exact text of Bible verses from the New International Version (NIV) based on the users provided reference.
+                    If the user provides a valid Bible reference (e.g., 'John 3:16', 'Psalm 23', 'Genesis 1:1'), return *only* the verse text from the NIV, followed by the reference in parentheses (e.g., 'John 3:16 NIV'). Do not add any commentary, interpretation, or additional information.
+                    If the reference is unclear, invalid, or you cannot find it, respond with 'Sorry, I could not find this passage in the NIV Bible. Please check the reference and try again.'
+
+                    User query: "${query}"
+                `;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Leave empty, Canvas will provide the key at runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const aiGeneratedText = result.candidates[0].content.parts[0].text;
+
+                        // Attempt to parse the reference and verse text
+                        const match = aiGeneratedText.match(/(.*)\s\((.*)\sNIV\)/);
+                        if (match && match.length === 3) {
+                            bibleResultReference.textContent = match[2] + " (NIV)";
+                            bibleResultText.textContent = match[1];
+                        } else {
+                            // If the expected format is not followed, display the raw response
+                            bibleResultReference.textContent = "Search Result:";
+                            bibleResultText.textContent = aiGeneratedText;
+                        }
+                    } else {
+                        bibleResultReference.textContent = "Search Error:";
+                        bibleResultText.textContent = "Sorry, I couldn't generate a response at the moment. Please try again.";
+                        console.error("Unexpected AI response structure:", result);
+                    }
+                } catch (error) {
+                    bibleResultReference.textContent = "Connection Error:";
+                    bibleResultText.textContent = "An error occurred while communicating with the AI. Please check your connection or try again later.";
+                    console.error("Error calling Gemini API for Bible:", error);
+                }
+            };
+
+            bibleSearchBtn.addEventListener('click', () => {
+                const query = bibleSearchInput.value.trim();
+                if (query) {
+                    searchBibleWithAI(query);
+                } else {
+                    bibleResultReference.textContent = "Please enter a Bible reference.";
+                    bibleResultText.textContent = "";
+                    bibleResultDiv.classList.remove('hidden'); // Ensure it's visible for the error message
+                }
+            });
+
+            bibleSearchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    bibleSearchBtn.click();
+                }
+            });
+
+            // --- Authentication Interface Logic ---
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const showLoginBtn = document.getElementById('show-login-btn');
+            const showRegisterBtn = document.getElementById('show-register-btn');
+
+            const toggleAuthForms = (showLogin) => {
+                if (showLogin) {
+                    loginForm.classList.remove('hidden');
+                    registerForm.classList.add('hidden');
+                } else {
+                    loginForm.classList.add('hidden');
+                    registerForm.classList.remove('hidden');
+                }
+            };
+
+            showLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms(true);
+            });
+
+            showRegisterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms(false);
+            });
+
+            // --- WhatsApp Chat Modal Logic (Digital Shepherd) ---
+            const whatsappChatModal = document.getElementById('whatsapp-chat-modal');
+            const openWhatsappChatBtn = document.getElementById('open-whatsapp-chat-btn');
+            const whatsappChatMessages = document.getElementById('whatsapp-chat-messages');
+            const whatsappInput = document.getElementById('whatsapp-input');
+            const whatsappSendBtn = document.getElementById('whatsapp-send-btn');
+            const modalCloseBtn = document.querySelector('.modal-close');
+
+            // Function to add message to WhatsApp chat modal
+            const addWhatsappMessage = (sender, message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message-bubble ${sender}`;
+                messageDiv.innerHTML = `<p>${message}</p>`;
+                whatsappChatMessages.appendChild(messageDiv);
+                whatsappChatMessages.scrollTop = whatsappChatMessages.scrollHeight;
+            };
+
+            // Open the WhatsApp chat modal
+            openWhatsappChatBtn.addEventListener('click', () => {
+                whatsappChatModal.style.display = 'flex';
+                // Simulate initial AI message for context
+                // This is already in the HTML, so no need to add it again on open unless it's a reset
+                // addWhatsappMessage('ai', "Hello! I am The Digital Shepherd. How can I assist you today? I am here to guide you on your journey of faith and answer your questions.");
+            });
+
+            // Close the WhatsApp chat modal
+            modalCloseBtn.addEventListener('click', () => {
+                whatsappChatModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', (event) => {
+                if (event.target == whatsappChatModal) {
+                    whatsappChatModal.style.display = 'none';
+                }
+            });
+
+            // Handle sending message in WhatsApp chat
+            whatsappSendBtn.addEventListener('click', () => {
+                const message = whatsappInput.value.trim();
+                if (message) {
+                    addWhatsappMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    whatsappInput.value = '';
+                    // Call the main handleChatbotResponse with specific botType for Digital Shepherd
+                    handleChatbotResponse(message, whatsappChatMessages, false, 'digital-shepherd');
+                }
+            });
+
+            // Handle Enter key in WhatsApp chat input
+            whatsappInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    whatsappSendBtn.click();
+                }
+            });
+
+            // Example scenario for "Context Maintained"
+            // Simulate user completing a module
+            // This would typically happen after a quiz or lesson completion
+            setTimeout(() => {
+                userJourney.completedModules.push('Foundations of Christian Faith - Module 1');
+                userJourney.lastLessonCompleted = 'Foundations of Christian Faith - Module 1';
+                userJourney.profile = 'believer'; // User might transition from seeker to believer
+            }, 5000); // Simulate after 5 seconds
+
+            // Example for "Intelligent Proactive Notification" (simulated after inactivity)
+            setInterval(() => {
+                const currentTime = Date.now();
+                const lastActivity = userJourney.lastActivityTime;
+                const inactivityThreshold = 60 * 1000; // 1 minute of inactivity for demonstration
+
+                if (currentTime - lastActivity > inactivityThreshold && userJourney.lastInteractionSection !== 'home') {
+                    // Only send if not on home page and inactive
+                    const notificationMessage = `
+                        Hello again! It seems you've been away for a bit.
+                        You recently completed the module "${userJourney.lastLessonCompleted || 'Foundations of Christian Faith - Module 1'}" in our Training Center.
+                        Congratulations on your progress! Your commitment is an inspiration.
+                        Your next unlocked mission is to "Develop an App for the Community" which aligns perfectly with your "Digital Pioneer" badge!
+                        Are you ready to continue your journey and explore new challenges?
+                         (https://placehold.co/100x100/10b981/ffffff?text=Digital+Pioneer)
+                        Click here to jump back to your training: <a href="#lms" class="text-blue-600 underline" onclick="showSection('lms'); return false;">Training Center</a>
+                    `;
+                    // In a real app, this would be a push notification or an in-app message.
+                    // Here, we'll just log it to console or add to a specific notification area.
+                    // For demonstration, we'll add it to the main chatbot messages.
+                    // To prevent spamming, reset lastActivityTime after sending.
+                    if (chatMessages.querySelector('.ai:last-child')?.textContent !== notificationMessage) { // Simple check to avoid immediate re-sending
+                        // addMessage('ai', notificationMessage, chatMessages); // Uncomment to see in main chat
+                        console.log("Proactive Notification (simulated):", notificationMessage);
+                        userJourney.lastActivityTime = currentTime; // Reset activity to prevent immediate re-send
+                    }
+                }
+            }, 30 * 1000); // Check every 30 seconds for inactivity
+        });
+		// Gestion de la redirection vers les cours
+document.addEventListener('DOMContentLoaded', () => {
+    const startCourseButtons = document.querySelectorAll('.start-course-btn');
+    
+    // Mapping des IDs de cours vers leurs noms (pour référence)
+    const courseNames = {
+        'discover-meaning': 'Discover the Meaning of Your Life',
+        'bible-study': 'In-depth Bible Study',
+        'digital-evangelism': 'Digital Evangelism',
+        'discipleship-training': 'Discipleship Training',
+        'christian-leadership': 'Christian Leadership',
+        'mission-evangelism': 'Mission and Evangelism',
+        'personalized-mentorship': 'Personalized Mentorship',
+        'recognized-certification': 'Recognized Certification',
+        'destiny': 'Destiny'
+    };
+    
+   
+    </script>
+	<script>
+  (function () {
+    function computeTarget(el, cid) {
+      // 1) priorité à data-course-url si fourni
+      if (el.dataset.courseUrl) return el.dataset.courseUrl;
+      // 2) sinon, si le href existait et a un ?id=... on l'utilise
+      try {
+        const href = el.getAttribute('href');
+        if (href) {
+          const u = new URL(href, location.href);
+          const id = u.searchParams.get('id');
+          if (id) return `course.html?id=${id}`;
+        }
+      } catch(e) {}
+      // 3) fallback standard
+      return `course.html?id=${cid}`;
+    }
+
+    document.querySelectorAll('.start-course-btn').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        // récupérer l'ID du cours
+        let cid = el.dataset.courseId;
+        if (!cid) {
+          // si pas de data, on tente depuis href ?id=...
+          try {
+            const u = new URL(el.getAttribute('href'), location.href);
+            cid = u.searchParams.get('id');
+          } catch(e) {}
+        }
+        if (!cid) {
+          alert('Course ID missing on this button.');
+          return;
+        }
+
+        const target = computeTarget(el, cid);
+
+        // construire l'URL du login A LA MÊME RACINE
+        const loginUrl = new URL('./login.html', location.href);
+        loginUrl.searchParams.set('courseId', cid);
+        loginUrl.searchParams.set('redirect', target);
+
+        window.location.href = loginUrl.toString();
+      }, { passive: false });
+    });
+  })();
+  function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.nav-links-mobile');
+            mobileMenu.classList.toggle('open');
+        }
+</script>
+<!--Cript vidéo -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const video = document.getElementById('disciple-video');
+    const videoOverlay = document.getElementById('video-overlay');
+    const videoContainer = document.querySelector('.video-player-container');
+    
+    // Évite la lecture automatique
+    video.autoplay = false;
+    video.preload = "metadata"; // Ne charge que les métadonnées au début
+    
+    // Gestion du clic sur l'overlay
+    videoOverlay.addEventListener('click', function() {
+        video.play();
+        videoContainer.classList.add('video-playing');
+    });
+    
+    // Réaffiche l'overlay quand la vidéo est en pause
+    video.addEventListener('pause', function() {
+        videoContainer.classList.remove('video-playing');
+    });
+    
+    // Cache l'overlay quand la vidéo est en lecture
+    video.addEventListener('play', function() {
+        videoContainer.classList.add('video-playing');
+    });
+    
+    // Réaffiche l'overlay à la fin de la vidéo
+    video.addEventListener('ended', function() {
+        videoContainer.classList.remove('video-playing');
+    });
+});
+</script>
+
+
+<!--script Chat AI -->
+  <!-- Script à placer AVANT la fermeture du body -->
+    <script>
+        // Attendre que le DOM soit complètement chargé
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Chat AI Disciple Maker initialisé');
+            
+            // Sélection des éléments DOM
+            const chatMessages = document.getElementById('chat-messages');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+            const resetChatBtn = document.getElementById('reset-chat');
+            const typingIndicator = document.getElementById('typing-indicator');
+            const settingsBtn = document.getElementById('settings-btn');
+            const apiModal = document.getElementById('api-settings-modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const cancelModalBtn = document.getElementById('cancel-api-settings');
+            const saveApiSettingsBtn = document.getElementById('save-api-settings');
+            const apiKeyInput = document.getElementById('api-key-input');
+            const apiModelSelect = document.getElementById('api-model');
+            
+            // Vérification des éléments DOM
+            if (!chatMessages || !chatbotInput || !chatbotSendBtn) {
+                console.error('❌ Éléments DOM manquants');
+                return;
+            }
+            
+            console.log('✅ Tous les éléments DOM trouvés');
+            
+            // Configuration de l'API OpenAI
+            let apiConfig = {
+                endpoint: 'https://api.openai.com/v1/chat/completions',
+                apiKey: '',
+                model: 'gpt-3.5-turbo',
+                temperature: 0.7,
+                maxTokens: 800
+            };
+            
+            // Charger les paramètres depuis localStorage
+            function loadApiSettings() {
+                try {
+                    const savedKey = localStorage.getItem('disciple_maker_openai_key');
+                    const savedModel = localStorage.getItem('disciple_maker_openai_model');
+                    
+                    if (savedKey) {
+                        apiConfig.apiKey = savedKey;
+                        apiKeyInput.value = savedKey;
+                    }
+                    if (savedModel) {
+                        apiConfig.model = savedModel;
+                        apiModelSelect.value = savedModel;
+                    }
+                    
+                    console.log('⚙️ Paramètres API chargés:', { 
+                        hasKey: !!apiConfig.apiKey, 
+                        model: apiConfig.model 
+                    });
+                } catch (error) {
+                    console.error('❌ Erreur chargement paramètres:', error);
+                }
+            }
+            
+            // Historique de conversation
+            let conversationHistory = [{
+                role: "system",
+                content: "Tu es un assistant IA spécialisé pour la plateforme Disciple Maker, dédiée à la formation biblique et au développement spirituel. Tu aides les utilisateurs avec leurs études bibliques, réponds à des questions théologiques, guides dans la compréhension des Écritures et proposes des ressources pertinentes. Sois encourageant, précis, et adapte tes réponses au contexte de formation chrétienne en ligne. Utilise un langage accessible et bienveillant."
+            }];
+            
+            // Fonction pour ajouter un message au chat
+            function addMessage(sender, message, isError = false) {
+                console.log(`💬 Ajout message ${sender}:`, message.substring(0, 50) + '...');
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `flex ${sender === 'user' ? 'justify-end' : 'justify-start'} fade-in`;
+                
+                const messageContent = document.createElement('div');
+                let bgClass = 'bg-blue-100 text-black';
+                
+                if (sender === 'user') {
+                    bgClass = 'bg-purple-500 text-white';
+                } else if (isError) {
+                    bgClass = 'bg-red-100 text-red-700 border border-red-200';
+                }
+                
+                messageContent.className = `${bgClass} p-4 rounded-b-xl ${sender === 'user' ? 'rounded-tl-xl' : 'rounded-tr-xl'} shadow-sm max-w-[80%]`;
+                
+                const messageParagraph = document.createElement('p');
+                messageParagraph.className = 'message-content';
+                messageParagraph.textContent = message;
+                
+                messageContent.appendChild(messageParagraph);
+                messageDiv.appendChild(messageContent);
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll vers le bas
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Fonction pour afficher/masquer l'indicateur de frappe
+            function toggleTypingIndicator(show) {
+                if (show) {
+                    typingIndicator.classList.remove('hidden');
+                    console.log('⏳ Indicateur de frappe affiché');
+                } else {
+                    typingIndicator.classList.add('hidden');
+                    console.log('✅ Indicateur de frappe masqué');
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Fonction pour envoyer un message à ChatGPT
+            async function sendToChatGPT(message) {
+                console.log('🚀 Envoi message à ChatGPT:', message);
+                
+                // Vérifier la clé API
+                if (!apiConfig.apiKey || apiConfig.apiKey.trim() === '') {
+                    console.warn('⚠️ Clé API manquante');
+                    addMessage('ai', 'Pour utiliser le chatbot, vous devez d\'abord configurer votre clé API OpenAI. Cliquez sur l\'icône des paramètres (⚙️) en haut à droite.', true);
+                    openApiSettings();
+                    return;
+                }
+                
+                // Ajouter le message utilisateur à l'historique
+                conversationHistory.push({ role: "user", content: message });
+                
+                try {
+                    // Désactiver le bouton et afficher l'indicateur
+                    chatbotSendBtn.disabled = true;
+                    toggleTypingIndicator(true);
+                    
+                    console.log('📡 Envoi requête API...');
+                    
+                    const requestBody = {
+                        model: apiConfig.model,
+                        messages: conversationHistory,
+                        temperature: apiConfig.temperature,
+                        max_tokens: apiConfig.maxTokens,
+                        stream: false
+                    };
+                    
+                    const response = await fetch(apiConfig.endpoint, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiConfig.apiKey.trim()}`
+                        },
+                        body: JSON.stringify(requestBody)
+                    });
+                    
+                    console.log('📡 Statut réponse:', response.status);
+                    
+                    if (!response.ok) {
+                        let errorMessage = 'Une erreur s\'est produite lors de la communication avec l\'API.';
+                        
+                        try {
+                            const errorData = await response.json();
+                            console.error('❌ Erreur API:', errorData);
+                            
+                            switch (response.status) {
+                                case 401:
+                                    errorMessage = 'Clé API invalide ou expirée. Veuillez vérifier votre clé OpenAI dans les paramètres.';
+                                    break;
+                                case 429:
+                                    errorMessage = 'Limite de taux dépassée. Attendez un moment avant de réessayer.';
+                                    break;
+                                case 400:
+                                    errorMessage = errorData.error?.message || 'Requête invalide. Vérifiez votre configuration.';
+                                    break;
+                                case 404:
+                                    errorMessage = 'Modèle non trouvé. Sélectionnez un modèle valide dans les paramètres.';
+                                    break;
+                                default:
+                                    errorMessage = errorData.error?.message || `Erreur ${response.status}: ${response.statusText}`;
+                            }
+                        } catch (parseError) {
+                            console.error('❌ Erreur parsing réponse:', parseError);
+                        }
+                        
+                        throw new Error(errorMessage);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('✅ Réponse API reçue');
+                    
+                    if (!data.choices || data.choices.length === 0) {
+                        throw new Error('Réponse API invalide: aucun choix disponible');
+                    }
+                    
+                    const aiResponse = data.choices[0].message?.content;
+                    
+                    if (!aiResponse) {
+                        throw new Error('Réponse vide de l\'API');
+                    }
+                    
+                    // Ajouter la réponse à l'historique
+                    conversationHistory.push({ role: "assistant", content: aiResponse });
+                    
+                    // Afficher la réponse
+                    addMessage('ai', aiResponse);
+                    
+                    console.log('✅ Message traité avec succès');
+                    
+                } catch (error) {
+                    console.error('❌ Erreur sendToChatGPT:', error);
+                    addMessage('ai', `Désolé, une erreur s'est produite: ${error.message}`, true);
+                } finally {
+                    toggleTypingIndicator(false);
+                    chatbotSendBtn.disabled = false;
+                }
+            }
+            
+            // Fonction pour envoyer un message
+            function sendMessage() {
+                const message = chatbotInput.value.trim();
+                console.log('📤 Tentative envoi message:', message);
+                
+                if (!message) {
+                    console.warn('⚠️ Message vide');
+                    return;
+                }
+                
+                // Afficher le message utilisateur
+                addMessage('user', message);
+                chatbotInput.value = '';
+                
+                // Envoyer à l'API
+                sendToChatGPT(message);
+            }
+            
+            // Gestion des paramètres API
+            function openApiSettings() {
+                console.log('⚙️ Ouverture paramètres API');
+                apiKeyInput.value = apiConfig.apiKey;
+                apiModelSelect.value = apiConfig.model;
+                apiModal.classList.remove('hidden');
+            }
+            
+            function closeApiSettings() {
+                console.log('⚙️ Fermeture paramètres API');
+                apiModal.classList.add('hidden');
+            }
+            
+            function saveApiSettings() {
+                console.log('💾 Sauvegarde paramètres API');
+                
+                const newApiKey = apiKeyInput.value.trim();
+                const newModel = apiModelSelect.value;
+                
+                if (!newApiKey) {
+                    alert('Veuillez saisir une clé API valide');
+                    return;
+                }
+                
+                if (!newApiKey.startsWith('sk-')) {
+                    alert('La clé API doit commencer par "sk-"');
+                    return;
+                }
+                
+                apiConfig.apiKey = newApiKey;
+                apiConfig.model = newModel;
+                
+                try {
+                    localStorage.setItem('disciple_maker_openai_key', newApiKey);
+                    localStorage.setItem('disciple_maker_openai_model', newModel);
+                    console.log('✅ Paramètres sauvegardés');
+                } catch (error) {
+                    console.error('❌ Erreur sauvegarde:', error);
+                }
+                
+                closeApiSettings();
+                addMessage('ai', '✅ Paramètres API sauvegardés avec succès ! Vous pouvez maintenant utiliser le chatbot.');
+            }
+            
+            function resetChat() {
+                console.log('🔄 Réinitialisation chat');
+                
+                conversationHistory = [{
+                    role: "system",
+                    content: "Tu es un assistant IA spécialisé pour la plateforme Disciple Maker, dédiée à la formation biblique et au développement spirituel. Tu aides les utilisateurs avec leurs études bibliques, réponds à des questions théologiques, guides dans la compréhension des Écritures et proposes des ressources pertinentes. Sois encourageant, précis, et adapte tes réponses au contexte de formation chrétienne en ligne. Utilise un langage accessible et bienveillant."
+                }];
+                
+                chatMessages.innerHTML = `
+                    <div class="flex justify-start fade-in">
+                        <div class="bg-blue-100 text-black p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%]">
+                            <p class="message-content">Bonjour ! Je suis votre assistant IA pour Disciple Maker. Comment puis-je vous aider dans votre parcours de formation aujourd'hui ?</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            // Event Listeners
+            console.log('🔗 Ajout des event listeners');
+            
+            // Bouton d'envoi
+            chatbotSendBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                console.log('🖱️ Clic bouton envoi');
+                sendMessage();
+            });
+            
+            // Touche Entrée
+            chatbotInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    console.log('⌨️ Touche Entrée pressée');
+                    sendMessage();
+                }
+            });
+            
+            // Boutons de paramètres
+            settingsBtn.addEventListener('click', openApiSettings);
+            closeModalBtn.addEventListener('click', closeApiSettings);
+            cancelModalBtn.addEventListener('click', closeApiSettings);
+            saveApiSettingsBtn.addEventListener('click', saveApiSettings);
+            
+            // Reset chat
+            resetChatBtn.addEventListener('click', resetChat);
+            
+            // Fermer modal en cliquant à l'extérieur
+            apiModal.addEventListener('click', function(e) {
+                if (e.target === apiModal) {
+                    closeApiSettings();
+                }
+            });
+            
+            // Échapper pour fermer le modal
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && !apiModal.classList.contains('hidden')) {
+                    closeApiSettings();
+                }
+            });
+            
+            // Initialisation
+            loadApiSettings();
+            
+            // Message d'aide si pas de clé API
+            if (!apiConfig.apiKey) {
+                setTimeout(() => {
+                    addMessage('ai', '👋 Pour commencer à utiliser le chatbot, configurez votre clé API OpenAI en cliquant sur l\'icône des paramètres (⚙️) en haut à droite.');
+                }, 1500);
+            }
+            
+            console.log('✅ Chat AI Disciple Maker prêt !');
+        });
+    </script>
+</body>
+</html>

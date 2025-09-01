@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Spirit-Filled Life: Unlocking Daily Victory</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .lesson-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .lesson-section.active {
+            display: block;
+            opacity: 1;
+        }
+        .locked-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(240, 244, 248, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 0.75rem;
+        }
+        .interactive-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .btn-secondary {
+            background-color: #e2e8f0;
+            color: #1e293b;
+        }
+        .btn-secondary:hover {
+            background-color: #cbd5e1;
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+        .objective-arrow {
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .objective-arrow:hover {
+            transform: translateX(10px);
+        }
+        .objective-arrow.shot {
+            transform: translateX(200px) scale(0);
+            opacity: 0;
+        }
+        .option-btn {
+            border: 2px solid #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        .option-btn:hover {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+        }
+        .option-btn.selected {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+            box-shadow: 0 0 0 2px #c7d2fe;
+        }
+        .option-btn.correct {
+            border-color: #22c55e;
+            background-color: #f0fdf4;
+        }
+        .option-btn.incorrect {
+            border-color: #ef4444;
+            background-color: #fef2f2;
+        }
+        .draggable {
+            cursor: grab;
+            user-select: none;
+        }
+        .dropzone {
+            border: 2px dashed #cbd5e1;
+            transition: background-color 0.3s ease;
+        }
+        .dropzone.drag-over {
+            background-color: #eef2ff;
+        }
+        .chatbot-container {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            z-index: 100;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chatbot-container.active {
+            display: flex;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 p-4 md:p-8">
+
+    <div id="lms-container" class="max-w-4xl mx-auto">
+
+        <!-- Header and Progress Bar -->
+        <header class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <svg class="w-10 h-10 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-5.22-6.22l-1.591 1.591M18.81 11.19l-1.591-1.591M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <div>
+                        <h1 class="font-serif text-2xl font-bold text-gray-900">Agape Academy</h1>
+                        <p class="text-sm text-gray-500">The Spirit-Filled Life: Unlocking Daily Victory</p>
+                    </div>
+                </div>
+                <div id="completion-badge-header" class="hidden items-center space-x-2 bg-green-100 text-green-700 font-semibold px-4 py-2 rounded-full">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                     <span>Course Complete!</span>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="flex justify-between text-sm font-medium text-gray-600 mb-1">
+                    <span>Progress</span>
+                    <span id="progress-percent">0%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5">
+                    <div id="progress-bar" class="bg-indigo-600 h-2.5 rounded-full" style="width: 0%"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main id="lesson-content">
+
+            <!-- Introductory Question -->
+            <section id="section-0" class="lesson-section active">
+                <div class="interactive-box relative">
+                    <h2 class="font-serif text-xl font-bold mb-4">Let's Begin with a Reflection</h2>
+                    <p class="mb-6 text-gray-600">This first question helps you assess your current understanding. There's no wrong answer, just an honest starting point.</p>
+                    <div id="intro-quiz" class="space-y-3">
+                        <p class="font-semibold">Which of the following best describes your current understanding of what it means to be "filled with the Holy Spirit"?</p>
+                        <button class="w-full text-left option-btn" onclick="selectOption(this, 'intro-quiz')">A) It's a one-time event that happens at conversion.</button>
+                        <button class="w-full text-left option-btn" onclick="selectOption(this, 'intro-quiz')">B) It's an emotional feeling I sometimes get.</button>
+                        <button class="w-full text-left option-btn" onclick="selectOption(this, 'intro-quiz')">C) It means the Holy Spirit is fully directing and empowering my life.</button>
+                        <button class="w-full text-left option-btn" onclick="selectOption(this, 'intro-quiz')">D) It's a concept I don't fully understand.</button>
+                    </div>
+                    <div class="mt-6 text-right">
+                        <button id="submit-intro-quiz" class="btn btn-primary" onclick="submitAndProceed(0, 'intro-quiz')" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Learning Objectives -->
+            <section id="section-1" class="lesson-section">
+                <div class="interactive-box relative">
+                    <div id="objectives-content">
+                        <h2 class="font-serif text-xl font-bold mb-2">Learning Objectives</h2>
+                        <p class="mb-6 text-gray-600">Your mission, should you choose to accept it. Shoot the arrows with your cursor to reveal your targets for this lesson!</p>
+                        <div class="flex items-center">
+                            <!-- Bow -->
+                            <div class="mr-8">
+                                <svg width="100" height="200" viewBox="0 0 100 200">
+                                    <path d="M 80 10 C 20 50, 20 150, 80 190" stroke="#4a5568" stroke-width="4" fill="none"/>
+                                    <line x1="80" y1="10" x2="80" y2="190" stroke="#a0aec0" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <!-- Arrows and Targets -->
+                            <div class="flex-grow space-y-4">
+                                <!-- Objective 1 -->
+                                <div class="flex items-center space-x-4 objective-container">
+                                    <svg class="w-12 h-12 text-indigo-500 objective-arrow" onclick="shootArrow(this, 0)" viewBox="0 0 24 24"><path fill="currentColor" d="M22,12l-4-4v3H3v2h15v3L22,12z"/></svg>
+                                    <div id="objective-0" class="flex-grow bg-gray-100 p-3 rounded-lg opacity-0 transition-opacity duration-500"></div>
+                                </div>
+                                <!-- Objective 2 -->
+                                <div class="flex items-center space-x-4 objective-container">
+                                    <svg class="w-12 h-12 text-indigo-500 objective-arrow" onclick="shootArrow(this, 1)" viewBox="0 0 24 24"><path fill="currentColor" d="M22,12l-4-4v3H3v2h15v3L22,12z"/></svg>
+                                    <div id="objective-1" class="flex-grow bg-gray-100 p-3 rounded-lg opacity-0 transition-opacity duration-500"></div>
+                                </div>
+                                <!-- Objective 3 -->
+                                <div class="flex items-center space-x-4 objective-container">
+                                    <svg class="w-12 h-12 text-indigo-500 objective-arrow" onclick="shootArrow(this, 2)" viewBox="0 0 24 24"><path fill="currentColor" d="M22,12l-4-4v3H3v2h15v3L22,12z"/></svg>
+                                    <div id="objective-2" class="flex-grow bg-gray-100 p-3 rounded-lg opacity-0 transition-opacity duration-500"></div>
+                                </div>
+                                <!-- Objective 4 -->
+                                <div class="flex items-center space-x-4 objective-container">
+                                    <svg class="w-12 h-12 text-indigo-500 objective-arrow" onclick="shootArrow(this, 3)" viewBox="0 0 24 24"><path fill="currentColor" d="M22,12l-4-4v3H3v2h15v3L22,12z"/></svg>
+                                    <div id="objective-3" class="flex-grow bg-gray-100 p-3 rounded-lg opacity-0 transition-opacity duration-500"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 text-right">
+                            <button id="submit-objectives" class="btn btn-primary" onclick="submitAndProceed(1)" disabled>Start Lesson</button>
+                        </div>
+                    </div>
+                    <div id="section-1-lock" class="locked-overlay">
+                        <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Section 1.1: Divine Person of the Holy Spirit -->
+            <section id="section-2" class="lesson-section">
+                <div class="interactive-box relative">
+                    <div id="section-2-content">
+                        <h3 class="font-serif text-lg font-bold text-indigo-700">Section 1: The Holy Spirit: Who He Is and What He Does</h3>
+                        <h4 class="font-semibold text-md mt-2 mb-4">Subpoint 1.1: The Divine Person of the Holy Spirit</h4>
+                        <p class="mb-4 text-gray-600">The Holy Spirit is God, dwelling within every believer and providing power for Christian living and witness.</p>
+                        
+                        <div class="bg-indigo-50 p-4 rounded-lg mb-4">
+                            <p class="font-bold">Key Biblical Truth:</p>
+                            <blockquote class="italic text-gray-700 border-l-4 border-indigo-300 pl-4 mt-2">
+                                "Then Peter said, 'Ananias, how is it that Satan has so filled your heart that you have lied to the Holy Spirit... You have not lied just to human beings but to God.'" (Acts 5:3-4 NIV)
+                            </blockquote>
+                        </div>
+                        
+                        <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                             <p class="font-bold mb-2">Illustration: The Indwelling Power Source</p>
+                             <p class="text-gray-600">Imagine being given the key to a hidden chamber within your own home, a chamber containing a limitless power source. This is similar to the Holy Spirit's dwelling within you. He is not merely an influence; He is God Himself, living within every person who has received Jesus Christ.</p>
+                        </div>
+
+                        <!-- Interactive Activity 1: Matching -->
+                        <div class="interactive-box mt-6">
+                            <h5 class="font-bold mb-2">Activity: Match the Truth</h5>
+                            <p class="text-sm text-gray-500 mb-4">Drag the Bible reference to its correct meaning.</p>
+                            <div class="flex flex-col md:flex-row gap-4">
+                                <div id="matching-options-1" class="w-full md:w-1/3 space-y-2">
+                                    <div class="p-2 bg-indigo-100 rounded draggable" draggable="true" id="match-opt-1-1">Acts 5:3-4</div>
+                                    <div class="p-2 bg-indigo-100 rounded draggable" draggable="true" id="match-opt-1-2">1 Corinthians 6:19-20</div>
+                                    <div class="p-2 bg-indigo-100 rounded draggable" draggable="true" id="match-opt-1-3">Romans 8:9</div>
+                                </div>
+                                <div class="w-full md:w-2/3 space-y-2">
+                                    <div class="flex items-center">
+                                        <div class="w-48 h-10 p-2 border-2 border-dashed rounded dropzone" data-correct="match-opt-1-1"></div>
+                                        <span class="ml-2 text-sm">The Holy Spirit is God.</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-48 h-10 p-2 border-2 border-dashed rounded dropzone" data-correct="match-opt-1-2"></div>
+                                        <span class="ml-2 text-sm">The Holy Spirit indwells every believer (as a temple).</span>
+                                    </div>
+                                     <div class="flex items-center">
+                                        <div class="w-48 h-10 p-2 border-2 border-dashed rounded dropzone" data-correct="match-opt-1-3"></div>
+                                        <span class="ml-2 text-sm">Having the Spirit is essential for belonging to Christ.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <p id="matching-feedback-1" class="text-sm mt-2 font-semibold"></p>
+                        </div>
+
+                        <div class="mt-6 text-right">
+                            <button id="submit-section-2" class="btn btn-primary" onclick="submitAndProceed(2)" disabled>Next Subpoint</button>
+                        </div>
+                    </div>
+                    <div id="section-2-lock" class="locked-overlay">
+                         <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- ... More sections will be dynamically generated here by JS ... -->
+
+        </main>
+
+        <!-- AI Coach Chatbot -->
+        <div id="chatbot-icon" class="fixed bottom-5 right-5 bg-indigo-600 text-white w-16 h-16 rounded-full flex items-center justify-center cursor-pointer shadow-lg hover:bg-indigo-700 transition-colors" onclick="toggleChatbot()">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+        </div>
+
+        <div id="chatbot-container" class="chatbot-container">
+            <div class="bg-indigo-600 text-white p-4 flex justify-between items-center">
+                <div>
+                    <h3 class="font-bold">AI Faith Coach</h3>
+                    <p class="text-xs opacity-80">Here to help you on your journey</p>
+                </div>
+                <button class="text-white" onclick="toggleChatbot()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div id="chat-messages" class="flex-grow p-4 overflow-y-auto bg-gray-50">
+                <!-- Chat messages will appear here -->
+            </div>
+            <div class="p-4 bg-white border-t">
+                 <p class="text-xs text-gray-500 mb-2">Quick Questions:</p>
+                 <div class="flex flex-wrap gap-2">
+                    <button class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full" onclick="askBot('What is a carnal Christian?')">What's a carnal Christian?</button>
+                    <button class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full" onclick="askBot('What is spiritual breathing?')">Spiritual breathing?</button>
+                    <button class="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full" onclick="askBot('Connect me to a person')">Talk to a person</button>
+                 </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- LMS STATE MANAGEMENT ---
+        const state = {
+            progress: 0,
+            totalSections: 12, // Update this as you add sections
+            currentSection: 0,
+            objectivesCompleted: 0,
+            activitiesCompleted: {}, // e.g., { 'matching-1': true }
+        };
+
+        const objectives = [
+            {
+                title: "Grasp the Holy Spirit's Identity & Role",
+                details: "Understand the Holy Spirit as God Himself, living within every believer and empowering them.",
+                points: "+1100 'Spirit Identifier' Points!",
+                icon: '???'
+            },
+            {
+                title: "Discern Three Types of People",
+                details: "Clearly differentiate between the natural, Spirit-filled, and carnal person.",
+                points: "+1125 'Discernment Seeker' Points!",
+                icon: '??'
+            },
+            {
+                title: "Embrace the Invitation to Be Spirit-Filled",
+                details: "Recognize that being filled with the Holy Spirit is God's command and promise, accessible by faith.",
+                points: "+1150 'Faith Recipient' Points!",
+                icon: '??'
+            },
+            {
+                title: "Cultivate Continuous Spirit-Empowerment",
+                details: "Learn the practical steps for being continually filled through 'spiritual breathing'.",
+                points: "+1175 'Empowered Walker' Points!",
+                icon: '???'
+            }
+        ];
+
+        // --- UI & PROGRESS FUNCTIONS ---
+
+        function updateProgress() {
+            state.progress = Math.round((state.currentSection / state.totalSections) * 100);
+            document.getElementById('progress-bar').style.width = `${state.progress}%`;
+            document.getElementById('progress-percent').innerText = `${state.progress}%`;
+        }
+
+        function unlockNextSection() {
+            const current = document.getElementById(`section-${state.currentSection}`);
+            if (current) {
+                current.classList.remove('active');
+            }
+
+            state.currentSection++;
+            updateProgress();
+
+            const next = document.getElementById(`section-${state.currentSection}`);
+            if (next) {
+                const lock = document.getElementById(`section-${state.currentSection}-lock`);
+                if (lock) lock.style.display = 'none';
+                next.classList.add('active');
+            }
+            
+            if (state.currentSection >= state.totalSections) {
+                const badge = document.getElementById('completion-badge-header');
+                badge.classList.remove('hidden');
+                badge.classList.add('flex');
+            }
+        }
+
+        function submitAndProceed(sectionNumber, activityId = null) {
+            if (activityId) {
+                if (!state.activitiesCompleted[activityId]) {
+                    // This is a simple check. For quizzes, you'd check for correctness.
+                    // For this basic version, just selecting an option is enough.
+                    const quizContainer = document.getElementById(activityId);
+                    const selected = quizContainer.querySelector('.selected');
+                    if (!selected) return; // Don't proceed if nothing is selected
+                }
+            }
+            if (state.currentSection === sectionNumber) {
+                unlockNextSection();
+            }
+        }
+
+        // --- INTERACTIVE ACTIVITY FUNCTIONS ---
+
+        function selectOption(button, quizId) {
+            const quizContainer = document.getElementById(quizId);
+            const options = quizContainer.querySelectorAll('.option-btn');
+            options.forEach(opt => opt.classList.remove('selected'));
+            button.classList.add('selected');
+
+            const submitBtn = document.getElementById(`submit-${quizId}`);
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+            state.activitiesCompleted[quizId] = true;
+        }
+
+        function shootArrow(arrow, index) {
+            if (arrow.classList.contains('shot')) return;
+
+            arrow.classList.add('shot');
+            const objectiveDiv = document.getElementById(`objective-${index}`);
+            const objectiveData = objectives[index];
+
+            objectiveDiv.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <span class="text-2xl">${objectiveData.icon}</span>
+                    <div>
+                        <p class="font-bold">${objectiveData.title}</p>
+                        <p class="text-sm text-gray-600">${objectiveData.details}</p>
+
+                        <p class="text-xs font-bold text-indigo-600 mt-1">${objectiveData.points}</p>
+                    </div>
+                </div>
+            `;
+            setTimeout(() => {
+                objectiveDiv.style.opacity = 1;
+            }, 300);
+
+            state.objectivesCompleted++;
+            if (state.objectivesCompleted === objectives.length) {
+                document.getElementById('submit-objectives').disabled = false;
+            }
+        }
+
+        // --- DRAG & DROP LOGIC ---
+        function initializeDragAndDrop(containerId) {
+            const draggables = document.querySelectorAll(`#${containerId} .draggable`);
+            const dropzones = document.querySelectorAll(`#${containerId} .dropzone`);
+            const feedback = document.getElementById(`${containerId}-feedback`);
+            const submitBtn = document.getElementById(`submit-section-${state.currentSection}`);
+            let correctMatches = 0;
+            const totalMatches = dropzones.length;
+
+            draggables.forEach(draggable => {
+                draggable.addEventListener('dragstart', () => {
+                    draggable.classList.add('dragging');
+                });
+                draggable.addEventListener('dragend', () => {
+                    draggable.classList.remove('dragging');
+                });
+            });
+
+            dropzones.forEach(dropzone => {
+                dropzone.addEventListener('dragover', e => {
+                    e.preventDefault();
+                    dropzone.classList.add('drag-over');
+                });
+                dropzone.addEventListener('dragleave', () => {
+                    dropzone.classList.remove('drag-over');
+                });
+                dropzone.addEventListener('drop', e => {
+                    e.preventDefault();
+                    dropzone.classList.remove('drag-over');
+                    const draggable = document.querySelector('.dragging');
+                    if (dropzone.children.length === 0) { // Only allow one item
+                        if (dropzone.dataset.correct === draggable.id) {
+                            dropzone.innerHTML = ''; // Clear previous content if any
+                            dropzone.appendChild(draggable);
+                            draggable.style.cursor = 'default';
+                            draggable.setAttribute('draggable', 'false');
+                            correctMatches++;
+                            if (feedback) feedback.textContent = `Correct! ${correctMatches}/${totalMatches} matched.`;
+                        } else {
+                            if (feedback) feedback.textContent = 'Not quite, try another match!';
+                            feedback.classList.add('text-red-500');
+                            setTimeout(() => {
+                                feedback.textContent = '';
+                                feedback.classList.remove('text-red-500');
+                            }, 2000);
+                        }
+                    }
+                    if (correctMatches === totalMatches) {
+                        if (feedback) {
+                            feedback.textContent = 'Excellent! All matched correctly.';
+                            feedback.classList.remove('text-red-500');
+                            feedback.classList.add('text-green-500');
+                        }
+                        if(submitBtn) submitBtn.disabled = false;
+                    }
+                });
+            });
+        }
+        
+        // --- CHATBOT FUNCTIONS ---
+        const chatbot = document.getElementById('chatbot-container');
+        const chatMessages = document.getElementById('chat-messages');
+
+        const botResponses = {
+            "default": "I can help with questions about the lesson. Or I can connect you with a real person.",
+            "What is a carnal Christian?": "A carnal Christian is someone who has received Christ but is still trying to live the Christian life in their own strength. This leads to frustration and a lack of spiritual fruit, as described in 1 Corinthians 3:1-3.",
+            "What is spiritual breathing?": "Spiritual breathing is a practical way to stay filled with the Spirit. You 'exhale' by confessing any known sin to God (1 John 1:9) and 'inhale' by surrendering control back to Christ and asking Him to fill you by faith (Ephesians 5:18).",
+            "Connect me to a person": "Of course. You can reach a member of our support team through one of these platforms:",
+        };
+
+        function toggleChatbot() {
+            chatbot.classList.toggle('active');
+            if (chatbot.classList.contains('active') && chatMessages.children.length === 0) {
+                addBotMessage("Hello! I'm your AI Faith Coach. How can I help you with today's lesson?");
+            }
+        }
+
+        function addBotMessage(message, isUser = false, isHtml = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('p-2', 'rounded-lg', 'mb-2', 'max-w-xs', 'text-sm');
+            if (isUser) {
+                messageDiv.classList.add('bg-indigo-500', 'text-white', 'self-end', 'ml-auto');
+                messageDiv.textContent = message;
+            } else {
+                messageDiv.classList.add('bg-gray-200', 'text-gray-800', 'self-start', 'mr-auto');
+                 if(isHtml) {
+                    messageDiv.innerHTML = message;
+                 } else {
+                    messageDiv.textContent = message;
+                 }
+            }
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function askBot(question) {
+            addBotMessage(question, true);
+            
+            setTimeout(() => {
+                const response = botResponses[question] || botResponses["default"];
+                addBotMessage(response);
+                if (question === "Connect me to a person") {
+                    const contactHtml = `
+                        <div class="space-y-2 mt-2">
+                           <a href="https://wa.me/YOUR_NUMBER" target="_blank" class="flex items-center gap-2 p-2 bg-green-100 rounded-lg">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" class="w-6 h-6"/> <span>WhatsApp</span>
+                           </a>
+                           <a href="https://t.me/YOUR_USERNAME" target="_blank" class="flex items-center gap-2 p-2 bg-blue-100 rounded-lg">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" class="w-6 h-6"/> <span>Telegram</span>
+                           </a>
+                           <a href="https://signal.me/#p/+YOUR_NUMBER" target="_blank" class="flex items-center gap-2 p-2 bg-sky-100 rounded-lg">
+                              <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/Signal-Logo.svg" class="w-6 h-6"/> <span>Signal</span>
+                           </a>
+                        </div>
+                        <p class="text-xs mt-2 text-gray-500">Note: Replace 'YOUR_NUMBER' and 'YOUR_USERNAME' with actual contact details.</p>
+                    `;
+                    addBotMessage(contactHtml, false, true);
+                }
+            }, 1000);
+        }
+
+        // --- DYNAMIC CONTENT INJECTION ---
+        function createLessonSection(id, content) {
+            const section = document.createElement('section');
+            section.id = `section-${id}`;
+            section.classList.add('lesson-section');
+            section.innerHTML = `
+                <div class="interactive-box relative">
+                    <div id="section-${id}-content">
+                        ${content}
+                    </div>
+                    <div id="section-${id}-lock" class="locked-overlay">
+                        <svg class="w-12 h-12 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
+                </div>
+            `;
+            document.getElementById('lesson-content').appendChild(section);
+        }
+
+        function buildCourse() {
+            // Section 1.2
+            createLessonSection(3, `
+                <h3 class="font-serif text-lg font-bold text-indigo-700">Section 1: The Holy Spirit: Who He Is and What He Does</h3>
+                <h4 class="font-semibold text-md mt-2 mb-4">Subpoint 1.2: The Holy Spirit's Practical Empowerment</h4>
+                <p class="mb-4 text-gray-600">The Holy Spirit empowers believers to live a fruitful Christian life, witness for Christ, and overcome spiritual opposition.</p>
+                <div class="bg-indigo-50 p-4 rounded-lg mb-4">
+                    <p class="font-bold">Key Biblical Truth:</p>
+                    <blockquote class="italic text-gray-700 border-l-4 border-indigo-300 pl-4 mt-2">
+                        "But you will receive power when the Holy Spirit comes on you; and you will be my witnesses..." (Acts 1:8 NIV)
+                    </blockquote>
+                </div>
+                <!-- Interactive Activity: True/False -->
+                <div class="interactive-box mt-6" id="tf-1">
+                    <h5 class="font-bold mb-2">Activity: True or False?</h5>
+                    <p class="font-semibold mb-4">"According to Acts 1:8, the power of the Holy Spirit is given primarily for personal comfort and ease."</p>
+                    <div class="flex space-x-4">
+                        <button class="w-full option-btn" onclick="checkTrueFalse(this, false, 'tf-1')">True</button>
+                        <button class="w-full option-btn" onclick="checkTrueFalse(this, true, 'tf-1')">False</button>
+                    </div>
+                    <p id="tf-1-feedback" class="text-sm mt-2 font-semibold"></p>
+                </div>
+                <div class="mt-6 text-right">
+                    <button id="submit-section-3" class="btn btn-primary" onclick="submitAndProceed(3)" disabled>Next Section</button>
+                </div>
+            `);
+            
+            // Section 2.1
+            createLessonSection(4, `
+                <h3 class="font-serif text-lg font-bold text-indigo-700">Section 2: Three Kinds of People</h3>
+                <h4 class="font-semibold text-md mt-2 mb-4">Subpoint 2.1: The Natural Person (Without Christ)</h4>
+                <p class="mb-4 text-gray-600">The natural person, without Christ, is spiritually separated from God and cannot understand spiritual truths.</p>
+                <!-- Diagram Placeholder -->
+                <div class="bg-gray-800 text-white p-4 rounded-lg mb-4 text-center">
+                    <p class="font-mono text-sm text-green-400">&gt; DALL-E Prompt:</p>
+                    <p class="italic text-gray-300 text-xs">"A heart-shaped outline. Inside, a person is on a throne with a crown (self-direction). Outside the heart, a small cross is visible but separate. Conveys 'The Natural Person,' self-directed with Christ outside their life."</p>
+                </div>
+                <!-- Interactive Activity: Multiple Choice -->
+                <div class="interactive-box mt-6" id="mc-1">
+                    <h5 class="font-bold mb-2">Activity: Identify the Characteristic</h5>
+                    <p class="font-semibold mb-4">Which is NOT a characteristic of the Natural Person?</p>
+                    <div class="space-y-3">
+                        <button class="w-full text-left option-btn" onclick="checkMultipleChoice(this, false, 'mc-1')">A) Christ is outside their life.</button>
+                        <button class="w-full text-left option-btn" onclick="checkMultipleChoice(this, false, 'mc-1')">B) Cannot understand spiritual truths.</button>
+                        <button class="w-full text-left option-btn" onclick="checkMultipleChoice(this, true, 'mc-1')">C) Spiritually discerning and wise.</button>
+                        <button class="w-full text-left option-btn" onclick="checkMultipleChoice(this, false, 'mc-1')">D) The person is on the throne of their life.</button>
+                    </div>
+                     <p id="mc-1-feedback" class="text-sm mt-2 font-semibold"></p>
+                </div>
+                <div class="mt-6 text-right">
+                    <button id="submit-section-4" class="btn btn-primary" onclick="submitAndProceed(4)" disabled>Next Subpoint</button>
+                </div>
+            `);
+
+            // ... Continue building all other sections in this manner
+            // For brevity, the rest of the sections are omitted here but would follow the same pattern.
+            // Let's skip to the final sections for demonstration.
+
+            // Invitation to Respond
+            createLessonSection(10, `
+                <h2 class="font-serif text-xl font-bold mb-4">Invitation to Respond</h2>
+                <p class="mb-4 text-gray-600">You've learned that the Spirit-filled life is not an elusive mystery, but a tangible reality available to every believer by faith. Don't settle for a frustrated, self-driven Christian walk. Embrace His command to be filled, confess any known sin, surrender all areas of your life to Christ's leadership, and ask Him by faith to fill you now.</p>
+                <div class="bg-indigo-50 p-6 rounded-lg mb-6">
+                    <h4 class="font-bold mb-2">Prayer of Commitment</h4>
+                    <p class="italic text-gray-700">"Sovereign Lord and Holy Spirit, I thank You that You are God and that You desire to fill me with Your presence and power. I confess any known sin in my life. I thank You for Your forgiveness through Jesus' blood. I surrender every area of my life to Jesus Christ as Lord. According to Your command in Ephesians 5:18 and Your promise in 1 John 5:14-15, I ask You by faith to fill me with Your Holy Spirit right now. In Jesus' mighty name, Amen!"</p>
+                </div>
+                <div id="commitment-options" class="space-y-3">
+                    <h4 class="font-semibold">Take Your Next Step:</h4>
+                    <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="commitment" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500" onchange="checkCommitment()">
+                        <span class="ml-3 text-gray-700">I have prayed this prayer and desire to walk in the Spirit's power.</span>
+                    </label>
+                    <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="commitment" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500" onchange="checkCommitment()">
+                        <span class="ml-3 text-gray-700">I would like to know more before deciding.</span>
+                    </label>
+                     <label class="flex items-center p-3 border-2 border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                        <input type="radio" name="commitment" class="h-5 w-5 text-indigo-600 focus:ring-indigo-500" onchange="checkCommitment()">
+                        <span class="ml-3 text-gray-700">I already committed but backslided – need followup.</span>
+                    </label>
+                </div>
+                 <div class="mt-6 text-right">
+                    <button id="submit-section-10" class="btn btn-primary" onclick="submitAndProceed(10)" disabled>Continue to Final Quiz</button>
+                </div>
+            `);
+
+            // Final Quiz
+            createLessonSection(11, `
+                <h2 class="font-serif text-xl font-bold mb-4">Final Quiz</h2>
+                <p class="mb-6 text-gray-600">Test your understanding of the key concepts from this lesson. You must score at least 75% to complete the course.</p>
+                <div id="final-quiz" class="space-y-6">
+                    <!-- Question 1 -->
+                    <div class="quiz-question">
+                        <p class="font-semibold">1. According to Acts 5:3-4, lying to the Holy Spirit is considered equivalent to lying to:</p>
+                        <div class="space-y-2 mt-2">
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, false)">A) The church leaders.</button>
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, true)">B) God.</button>
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, false)">C) Yourself.</button>
+                        </div>
+                    </div>
+                     <!-- Question 2 -->
+                    <div class="quiz-question">
+                        <p class="font-semibold">2. The "carnal Christian" is best described as:</p>
+                        <div class="space-y-2 mt-2">
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, true)">A) A Christian who has Christ but is still directing their own life.</button>
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, false)">B) A non-believer struggling with sin.</button>
+                           <button class="w-full text-left option-btn" onclick="selectQuizOption(this, false)">C) A Christian fully surrendered to the Spirit.</button>
+                        </div>
+                    </div>
+                    <!-- Add 2 more questions -->
+                </div>
+                <div class="mt-6 text-right">
+                    <button id="submit-final-quiz" class="btn btn-primary" onclick="gradeQuiz()">Submit Quiz</button>
+                    <p id="quiz-feedback" class="text-sm mt-2 font-semibold"></p>
+                </div>
+            `);
+            
+            // Completion Section
+            createLessonSection(12, `
+                 <div class="text-center py-12">
+                    <div id="completion-badge-main" class="inline-block bg-green-100 p-6 rounded-full mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    </div>
+                    <h2 class="font-serif text-3xl font-bold text-gray-900">Congratulations!</h2>
+                    <p class="text-lg text-gray-600 mt-2">You have earned the "Spirit-Filled Champion" badge!</p>
+                    <p class="max-w-2xl mx-auto mt-4">You've completed the lesson and taken a significant step in understanding how to unlock daily victory through the power of the Holy Spirit. Continue to practice spiritual breathing and walk in faith.</p>
+                    
+                    <div class="mt-8 border-t pt-8">
+                        <h3 class="font-bold text-xl mb-4">Spiritual Support & Next Steps</h3>
+                        <div class="grid md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+                            <div class="interactive-box text-left">
+                                <h4 class="font-bold mb-2">Prayer Request</h4>
+                                <p class="text-sm text-gray-500 mb-3">We are here to pray for you. Share your requests confidentially.</p>
+                                <button class="btn btn-secondary w-full">Submit a Prayer Request</button>
+                            </div>
+                             <div class="interactive-box text-left">
+                                <h4 class="font-bold mb-2">Join a Group Chat</h4>
+                                <p class="text-sm text-gray-500 mb-3">Connect with others on this journey for encouragement.</p>
+                                <button class="btn btn-secondary w-full" onclick="askBot('Connect me to a person')">Join Community</button>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            `);
+        }
+        
+        function checkTrueFalse(button, isCorrect, activityId) {
+            const feedback = document.getElementById(`${activityId}-feedback`);
+            const submitBtn = document.getElementById(`submit-section-${state.currentSection}`);
+            if (isCorrect) {
+                button.classList.add('correct');
+                feedback.textContent = "Correct! The Spirit's power is for witness, not just comfort.";
+                feedback.className = 'text-sm mt-2 font-semibold text-green-500';
+                if(submitBtn) submitBtn.disabled = false;
+            } else {
+                button.classList.add('incorrect');
+                feedback.textContent = "Not quite. Re-read Acts 1:8. The primary purpose mentioned is power for witness.";
+                feedback.className = 'text-sm mt-2 font-semibold text-red-500';
+                 if(submitBtn) submitBtn.disabled = true;
+            }
+            // Disable both buttons after selection
+            const parent = button.parentElement;
+            parent.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        }
+        
+        function checkMultipleChoice(button, isCorrect, activityId) {
+            const feedback = document.getElementById(`${activityId}-feedback`);
+            const submitBtn = document.getElementById(`submit-section-${state.currentSection}`);
+            if (isCorrect) {
+                 button.classList.add('correct');
+                feedback.textContent = "That's right! A natural person cannot discern spiritual truths.";
+                feedback.className = 'text-sm mt-2 font-semibold text-green-500';
+                if(submitBtn) submitBtn.disabled = false;
+            } else {
+                 button.classList.add('incorrect');
+                feedback.textContent = "Incorrect. That is a characteristic of the natural person.";
+                feedback.className = 'text-sm mt-2 font-semibold text-red-500';
+                if(submitBtn) submitBtn.disabled = true;
+            }
+            const parent = button.parentElement;
+            parent.querySelectorAll('button').forEach(btn => btn.disabled = true);
+        }
+
+        function checkCommitment() {
+             const submitBtn = document.getElementById(`submit-section-10`);
+             if(submitBtn) submitBtn.disabled = false;
+        }
+        
+        let quizSelections = [];
+        function selectQuizOption(button, isCorrect) {
+            const questionContainer = button.closest('.quiz-question');
+            questionContainer.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+            button.classList.add('selected');
+            
+            // This is a simplified way to store answers for grading
+            const questionIndex = Array.from(questionContainer.parentElement.children).indexOf(questionContainer);
+            quizSelections[questionIndex] = isCorrect;
+        }
+        
+        function gradeQuiz() {
+            const feedback = document.getElementById('quiz-feedback');
+            const questions = document.querySelectorAll('#final-quiz .quiz-question');
+            let score = 0;
+            quizSelections.forEach(isCorrect => {
+                if(isCorrect) score++;
+            });
+            
+            const percentage = (score / questions.length) * 100;
+            
+            if (percentage >= 75) {
+                feedback.textContent = `Passed! Your score: ${percentage.toFixed(0)}%. Well done!`;
+                feedback.className = 'text-sm mt-2 font-semibold text-green-500';
+                setTimeout(() => submitAndProceed(11), 1500);
+            } else {
+                feedback.textContent = `Please review the material and try again. Your score: ${percentage.toFixed(0)}%. You need 75% to pass.`;
+                feedback.className = 'text-sm mt-2 font-semibold text-red-500';
+            }
+        }
+
+
+        // --- INITIALIZATION ---
+        window.onload = () => {
+            buildCourse();
+            updateProgress();
+            // Attach drag and drop listeners for the first matching activity
+            initializeDragAndDrop('matching-options-1');
+            
+            // Set the first section active
+            const firstSection = document.getElementById('section-0');
+            firstSection.classList.add('active');
+            const firstLock = document.getElementById('section-0-lock');
+            if(firstLock) firstLock.style.display = 'none';
+        };
+
+    </script>
+</body>
+</html>

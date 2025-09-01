@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalogue de Cours - Disciple Maker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .page-content {
+            flex: 1;
+            padding-top: 64px; /* Espace pour la nav bar */
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Styles du menu de navigation */
+        nav {
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #667eea;
+        }
+        
+        /* Styles de la section Catalogue */
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-top: 2rem;
+        }
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+        .section-header p {
+            font-size: 1.125rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Barre de recherche et filtres */
+        .filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        .filter-bar input, .filter-bar select {
+            border: 1px solid #e1e8ed;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+        }
+
+        /* Grille des cours */
+        .courses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .course-card {
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            cursor: pointer;
+            border-top: 4px solid #f7a700;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        .course-card .course-icon {
+            font-size: 2.5rem;
+            color: #1e40af;
+            margin-bottom: 1rem;
+        }
+        .course-card .course-details {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+        .course-card .course-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        .course-card .course-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            flex-grow: 1;
+        }
+        .course-card .course-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+        .course-card .course-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .course-card .course-btn:hover {
+            background-color: #2563eb;
+        }
+
+        /* Footer styles from index.html */
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 60px 0 30px 0;
+            margin-top: auto;
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-section h3 {
+            color: #FF3300 !important;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        .footer-section ul li a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+        .footer-bottom {
+            border-top: 1px solid #4a5568;
+            padding-top: 20px;
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- Menu de navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center">
+        <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+        <ul class="flex space-x-6">
+            <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a></li>
+            <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a></li>
+            <li><a href="training.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium active-link">Training</a></li>
+            <li><a href="experts.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a></li>
+            <li><a href="statistics.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a></li>
+            <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a></li>
+            <li><a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a></li>
+        </ul>
+        <div id="auth-buttons" class="flex space-x-4">
+            <a href="login.html" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+            <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+        </div>
+    </nav>
+
+    <div class="page-content bg-gray-50">
+        <section id="courses-catalog" class="py-16">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Course Catalog</h2>
+                    <p>Découvrez tous nos programmes de formation conçus pour vous équiper dans votre marche avec le Christ et votre ministère.</p>
+                </div>
+                
+                <div class="filter-bar">
+                    <input type="text" placeholder="Rechercher un cours..." class="flex-1 max-w-sm">
+                    <select>
+                        <option>Toutes les catégories</option>
+                        <option>Découverte</option>
+                        <option>Étude Biblique</option>
+                        <option>Leadership</option>
+                    </select>
+                    <select>
+                        <option>Tous les niveaux</option>
+                        <option>Débutant</option>
+                        <option>Intermédiaire</option>
+                        <option>Avancé</option>
+                    </select>
+                </div>
+
+                <div class="courses-grid">
+                    <!-- Cours 1 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-search course-icon"></i>
+                            <h3 class="course-title">Discover the Meaning of Your Life</h3>
+                            <p class="course-description">Explore your identity in Christ and the unique plan God has for you.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 4h 30min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 2 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-bible course-icon"></i>
+                            <h3 class="course-title">In-depth Bible Study</h3>
+                            <p class="course-description">Dive into the Scriptures with analysis and understanding tools.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 8h 00min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 3 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-globe course-icon"></i>
+                            <h3 class="course-title">Digital Evangelism</h3>
+                            <p class="course-description">Learn to share your faith effectively online.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 5h 15min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 4 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-users course-icon"></i>
+                            <h3 class="course-title">Discipleship Training</h3>
+                            <p class="course-description">Learn the essential principles for making disciples and developing leaders in your community.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 6h 20min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 5 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-hands-helping course-icon"></i>
+                            <h3 class="course-title">Christian Leadership</h3>
+                            <p class="course-description">Develop your spiritual leadership skills and learn to serve effectively in God's work.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 7h 10min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 6 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-cross course-icon"></i>
+                            <h3 class="course-title">Mission and Evangelism</h3>
+                            <p class="course-description">Equip yourself to share the Gospel and take part in the Great Commission in your context.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 5h 45min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 7 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-user-graduate course-icon"></i>
+                            <h3 class="course-title">Personalized Mentorship</h3>
+                            <p class="course-description">Benefit from one-on-one guidance with experienced mentors in the faith.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 10h 00min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 8 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-award course-icon"></i>
+                            <h3 class="course-title">Recognized Certification</h3>
+                            <p class="course-description">Earn recognized certifications that validate your training and acquired skills.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 12h 00min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Cours 9 -->
+                    <div class="course-card">
+                        <div class="course-details">
+                            <i class="fas fa-star course-icon"></i>
+                            <h3 class="course-title">Destiny</h3>
+                            <p class="course-description">Discover how to discern God's perfect will and walk in His glorious destiny for your spiritual life.</p>
+                            <div class="course-meta">
+                                <span><i class="fas fa-clock"></i> 9h 30min</span>
+                                <button class="course-btn">Start Course</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Pied de page -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">LEARN</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">TRAINING</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">CERTIFICATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">RESOURCES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">PLANS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tarification</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Institutions</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discounts & Promotions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section ">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">ABOUT</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Press</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+                <p class="text-gray-600">&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+            </div>
+        </div>
+    </footer>
+    
+</body>
+</html>

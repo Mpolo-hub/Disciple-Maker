@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orientation Form - Disciple Maker</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1a2d; /* Bleu foncé pour le ciel */
+            color: #d1d5db;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        /* Styles du header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-links-desktop {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #667eea;
+        }
+        .nav-link.active {
+            font-weight: 600;
+            color: #2563eb;
+        }
+        
+        /* Menu mobile */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links-mobile {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+        .nav-links-mobile a {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-links-mobile a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop, .auth-buttons-desktop {
+                display: none;
+            }
+            .hamburger-menu {
+                display: flex;
+            }
+            .nav-container {
+                padding: 1rem;
+            }
+            .nav-links-mobile.open {
+                display: flex;
+            }
+        }
+        
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(#fff 1px, transparent 1px);
+            background-size: 20px 20px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+        
+        .page-content {
+            flex: 1;
+            padding-top: 64px; /* Espace pour la nav bar */
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            color: #333;
+        }
+        
+        h1, h2 {
+            color: #2c3e50;
+        }
+        
+        .question-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        
+        .question-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .question-group input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .question-group .option-label {
+            display: inline-block;
+            margin-right: 20px;
+            margin-bottom: 8px;
+        }
+        
+        button {
+            background-color: #28a745;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        
+        button:hover {
+            background-color: #218838;
+        }
+        
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #e2f0cb;
+            border: 1px solid #c3e69a;
+            color: #155724;
+            display: none;
+        }
+        
+        /* Footer styles */
+        .footer {
+            background: #1e293b;
+            color: white;
+            padding: 60px 0 30px 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            color: #FF3300 !important;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-section ul li a {
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .footer-section ul li a:hover {
+            color: #667eea;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #4a5568;
+            padding-top: 20px;
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.9rem;
+        }
+        
+        /* User Badge Styles */
+        .ldx-userbadge {
+            position: fixed;
+            top: 14px;
+            right: 16px;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(17,24,39,.86);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 999px;
+            box-shadow: 0 10px 24px rgba(0,0,0,.18);
+            font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+        }
+        
+        .ldx-userbadge .avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background:#334155;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-weight:700;
+        }
+        
+        .ldx-userbadge .name {
+            font-weight: 600;
+            font-size: 14px;
+            max-width: 220px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .ldx-userbadge .sep {
+            opacity:.4;
+        }
+        
+        .ldx-userbadge .logout {
+            background: transparent;
+            border: 0;
+            color: #cbd5e1;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        @media (max-width: 480px) {
+            .ldx-userbadge {
+                padding:6px 10px;
+            }
+            .ldx-userbadge .name {
+                max-width: 140px;
+            }
+        }
+        
+        .menu-nav-pos {
+            margin-left: -200px !important;
+        }
+    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body class="flex flex-col min-h-screen">
+
+    <header>
+        <div class="nav-container">
+            <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+            
+            <!-- Menu de navigation pour grand écran -->
+            <div class="menu-nav-pos">
+                <ul class="nav-links-desktop">
+                    <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a></li>
+                    <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a></li>
+                    <li><a href="courses.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a></li>
+                    <li><a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a></li>
+                    <li><a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a></li>
+                    <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a></li>
+                    <li><a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a></li>
+                    <li><a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a></li>
+                </ul>
+            </div>
+
+            <!-- Boutons d'authentification pour grand écran -->
+            <div class="auth-buttons-desktop flex items-center space-x-4">
+                <div class="bg-gray-800 text-white rounded-full p-2 flex items-center space-x-2" style="background-color:white !important;">
+                    <span class="font-bold text-sm"></span>
+                    <span class="text-sm"></span>
+                </div>
+                <button class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-5 rounded-full transition-all duration-300 transform hover:scale-105" style="background-color:white !important;">Logout</button>
+            </div>
+
+            <!-- Menu hamburger pour mobile -->
+            <div class="hamburger-menu" onClick="toggleMobileMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+        <!-- Menu de navigation pour mobile (initiallement caché) -->
+        <div class="nav-links-mobile">
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a>
+            <a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a>
+            <a href="courses.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a>
+            <a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a>
+            <a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a>
+            <a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a>
+            <a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+            <a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a>
+            <div class="flex flex-col mt-4">
+                <div class="bg-gray-800 text-white rounded-full p-2 flex items-center space-x-2 justify-center mb-2">
+                    <span class="font-bold text-sm"></span>
+                    <span class="text-sm"></span>
+                </div>
+                <button class="bg-red-500 text-white font-bold py-2 px-5 rounded-full text-center" style="background-color:white !important;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- User Badge (top-right) -->
+    <div id="ldxUserBadge" class="ldx-userbadge" style="display:none">
+        <div class="avatar" id="ldxAvatar">U</div>
+        <span class="name" id="ldxFullName">User</span>
+        <span class="sep">·</span>
+        <button class="logout" id="ldxLogoutBtn" title="Se déconnecter">Logout</button>
+    </div>
+
+    <div class="page-content">
+        <div class="container">
+            <h1>Orientation for Your Biblical Training</h1>
+            <p>Thank you for answering these few questions to help us offer you the teachings best suited to your spiritual journey.</p>
+
+            <form id="orientationForm">
+                <div class="question-group">
+                    <label>1. What is your experience with the Christian faith?</label>
+                    <input type="radio" id="q1_a" name="q1" value="1" required>
+                    <label for="q1_a" class="option-label">a) I am not a Christian and would like to know more about Christianity.</label><br>
+                    <input type="radio" id="q1_b" name="q1" value="2">
+                    <label for="q1_b" class="option-label">b) I have been a Christian for a short time (less than a year or two) and am just beginning my faith journey.</label><br>
+                    <input type="radio" id="q1_c" name="q1" value="3">
+                    <label for="q1_c" class="option-label">c) I have been a Christian for several years and am committed in my faith.</label>
+                </div>
+
+                <div class="question-group">
+                    <label>2. Have you ever read the Bible?</label>
+                    <input type="radio" id="q2_a" name="q2" value="1" required>
+                    <label for="q2_a" class="option-label">a) No, or very little.</label><br>
+                    <input type="radio" id="q2_b" name="q2" value="2">
+                    <label for="q2_b" class="option-label">b) Yes, I have read some passages or books of the Bible.</label><br>
+                    <input type="radio" id="q2_c" name="q2" value="3">
+                    <label for="q2_c" class="option-label">c) Yes, I read the Bible regularly and have a good understanding of it.</label>
+                </div>
+
+                <div class="question-group">
+                    <label>3. Do you regularly participate in a Christian community (church, home group, etc.)?</label>
+                    <input type="radio" id="q3_a" name="q3" value="1" required>
+                    <label for="q3_a" class="option-label">a) No, not at all.</label><br>
+                    <input type="radio" id="q3_b" name="q3" value="2">
+                    <label for="q3_b" class="option-label">b) Yes, I participate occasionally or am just starting to do so.</label><br>
+                    <input type="radio" id="q3_c" name="q3" value="3">
+                    <label for="q3_c" class="option-label">c) Yes, I am an active and committed member of a Christian community.</label>
+                </div>
+
+                <div class="question-group">
+                    <label>4. Do you consider yourself to understand the foundations of the Christian faith (e.g., who Jesus Christ is, salvation, the Holy Spirit)?</label>
+                    <input type="radio" id="q4_a" name="q4" value="1" required>
+                    <label for="q4_a" class="option-label">a) No, I would like to learn the basics.</label><br>
+                    <input type="radio" id="q4_b" name="q4" value="2">
+                    <label for="q4_b" class="option-label">b) Yes, I have a partial understanding, but I would like to deepen it.</label><br>
+                    <input type="radio" id="q4_c" name="q4" value="3">
+                    <label for="q4_c" class="option-label">c) Yes, I have a good understanding of these concepts.</label>
+                </div>
+
+                <button type="submit">See my training recommendation</button>
+            </form>
+
+            <div id="loadingMessage" class="message" style="display: none;">
+                Processing your answers and preparing your personalized path...
+            </div>
+        </div>
+    </div>
+
+    <!-- Pied de page -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">LEARN</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">TRAINING</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">CERTIFICATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">RESOURCES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">PLANS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tarification</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Institutions</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discounts & Promotions</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section ">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4" style="color: #FF3300 !important;">ABOUT</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Press</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+                <p class="text-gray-600">&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+            </div>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuration Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCwO2PtRkrbmlIs8QOX_71a6NYBR_FhZc8",
+            authDomain: "disciple-maker.firebaseapp.com",
+            projectId: "disciple-maker",
+            storageBucket: "disciple-maker.firebasestorage.app",
+            messagingSenderId: "202105691136",
+            appId: "1:202105691136:web:9e27bb1d909dd89cba4ce5",
+            measurementId: "G-VBCV8SH3S0"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db   = getFirestore(app);
+        const appId = firebaseConfig.projectId;
+
+        const $badge = document.getElementById('ldxUserBadge');
+        const $name  = document.getElementById('ldxFullName');
+        const $avatar= document.getElementById('ldxAvatar');
+        const $logout= document.getElementById('ldxLogoutBtn');
+
+        function initials(firstName, lastName) {
+            const f = (firstName||'').trim()[0] || '';
+            const l = (lastName||'').trim()[0] || '';
+            return (f + l || 'U').toUpperCase();
+        }
+
+        async function loadAndShowProfile(user) {
+            // Profil Firestore: artifacts/{appId}/users/{uid}/profile/details
+            const ref = doc(db, `artifacts/${appId}/users/${user.uid}/profile`, 'details');
+            const snap = await getDoc(ref);
+            let firstName = '', lastName = '';
+
+            if (snap.exists()) {
+                const d = snap.data();
+                firstName = d.firstName || '';
+                lastName  = d.lastName  || '';
+            } else if (user.displayName) {
+                // fallback displayName
+
+
+                const parts = user.displayName.split(' ');
+                firstName = parts[0] || '';
+                lastName  = parts.slice(1).join(' ');
+            } else {
+                firstName = user.email?.split('@')[0] || 'User';
+                lastName  = '';
+            }
+
+            const full = [firstName, lastName].filter(Boolean).join(' ').trim();
+            $name.textContent = full || 'User';
+            $avatar.textContent = initials(firstName, lastName);
+            $badge.style.display = 'flex';
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loadAndShowProfile(user).catch(console.error);
+            } else {
+                // Non connecté → masque le badge
+                $badge.style.display = 'none';
+            }
+        });
+
+        $logout.addEventListener('click', async () => {
+            await signOut(auth);
+            location.href = 'index.html';
+        });
+
+        // Gestion du formulaire d'orientation
+        document.getElementById('orientationForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            document.getElementById('loadingMessage').style.display = 'block';
+
+            let score = 0;
+            const questions = ['q1', 'q2', 'q3', 'q4'];
+
+            questions.forEach(qName => {
+                const selectedOption = document.querySelector(`input[name="${qName}"]:checked`);
+                if (selectedOption) {
+                    score += parseInt(selectedOption.value);
+                }
+            });
+
+            let category = '';
+            if (score >= 10) {
+                category = 'Mature-Christian';
+            } else if (score >= 6) {
+                category = 'New-Believer';
+            } else {
+                category = 'Non-believer';
+            }
+
+            // Redirection vers formation.html
+            const redirectUrl = `formation.html?category=${encodeURIComponent(category)}`;
+            
+            setTimeout(() => {
+                window.location.href = redirectUrl;
+            }, 1500);
+        });
+
+        // Fonction pour le menu mobile
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.nav-links-mobile');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>

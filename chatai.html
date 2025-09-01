@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Expert LearnDash</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Styles de base pour l'apparence générale du chat */
+        .bp-chat {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        /* Conteneur principal qui définit la taille et la forme du chat */
+        .bp-container {
+            max-width: 420px;
+            max-height: 700px;
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        /* Styles de l'en-tête */
+        .header-gradient {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+        }
+
+        /* Styles pour l'avatar du bot et le statut */
+        .bot-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #10b981; /* Vert pour "En ligne" */
+        }
+
+        /* Styles de l'iframe qui contient le chat Botpress */
+        .webchat-iframe-container {
+            flex-grow: 1; /* L'iframe prend tout l'espace restant */
+            position: relative;
+            background: linear-gradient(145deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .webchat-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex items-center justify-center p-4">
+
+    <div class="bp-chat bp-container">
+
+        <div class="header-gradient px-4 py-3 flex items-center justify-between flex-shrink-0">
+            <div class="flex items-center space-x-3">
+                <div class="bot-avatar">
+                    B
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold text-sm">Expert LearnDash</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="status-indicator"></div>
+                        <span class="text-gray-300 text-xs">En ligne</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="webchat-iframe-container">
+            <iframe class="webchat-iframe" srcdoc="
+                <body>
+                    <script src='https://cdn.botpress.cloud/webchat/v0/inject.js'></script>
+                    <script>
+                        window.botpressWebChat.init({
+                            'composerPlaceholder': 'Vos préoccupations LearnDash...',
+                            'botConversationDescription': 'Ce chat est construit par Bongo',
+                            'botName': 'Bongo',
+                            'botId': '2a07efd8-63d8-4960-bc5b-3e7f84397f79',
+                            'hostUrl': 'https://cdn.botpress.cloud/webchat/v0',
+                            'messagingUrl': 'https://messaging.botpress.cloud',
+                            'clientId': '2a07efd8-63d8-4960-bc5b-3e7f84397f79',
+                            'enableConversationDeletion': true,
+                            'showPoweredBy': false,
+                            'className': 'webchatIframe',
+                            'containerWidth': '100%25',
+                            'layoutWidth': '100%25',
+                            'hideWidget': true,
+                            'showCloseButton': false,
+                            'disableAnimations': true,
+                            'closeOnEscape': false,
+                            'showConversationsButton': false,
+                            'enableTranscriptDownload': false,
+                            'stylesheet':'https://webchat-styler-css.botpress.app/prod/code/242c85cb-5949-472f-bdcb-e11eeb42b21b/v38412/style.css'
+                        });
+                        window.botpressWebChat.onEvent(function () {
+                            window.botpressWebChat.sendEvent({ type: 'show' });
+                        }, ['LIFECYCLE.LOADED']);
+                    </script>
+                </body>">
+            </iframe>
+        </div>
+
+    </div>
+
+</body>
+</html>

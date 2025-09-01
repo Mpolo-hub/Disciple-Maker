@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistiques - Disciple Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-links-desktop {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #667eea;
+        }
+        .nav-link.active {
+            font-weight: 600;
+            color: #2563eb;
+        }
+        
+        /* Mobile menu */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links-mobile {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+        .nav-links-mobile a {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-links-mobile a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop, .auth-buttons-desktop {
+                display: none;
+            }
+            .hamburger-menu {
+                display: flex;
+            }
+            .nav-container {
+                padding: 1rem;
+            }
+            .nav-links-mobile.open {
+                display: flex;
+            }
+        }
+
+        /* Stats specific styles */
+        .stats-card {
+            transition: all 0.3s ease;
+            border-top: 3px solid transparent;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .progress-value {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+            border-radius: 4px;
+        }
+        
+        /* Badges */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        
+        .badge-beginner {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-intermediate {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-advanced {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        .badge-expert {
+            background-color: #ede9fe;
+            color: #5b21b6;
+        }
+        
+        footer {
+            background: #012450 !important;
+            margin-top: auto;
+        }
+        
+        .footer-section {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        
+        footer .footer-section h3 {
+            color: #FF3300 !important;
+        }
+        
+        footer .footer-section ul li a {
+            color: white !important;
+        }
+        
+        footer .footer-section ul li a:hover {
+            color: #93c5fd !important;
+        }
+        
+        /* Chart container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        /* Level indicator */
+        .level-indicator {
+            width: 120px;
+            height: 120px;
+            position: relative;
+        }
+        
+        .level-progress {
+            transform: rotate(-90deg);
+        }
+        
+        .level-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #3b82f6;
+        }
+        
+        /* Popular course bar */
+        .popular-course-bar {
+            height: 24px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .popular-course-bar span {
+            position: absolute;
+            right: 10px;
+            color: white;
+            font-weight: 600;
+            line-height: 24px;
+        }
+        
+        /* Tabs */
+        .tab {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab.active {
+            background-color: white;
+            color: #3b82f6;
+            font-weight: 600;
+            border-bottom: 3px solid #3b82f6;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Most followed courses section */
+        .course-rank {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-right: 12px;
+        }
+        
+        .rank-1 {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+        }
+        
+        .rank-2 {
+            background: linear-gradient(135deg, #C0C0C0, #A9A9A9);
+        }
+        
+        .rank-3 {
+            background: linear-gradient(135deg, #CD7F32, #8C6B46);
+        }
+        
+        .rank-other {
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+        }
+        
+        .course-item {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .course-item:hover {
+            transform: translateX(5px);
+            border-left-color: #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+            
+            <!-- Desktop navigation menu -->
+            <ul class="nav-links-desktop">
+                <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a></li>
+                <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a></li>
+                <li><a href="courses.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a></li>
+                <li><a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a></li>
+                <li><a href="statistics.html" class="nav-link active text-blue-600 font-medium">Statistics</a></li>
+                <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a></li>
+                <li><a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a></li>
+                <li><a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a></li>
+            </ul>
+
+            <!-- Desktop authentication buttons -->
+            <div class="auth-buttons-desktop flex space-x-4">
+                <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+                <a href="login.html" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+            </div>
+
+            <!-- Mobile hamburger menu -->
+            <div class="hamburger-menu" onclick="toggleMobileMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+        <!-- Mobile navigation menu (initially hidden) -->
+        <div class="nav-links-mobile">
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a>
+            <a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a>
+            <a href="courses.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Training</a>
+            <a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a>
+            <a href="statistics.html" class="nav-link text-blue-600 font-medium">Statistics</a>
+            <a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a>
+            <a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+            <a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a>
+            <div class="flex flex-col mt-4">
+                <a href="register.html" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-full text-center mb-2">Sign Up</a>
+                <a href="login.html" class="text-blue-600 font-bold text-center py-2">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 py-8 flex-1">
+        <!-- Page header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Mes Statistiques</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Suivez votre progression et découvrez les tendances de la plateforme.</p>
+        </div>
+
+        <!-- Tabs -->
+        <div class="bg-white rounded-xl shadow-md p-1 mb-8">
+            <div class="flex border-b border-gray-200">
+                <div class="tab active" data-tab="personal">Progression Personnelle</div>
+                <div class="tab" data-tab="platform">Statistiques de la Plateforme</div>
+            </div>
+            
+            <!-- Personal Stats Tab -->
+            <div id="personal-tab" class="tab-content active p-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Level Card -->
+                    <div class="stats-card bg-white rounded-xl shadow-md p-6 flex flex-col items-center">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Mon Niveau</h3>
+                        <div class="level-indicator mb-4">
+                            <svg class="level-progress" width="120" height="120" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#e5e7eb" stroke-width="8" />
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="#3b82f6" stroke-width="8" stroke-dasharray="339.292" stroke-dashoffset="135.717" />
+                            </svg>
+                            <div class="level-value">60%</div>
+                        </div>
+                        <span class="badge badge-intermediate">Intermédiaire</span>
+                    </div>
+                    
+                    <!-- Certificates Card -->
+                    <div class="stats-card bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Mes Certificats</h3>
+                        <div class="flex items-center justify-center mb-4">
+                            <div class="text-4xl font-bold text-blue-600">7</div>
+                            <div class="text-sm text-gray-600 ml-2">/12 cours complétés</div>
+                        </div>
+                        <div class="progress-bar mb-2">
+                            <div class="progress-value" style="width: 58%"></div>
+                        </div>
+                        <p class="text-sm text-gray-600 text-center">58% des cours certifiés</p>
+                    </div>
+                    
+                    <!-- Time Spent Card -->
+                    <div class="stats-card bg-white rounded-xl shadow-md p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Temps d'Étude</h3>
+                        <div class="flex items-center justify-center mb-4">
+                            <i class="fas fa-clock text-blue-500 text-2xl mr-2"></i>
+                            <div class="text-2xl font-bold text-gray-800">42h 15m</div>
+                        </div>
+                        <p class="text-sm text-gray-600 text-center">Moyenne de 1h 20m par jour</p>
+                    </div>
+                </div>
+                
+                <!-- Progress Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Ma Progression</h3>
+                    <div class="chart-container">
+                        <canvas id="progressChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Current Courses -->
+                <div class="bg-white rounded-xl shadow-md p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Mes Cours en Progrès</h3>
+                    <div class="space-y-4">
+                        <!-- Course 1 -->
+                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-800">Introduction à la Théologie</h4>
+                                <p class="text-sm text-gray-600">Bible Study • Débuté le 12 Oct 2023</p>
+                            </div>
+                            <div class="w-48">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progression</span>
+                                    <span>65%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-value" style="width: 65%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 2 -->
+                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-800">Formation au Discipolat</h4>
+                                <p class="text-sm text-gray-600">Discipleship • Débuté le 18 Oct 2023</p>
+                            </div>
+                            <div class="w-48">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progression</span>
+                                    <span>42%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-value" style="width: 42%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 3 -->
+                        <div class="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                            <div>
+                                <h4 class="font-medium text-gray-800">Évangélisation Numérique</h4>
+                                <p class="text-sm text-gray-600">Evangelism • Débuté le 25 Oct 2023</p>
+                            </div>
+                            <div class="w-48">
+                                <div class="flex justify-between text-sm mb-1">
+                                    <span>Progression</span>
+                                    <span>28%</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-value" style="width: 28%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Platform Stats Tab -->
+            <div id="platform-tab" class="tab-content p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Total Users Card -->
+                    <div class="stats-card bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-lg mr-4">
+                                <i class="fas fa-users text-blue-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Utilisateurs Actifs</h3>
+                                <p class="text-3xl font-bold text-blue-600">12,458</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Total Courses Card -->
+                    <div class="stats-card bg-white rounded-xl shadow-md p-6">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-lg mr-4">
+                                <i class="fas fa-book text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">Cours Disponibles</h3>
+                                <p class="text-3xl font-bold text-green-600">48</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Popular Courses -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Cours les Plus Populaires</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Course 1 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Introduction à la Théologie</span>
+                                <span class="font-medium text-blue-600">3,245 étudiants</span>
+                            </div>
+                            <div class="popular-course-bar" style="background: linear-gradient(90deg, #3b82f6, #6366f1); width: 92%">
+                                <span>92%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 2 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Formation au Discipolat</span>
+                                <span class="font-medium text-blue-600">2,876 étudiants</span>
+                            </div>
+                            <div class="popular-course-bar" style="background: linear-gradient(90deg, #10b981, #059669); width: 82%">
+                                <span>82%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 3 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Évangélisation Numérique</span>
+                                <span class="font-medium text-blue-600">2,543 étudiants</span>
+                            </div>
+                            <div class="popular-course-bar" style="background: linear-gradient(90deg, #8b5cf6, #7c3aed); width: 73%">
+                                <span>73%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 4 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Histoire de l'Église Chrétienne</span>
+                                <span class="font-medium text-blue-600">2,112 étudiants</span>
+                            </div>
+                            <div class="popular-course-bar" style="background: linear-gradient(90deg, #f59e0b, #d97706); width: 60%">
+                                <span>60%</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 5 -->
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="font-medium">Leadership Chrétien</span>
+                                <span class="font-medium text-blue-600">1,987 étudiants</span>
+                            </div>
+                            <div class="popular-course-bar" style="background: linear-gradient(90deg, #ec4899, #db2777); width: 57%">
+                                <span>57%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Completion Rate Chart -->
+                <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+                    <h3 class="text-xl font-bold text-gray-800 mb-6">Taux de Complétion par Catégorie</h3>
+                    <div class="chart-container">
+                        <canvas id="completionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Most Followed Courses Section -->
+        <section class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                <i class="fas fa-fire text-orange-500 mr-3"></i>
+                Cours les Plus Suivis sur la Plateforme
+            </h2>
+            <p class="text-gray-600 mb-6">Découvrez les cours les plus populaires classés par nombre d'étudiants inscrits.</p>
+            
+            <div class="space-y-6">
+                <!-- Course 1 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-1">1</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Introduction à la Théologie</h3>
+                        <p class="text-gray-600 text-sm">Bible Study • Niveau Débutant</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>3,245 étudiants</span>
+                            <span class="font-bold">92%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #3b82f6, #6366f1); width: 92%">
+                            <span>92%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-2">2</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Formation au Discipolat</h3>
+                        <p class="text-gray-600 text-sm">Discipleship • Niveau Intermédiaire</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>2,876 étudiants</span>
+                            <span class="font-bold">82%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #10b981, #059669); width: 82%">
+                            <span>82%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-3">3</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Évangélisation Numérique</h3>
+                        <p class="text-gray-600 text-sm">Evangelism • Niveau Intermédiaire</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>2,543 étudiants</span>
+                            <span class="font-bold">73%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #8b5cf6, #7c3aed); width: 73%">
+                            <span>73%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 4 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-other">4</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Histoire de l'Église Chrétienne</h3>
+                        <p class="text-gray-600 text-sm">Bible Study • Niveau Avancé</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>2,112 étudiants</span>
+                            <span class="font-bold">60%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #f59e0b, #d97706); width: 60%">
+                            <span>60%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 5 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-other">5</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Leadership Chrétien</h3>
+                        <p class="text-gray-600 text-sm">Discipleship • Niveau Avancé</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>1,987 étudiants</span>
+                            <span class="font-bold">57%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #ec4899, #db2777); width: 57%">
+                            <span>57%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 6 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-other">6</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Mentorat Personnalisé</h3>
+                        <p class="text-gray-600 text-sm">Discipleship • Niveau Expert</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>1,754 étudiants</span>
+                            <span class="font-bold">52%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #ef4444, #dc2626); width: 52%">
+                            <span>52%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 7 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-other">7</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Mission et Évangélisation</h3>
+                        <p class="text-gray-600 text-sm">Evangelism • Niveau Intermédiaire</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>1,632 étudiants</span>
+                            <span class="font-bold">48%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #14b8a6, #0d9488); width: 48%">
+                            <span>48%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 8 -->
+                <div class="course-item bg-gray-50 p-4 rounded-lg flex items-center">
+                    <div class="course-rank rank-other">8</div>
+                    <div class="flex-1">
+                        <h3 class="font-bold text-lg text-gray-800">Destinée et Volonté de Dieu</h3>
+                        <p class="text-gray-600 text-sm">Evangelism • Niveau Avancé</p>
+                    </div>
+                    <div class="w-48">
+                        <div class="flex justify-between text-sm mb-1">
+                            <span>1,421 étudiants</span>
+                            <span class="font-bold">45%</span>
+                        </div>
+                        <div class="popular-course-bar" style="background: linear-gradient(90deg, #a855f7, #9333ea); width: 45%">
+                            <span>45%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition-colors flex items-center mx-auto">
+                    <i class="fas fa-list mr-2"></i>
+                    Voir tous les cours
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 w-full py-12 border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+                <!-- LEARN Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">LEARN</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <!-- TRAINING Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">TRAINING</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                
+                <!-- CERTIFICATION Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">CERTIFICATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                
+                <!-- RESOURCES Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">RESOURCES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- PLANS Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">PLANS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pricing</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Organizations</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Free Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Scholarships</a></li>
+                    </ul>
+                </div>
+                
+                <!-- COMMUNITY Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">COMMUNITY</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Forum</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discussions</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Code of Conduct</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discord</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="text-2xl font-extrabold text-blue-700 mr-2">Disciple Maker</div>
+                    <span class="text-gray-500 text-sm">© 2023 All rights reserved.</span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.nav-links-mobile');
+            mobileMenu.classList.toggle('open');
+        }
+        
+        // Tab functionality
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                // Show the corresponding tab content
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-tab`).classList.add('active');
+            });
+        });
+        
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Progress Chart
+            const progressCtx = document.getElementById('progressChart').getContext('2d');
+            const progressChart = new Chart(progressCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+                    datasets: [{
+                        label: 'Cours Complétés',
+                        data: [2, 3, 1, 4, 2, 3, 5, 4, 3, 6, 4, 7],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.3,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Nombre de Cours'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Completion Rate Chart
+            const completionCtx = document.getElementById('completionChart').getContext('2d');
+            const completionChart = new Chart(completionCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Bible Study', 'Discipleship', 'Evangelism', 'Leadership', 'Theology'],
+                    datasets: [{
+                        label: 'Taux de Complétion (%)',
+                        data: [75, 68, 62, 58, 72],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.7)',
+                            'rgba(16, 185, 129, 0.7)',
+                            'rgba(139, 92, 246, 0.7)',
+                            'rgba(245, 158, 11, 0.7)',
+                            'rgba(239, 68, 68, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(16, 185, 129)',
+                            'rgb(139, 92, 246)',
+                            'rgb(245, 158, 11)',
+                            'rgb(239, 68, 68)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            title: {
+                                display: true,
+                                text: 'Pourcentage de Complétion'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

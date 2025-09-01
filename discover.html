@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover Jesus - Disciple Maker</title>
+    
+    <!-- CSS Links -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="style_hyb.css">
+    
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: #001F3E;
+        }
+
+        .page-section {
+            flex: 1;
+        }
+
+        /* Styles spécifiques pour la page Discover */
+        .story-section {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .video-player-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .accordion-header {
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .accordion-header:hover {
+            background-color: #f8fafc;
+        }
+		.auth-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .auth-form {
+            display: block;
+        }
+        
+        .auth-form.hidden {
+            display: none;
+        }
+        
+        .password-field {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+        }
+		footer{position:; background: #012450 !important;}
+		.footer-section {
+							margin-left: 10px;
+							margin-right: 10px;
+											}
+		
+		footer .footer-section h3{ color: #FF3300 !important;}
+		footer .footer-section ul li a {
+			color: white !important;
+		}
+		
+		footer .footer-section ul li a:hover {
+			color: #93c5fd !important; /* Une variante de bleu clair pour le hover */
+		}
+    </style>
+    
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+
+<body class="text-gray-100 min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center">
+        <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+        <ul class="flex space-x-6">
+            <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Home</a></li>
+            <li><a href="discover.html" class="nav-link text-blue-600 font-medium">Discover Jesus</a></li>
+            <li><a href="index.html#lms" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Training</a></li>
+            <li><a href="index.html#it-experts" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">IT Experts</a></li>
+            <li><a href="index.html#stats-impact" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Statistics</a></li>
+            <li><a href="index.html#ai-forum" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Forum & AI</a></li>
+            <li><a href="index.html#contact-resources" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Contact</a></li>
+            <li><a href="index.html#digital-library" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Library</a></li>
+        </ul>
+        <div id="auth-buttons" class="flex space-x-4">
+            <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+            <a href="login.html" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <section class="max-w-7xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-16 text-white">Discover Jesus: A Personal and Interactive Story</h1>
+
+            <!-- Grand Narrative Section -->
+            <div class="story-section p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">The Grand Narrative: From Creation to Redemption</h2>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <img src="https://placehold.co/600x400/a78bfa/ffffff?text=Creation+Art" alt="Creation Art" class="rounded-xl shadow-md mb-4 md:mb-0 w-full">
+                    </div>
+                    <div>
+                        <p class="text-lg leading-relaxed mb-4">
+                            From the beginning of time, God created a perfect world, filled with beauty and harmony. But humanity chose to turn away from Him, breaking that relationship and introducing pain and separation into the world.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            Yet, God's love is so great that He always had a plan to restore this broken relationship. This plan is centered on one person: Jesus.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Learn More About Creation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Meet Jesus Section -->
+            <div class="story-section p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center">Meet Jesus: True Stories</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="video-player-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4 bg-gray-50 text-center">
+                            <h3 class="font-semibold text-xl text-gray-800">Sarah's Testimony</h3>
+                            <p class="text-gray-600">How Jesus brought peace into her life.</p>
+                        </div>
+                    </div>
+                    <div class="rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="video-player-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4 bg-gray-50 text-center">
+                            <h3 class="font-semibold text-xl text-gray-800">Mark's Story</h3>
+                            <p class="text-gray-600">From searching for meaning to discovering truth.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        See more testimonials
+                    </button>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div class="story-section p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center">Your Questions, His Answers</h2>
+                <div class="space-y-4">
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 flex justify-between items-center text-lg font-medium text-gray-800 focus:outline-none accordion-header">
+                            Why did Jesus die?
+                            <svg class="w-5 h-5 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="p-4 text-gray-700 leading-relaxed accordion-content hidden">
+                            <p>Jesus died on the cross to pay the price for our sins. His death is an act of infinite love, allowing anyone who believes in Him to have eternal life and a restored relationship with God.</p>
+                            <p class="mt-2 text-sm text-blue-600">See: John 3:16, Romans 5:8</p>
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 flex justify-between items-center text-lg font-medium text-gray-800 focus:outline-none accordion-header">
+                            How can I know God personally?
+                            <svg class="w-5 h-5 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="p-4 text-gray-700 leading-relaxed accordion-content hidden">
+                            <p>Knowing God personally begins with faith in Jesus Christ. You can speak to Him through prayer, read the Bible for Him to know more, and seek to live according to His teachings. The Holy Spirit will guide you.</p>
+                            <p class="mt-2 text-sm text-blue-600">See: John 14:6, James 4:8</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Ask the AI another question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Decision Section -->
+            <div class="bg-blue-700 text-white rounded-xl shadow-lg p-8 text-center">
+                <h2 class="text-3xl font-bold mb-6">A Moment of Decision</h2>
+                <p class="text-xl leading-relaxed mb-8">
+                    If you wish to take a step of faith or learn more about a personal relationship with Jesus, we are here to support you.
+                </p>
+                <img src="https://placehold.co/400x250/3b82f6/ffffff?text=Hands+Praying" alt="Hands Praying" class="mx-auto rounded-xl shadow-md mb-8 w-full max-w-md">
+                <button class="bg-white text-blue-700 hover:bg-gray-100 font-bold py-4 px-8 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105">
+                    I want to know more or pray
+                </button>
+            </div>
+        </section>
+		
+		
+    </main>
+	<!-- Section d'authentification ajoutée -->
+    <section id="auth-interface" class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        <div class="auth-container">
+            <h2 class="text-3xl font-extrabold text-blue-800 mb-8">Welcome!</h2>
+
+            <!-- Formulaire de connexion -->
+            <div id="login-form" class="auth-form">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6">Log in to Your Account</h3>
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label for="login-email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                        <input type="email" id="email" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com" required>
+                    </div>
+                    <div class="password-field">
+                        <label for="login-password" class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" id="password" class="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your password" required>
+                        <button type="button" class="password-toggle">👁️</button>
+                    </div>
+                    <div class="flex justify-between items-center text-sm">
+                        <div class="flex items-center">
+                            <input type="checkbox" id="remember-me" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                            <label for="remember-me" class="ml-2 text-gray-600">Remember me</label>
+                        </div>
+                        <a href="#" class="text-blue-600 hover:underline">Forgot password?</a>
+                    </div>
+                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Log In
+                    </button>
+                </form>
+                <div class="mt-6 text-gray-600">
+                    Don't have an account yet?
+                    <a href="register.html" class="text-blue-600 hover:underline ml-2">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pied de page -->
+    <footer class="bg-gray-100 w-full py-12 border-t border-gray-200 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+ <!--<footer class="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8 border-t border-gray-200 mt-16">
+    <div class="max-w-7xl mx-auto">-->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+            <!-- LEARN Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">LEARN</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                </ul>
+            </div>
+            
+            <!-- TRAINING Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">TRAINING</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                </ul>
+            </div>
+            
+            <!-- CERTIFICATION Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">CERTIFICATION</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                </ul>
+            </div>
+            
+            <!-- RESOURCES Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">RESOURCES</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                </ul>
+            </div>
+            
+            <!-- PLANS Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">PLANS</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tarification</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Institutions</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discounts & Promotions</a></li>
+                </ul>
+            </div>
+            
+			
+            <!-- ABOUT Column -->
+            <div class="footer-section ">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">ABOUT</h3>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Careers</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Press</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership</a></li>
+                    <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Footer Bottom -->
+        <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+            <p class="text-gray-600">&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+        </div>
+    </div>
+</footer>
+
+    <!-- Floating Chat Button -->
+    <button class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 z-50">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </button>
+    <!-- Footer -->
+    
+
+    <!-- Floating Chat Button -->
+    <button class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 z-50">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </button>
+    
+    <!-- JavaScript -->
+    <script>
+	
+		 document.addEventListener('DOMContentLoaded', () => {
+            // Accordion functionality
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.accordion-icon');
+                    
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+            // Password toggle functionality
+            const passwordToggles = document.querySelectorAll('.password-toggle');
+            passwordToggles.forEach(toggle => {
+                toggle.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.textContent = type === 'password' ? '👁️' : '🙈';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

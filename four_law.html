@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Four Spiritual Laws - Interactive Course</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .lesson-container {
+            display: none;
+        }
+        .lesson-container.active {
+            display: block;
+        }
+        .progress-bar-fill {
+            transition: width 0.5s ease-in-out;
+        }
+        .option-button {
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .option-button:hover {
+            transform: translateY(-2px);
+        }
+        .correct {
+            background-color: #22c55e;
+            color: white;
+        }
+        .incorrect {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-blue-600">The Four Spiritual Laws</h1>
+            <p class="text-lg text-gray-600 mt-2">An Interactive Journey to Faith</p>
+        </header>
+
+        <!-- Progress Bar -->
+        <div class="w-full bg-gray-200 rounded-full h-4 mb-8">
+            <div id="progressBar" class="bg-blue-600 h-4 rounded-full progress-bar-fill" style="width: 0%"></div>
+        </div>
+
+        <!-- Course Content -->
+        <div id="courseContent">
+
+            <!-- Lesson 1: Introductory Question -->
+            <div id="lesson-1" class="lesson-container active bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Introductory Question</h2>
+                <p class="mb-4">Before we begin, let's reflect on your current understanding. Which of the following best describes your current belief about God?</p>
+                <div class="space-y-4">
+                    <button onclick="handleAnswer(1, false)" class="w-full text-left p-4 bg-gray-200 rounded-lg option-button">A) I believe in God and have a personal relationship with Him.</button>
+                    <button onclick="handleAnswer(1, false)" class="w-full text-left p-4 bg-gray-200 rounded-lg option-button">B) I believe in God, but I'm not sure about the personal relationship part.</button>
+                    <button onclick="handleAnswer(1, false)" class="w-full text-left p-4 bg-gray-200 rounded-lg option-button">C) I'm unsure about what I believe.</button>
+                    <button onclick="handleAnswer(1, true)" class="w-full text-left p-4 bg-gray-200 rounded-lg option-button">D) Any of the above is a great starting point for this journey!</button>
+                </div>
+            </div>
+
+            <!-- Lesson 2: Learning Objectives -->
+            <div id="lesson-2" class="lesson-container bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">Learning Objectives</h2>
+                <p class="mb-6">In this course, you'll discover four key principles that can change your life. Think of them as arrows to hit the target of a meaningful relationship with God.</p>
+                <div class="grid md:grid-cols-2 gap-6 text-center">
+                    <div class="bg-blue-100 p-6 rounded-lg">
+                        <i class="fas fa-heart text-blue-500 text-4xl mb-3"></i>
+                        <h3 class="font-bold text-lg">Law 1: God's Love</h3>
+                        <p>Understand God's unconditional love and His wonderful plan for your life.</p>
+                    </div>
+                    <div class="bg-green-100 p-6 rounded-lg">
+                        <i class="fas fa-user-slash text-green-500 text-4xl mb-3"></i>
+                        <h3 class="font-bold text-lg">Law 2: Man's Sin</h3>
+                        <p>Recognize that sin separates us from God, preventing us from experiencing His love.</p>
+                    </div>
+                    <div class="bg-yellow-100 p-6 rounded-lg">
+                        <i class="fas fa-cross text-yellow-500 text-4xl mb-3"></i>
+                        <h3 class="font-bold text-lg">Law 3: God's Provision</h3>
+                        <p>Discover that Jesus Christ is God's only solution for our sin.</p>
+                    </div>
+                    <div class="bg-purple-100 p-6 rounded-lg">
+                        <i class="fas fa-gift text-purple-500 text-4xl mb-3"></i>
+                        <h3 class="font-bold text-lg">Law 4: Our Response</h3>
+                        <p>Learn how to personally receive Jesus Christ as Savior and Lord.</p>
+                    </div>
+                </div>
+                 <button onclick="nextLesson()" class="mt-6 w-full bg-blue-600 text-white p-4 rounded-lg font-bold hover:bg-blue-700">Let's Get Started!</button>
+            </div>
+
+            <!-- Lesson 3: First Law - God's Love -->
+            <div id="lesson-3" class="lesson-container bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold mb-4">First Law: God Loves You and Offers a Wonderful Plan for Your Life</h2>
+                
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Key Biblical Truth</h3>
+                    <p>God's love for you is not a vague concept; it's an active, personal, and unconditional love.</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Bible Verse</h3>
+                    <p class="bg-gray-100 p-4 rounded-lg italic">"For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life." - <span class="font-bold">John 3:16 (NIV)</span></p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Illustration</h3>
+                    <p>Imagine a master artist who creates a beautiful painting. The artist doesn't just create it and walk away; they cherish it, protect it, and desire for it to be seen and appreciated. In the same way, God, the master creator, has a deep and abiding love for you, His creation. He has a plan for your life that is more beautiful and fulfilling than you can imagine.</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Diagram Prompt</h3>
+                    <p class="text-sm text-gray-500 italic">"Create a diagram showing a heart with a warm, glowing light inside, symbolizing God's love. From the heart, a path of light leads to a beautiful, vibrant landscape, representing God's wonderful plan for a person's life."</p>
+                </div>
+
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold mb-2">Reflection Question</h3>
+                    <p>What does it mean to you that the God of the universe has a personal and loving plan for your life?</p>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="text-lg font-bold mb-2">Activity: True or False</h3>
+                    <p class="mb-4">God's love is dependent on our good works.</p>
+                    <div class="flex space-x-4">
+                        <button onclick="handleAnswer(3, false, this)" class="w-full p-3 bg-gray-200 rounded-lg option-button">True</button>
+                        <button onclick="handleAnswer(3, true, this)" class="w-full p-3 bg-gray-200 rounded-lg option-button">False</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- More lessons will be dynamically added here -->
+
+        </div>
+
+        <!-- Navigation -->
+        <div id="navigation" class="mt-8 flex justify-between" style="display: none;">
+            <button id="prevButton" onclick="prevLesson()" class="bg-gray-300 text-gray-800 p-3 rounded-lg font-bold hover:bg-gray-400">&laquo; Previous</button>
+            <button id="nextButton" onclick="nextLesson()" class="bg-blue-600 text-white p-3 rounded-lg font-bold hover:bg-blue-700">Next &raquo;</button>
+        </div>
+
+        <!-- Chat & Support -->
+        <div class="mt-12 text-center">
+            <h3 class="text-2xl font-bold mb-4">Need Help or Want to Chat?</h3>
+            <p class="mb-6">Our team is here to support you. Connect with a coach or join our community.</p>
+            <div class="flex justify-center space-x-4">
+                <a href="#" class="bg-green-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-green-600 flex items-center"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
+                <a href="#" class="bg-blue-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-blue-600 flex items-center"><i class="fab fa-telegram-plane mr-2"></i> Telegram</a>
+                <a href="#" class="bg-purple-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-purple-600 flex items-center"><i class="fab fa-viber mr-2"></i> Signal</a>
+                <a href="#" class="bg-red-500 text-white py-3 px-6 rounded-lg font-bold hover:bg-red-600 flex items-center"><i class="fas fa-comment-dots mr-2"></i> AI Coach</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLesson = 1;
+        const totalLessons = 7; // Update this as you add more lessons
+
+        const lessons = {
+            4: {
+                title: "Second Law: Man is Sinful and Separated from God",
+                content: `
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Key Biblical Truth</h3>
+                        <p>Sin is not just about doing bad things; it's a state of rebellion against God that creates a chasm between us and Him.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Bible Verse</h3>
+                        <p class="bg-gray-100 p-4 rounded-lg italic">"For all have sinned and fall short of the glory of God." - <span class="font-bold">Romans 3:23 (NIV)</span></p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Illustration</h3>
+                        <p>Imagine trying to cross a vast canyon. No matter how far you jump, you can't reach the other side on your own. Sin is like that canyon, separating us from God. Our own efforts—good deeds, philosophy, religion—are like those failed jumps. They can't bridge the gap.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Diagram Prompt</h3>
+                        <p class="text-sm text-gray-500 italic">"Illustrate a deep, wide canyon. On one side, label it 'Humanity,' and on the other, 'God.' Show arrows representing human efforts (good works, religion) falling short of crossing the canyon."</p>
+                    </div>
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="text-lg font-bold mb-2">Activity: Fill in the Blank</h3>
+                        <p class="mb-4">"For the wages of sin is ______, but the gift of God is eternal life in Christ Jesus our Lord." (Romans 6:23)</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button onclick="handleAnswer(4, false, this)" class="p-3 bg-gray-200 rounded-lg option-button">sadness</button>
+                            <button onclick="handleAnswer(4, true, this)" class="p-3 bg-gray-200 rounded-lg option-button">death</button>
+                            <button onclick="handleAnswer(4, false, this)" class="p-3 bg-gray-200 rounded-lg option-button">forgiveness</button>
+                            <button onclick="handleAnswer(4, false, this)" class="p-3 bg-gray-200 rounded-lg option-button">work</button>
+                        </div>
+                    </div>
+                `
+            },
+            5: {
+                title: "Third Law: Jesus Christ is God's Only Provision for Man's Sin",
+                content: `
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Key Biblical Truth</h3>
+                        <p>Jesus is not just a good teacher or prophet; He is the divine bridge who spans the canyon of sin, connecting us back to God.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Bible Verse</h3>
+                        <p class="bg-gray-100 p-4 rounded-lg italic">"But God demonstrates his own love for us in this: While we were still sinners, Christ died for us." - <span class="font-bold">Romans 5:8 (NIV)</span></p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Illustration</h3>
+                        <p>Remember the canyon? God, in His love, didn't leave us stranded. He built a bridge across it. That bridge is Jesus Christ. He came to our side, lived a perfect life, and then sacrificed Himself on the cross to pay the penalty for our sin, spanning the gap once and for all.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Diagram Prompt</h3>
+                        <p class="text-sm text-gray-500 italic">"Show the same canyon from the previous diagram, but now with a sturdy cross forming a bridge from the 'Humanity' side to the 'God' side. An arrow should point from God to humanity, labeled 'Jesus Christ'."</p>
+                    </div>
+                     <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="text-lg font-bold mb-2">Activity: Matching</h3>
+                        <p class="mb-4">Match the concept to its description.</p>
+                        <div id="matching-game"></div>
+                    </div>
+                `
+            },
+            6: {
+                title: "Fourth Law: We Must Individually Receive Jesus Christ",
+                content: `
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Key Biblical Truth</h3>
+                        <p>Knowing about the bridge isn't enough; you must personally choose to cross it by placing your faith in Jesus Christ.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Bible Verse</h3>
+                        <p class="bg-gray-100 p-4 rounded-lg italic">"Here I am! I stand at the door and knock. If anyone hears my voice and opens the door, I will come in and eat with that person, and they with me." - <span class="font-bold">Revelation 3:20 (NIV)</span></p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Illustration</h3>
+                        <p>A beautifully wrapped gift with your name on it is worthless until you reach out and accept it. Similarly, Jesus offers the gift of salvation and a relationship with God. It's a free gift, but it only becomes yours when you personally receive it through faith.</p>
+                    </div>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">Diagram Prompt</h3>
+                        <p class="text-sm text-gray-500 italic">"Two contrasting images of a heart. The first shows a throne in the center with 'Self' sitting on it, and Jesus (represented by a cross) is outside the heart. The second image shows the cross on the throne inside the heart, and 'Self' is kneeling before it, yielding control."</p>
+                    </div>
+                    <div class="mt-6 p-4 bg-blue-50 rounded-lg">
+                        <h3 class="text-lg font-bold mb-2">Activity: Multiple Choice</h3>
+                        <p class="mb-4">How do we receive Jesus Christ?</p>
+                        <div class="space-y-3">
+                            <button onclick="handleAnswer(6, false, this)" class="w-full text-left p-3 bg-gray-200 rounded-lg option-button">By being a good person.</button>
+                            <button onclick="handleAnswer(6, true, this)" class="w-full text-left p-3 bg-gray-200 rounded-lg option-button">By personal invitation through faith.</button>
+                            <button onclick="handleAnswer(6, false, this)" class="w-full text-left p-3 bg-gray-200 rounded-lg option-button">By going to church.</button>
+                            <button onclick="handleAnswer(6, false, this)" class="w-full text-left p-3 bg-gray-200 rounded-lg option-button">By intellectual agreement alone.</button>
+                        </div>
+                    </div>
+                `
+            },
+             7: {
+                title: "Invitation to Respond",
+                content: `
+                    <div class="text-center">
+                        <h2 class="text-3xl font-bold text-blue-600 mb-4">Your Invitation</h2>
+                        <p class="text-lg mb-6">You have learned about God's incredible love, the problem of sin that separates us from Him, His perfect solution in Jesus, and the personal invitation to receive this gift. This is more than just information; it's an invitation to a new life. The decision to cross the bridge of faith is the most important one you will ever make. It's about turning from a life directed by self to one led by a loving Savior, resulting in forgiveness, purpose, and eternal security.</p>
+                        
+                        <div class="bg-gray-100 p-6 rounded-lg mb-8">
+                            <h3 class="text-xl font-semibold mb-3">A Prayer of Commitment</h3>
+                            <p class="text-left mb-4">"Lord Jesus, I need you. Thank you for dying on the cross for my sins. I open the door of my life and receive You as my Savior and Lord. Thank you for forgiving my sins and giving me eternal life. Take control of the throne of my life. Make me the kind of person You want me to be. Amen."</p>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-4">What is your next step?</h3>
+                        <div class="space-y-4 max-w-md mx-auto">
+                            <button class="w-full p-4 bg-green-500 text-white rounded-lg font-bold flex items-center justify-center hover:bg-green-600"><input type="checkbox" class="mr-3 h-5 w-5"> I have prayed this prayer.</button>
+                            <button class="w-full p-4 bg-yellow-500 text-white rounded-lg font-bold flex items-center justify-center hover:bg-yellow-600"><input type="checkbox" class="mr-3 h-5 w-5"> I would like to know more before deciding.</button>
+                            <button class="w-full p-4 bg-orange-500 text-white rounded-lg font-bold flex items-center justify-center hover:bg-orange-600"><input type="checkbox" class="mr-3 h-5 w-5"> I already committed but need followup.</button>
+                        </div>
+                    </div>
+                `
+            },
+        };
+
+        function updateProgressBar() {
+            const progress = ((currentLesson - 1) / (totalLessons -1)) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+        }
+
+        function showLesson(lessonNumber) {
+            document.querySelectorAll('.lesson-container').forEach(el => el.classList.remove('active'));
+            const nextLessonElement = document.getElementById(`lesson-${lessonNumber}`);
+            if (nextLessonElement) {
+                nextLessonElement.classList.add('active');
+            } else {
+                // Dynamically create and add the lesson if it doesn't exist
+                const lessonData = lessons[lessonNumber];
+                if(lessonData) {
+                    const newLessonDiv = document.createElement('div');
+                    newLessonDiv.id = `lesson-${lessonNumber}`;
+                    newLessonDiv.className = 'lesson-container active bg-white p-6 rounded-lg shadow-lg';
+                    newLessonDiv.innerHTML = `<h2 class="text-2xl font-bold mb-4">${lessonData.title}</h2>${lessonData.content}`;
+                    document.getElementById('courseContent').appendChild(newLessonDiv);
+
+                    if(lessonNumber === 5) {
+                        setupMatchingGame();
+                    }
+                }
+            }
+            
+            updateProgressBar();
+
+            if (currentLesson > 1) {
+                document.getElementById('navigation').style.display = 'flex';
+            } else {
+                 document.getElementById('navigation').style.display = 'none';
+            }
+            
+            document.getElementById('prevButton').disabled = currentLesson === 1;
+            document.getElementById('nextButton').style.display = currentLesson >= totalLessons ? 'none' : 'block';
+        }
+
+        function nextLesson() {
+            if (currentLesson < totalLessons) {
+                currentLesson++;
+                showLesson(currentLesson);
+            }
+        }
+
+        function prevLesson() {
+            if (currentLesson > 1) {
+                currentLesson--;
+                showLesson(currentLesson);
+            }
+        }
+
+        function handleAnswer(lesson, isCorrect, element) {
+            if (isCorrect) {
+                if(element) {
+                    element.classList.add('correct');
+                }
+                setTimeout(() => {
+                    nextLesson();
+                }, 1000);
+            } else {
+                 if(element) {
+                    element.classList.add('incorrect');
+                 }
+            }
+        }
+
+        function setupMatchingGame() {
+            const gameContainer = document.getElementById('matching-game');
+            const concepts = [
+                { id: 1, text: "Jesus' Death" },
+                { id: 2, text: "Resurrection" },
+                { id: 3, text: "The Cross" },
+                { id: 4, text: "Faith" }
+            ];
+            const descriptions = [
+                { id: 1, text: "Paid the price for our sins." },
+                { id: 2, text: "Proved His power over death." },
+                { id: 3, text: "The bridge between God and man." },
+                { id: 4, text: "The key to receiving God's gift." }
+            ];
+
+            // Shuffle arrays to randomize
+            concepts.sort(() => Math.random() - 0.5);
+            descriptions.sort(() => Math.random() - 0.5);
+
+            let html = '<div class="grid grid-cols-2 gap-4">';
+            html += '<div>';
+            concepts.forEach(c => {
+                html += `<button class="w-full p-3 mb-2 bg-blue-200 rounded-lg" data-id="${c.id}" onclick="selectMatch(this, 'concept')">${c.text}</button>`;
+            });
+            html += '</div>';
+            html += '<div>';
+            descriptions.forEach(d => {
+                html += `<button class="w-full p-3 mb-2 bg-green-200 rounded-lg" data-id="${d.id}" onclick="selectMatch(this, 'description')">${d.text}</button>`;
+            });
+            html += '</div></div>';
+            gameContainer.innerHTML = html;
+        }
+
+        let selectedConcept = null;
+        let selectedDescription = null;
+        let matchedPairs = 0;
+
+        function selectMatch(element, type) {
+            if (type === 'concept') {
+                if (selectedConcept) selectedConcept.classList.remove('ring-4', 'ring-blue-500');
+                selectedConcept = element;
+                selectedConcept.classList.add('ring-4', 'ring-blue-500');
+            } else {
+                if (selectedDescription) selectedDescription.classList.remove('ring-4', 'ring-green-500');
+                selectedDescription = element;
+                selectedDescription.classList.add('ring-4', 'ring-green-500');
+            }
+
+            if (selectedConcept && selectedDescription) {
+                if (selectedConcept.dataset.id === selectedDescription.dataset.id) {
+                    selectedConcept.classList.add('correct');
+                    selectedDescription.classList.add('correct');
+                    selectedConcept.disabled = true;
+                    selectedDescription.disabled = true;
+                    selectedConcept = null;
+                    selectedDescription = null;
+                    matchedPairs++;
+                    if (matchedPairs === 4) {
+                         setTimeout(() => {
+                            nextLesson();
+                        }, 1000);
+                    }
+                } else {
+                    selectedConcept.classList.add('incorrect');
+                    selectedDescription.classList.add('incorrect');
+                    setTimeout(() => {
+                        selectedConcept.classList.remove('incorrect', 'ring-4', 'ring-blue-500');
+                        selectedDescription.classList.remove('incorrect', 'ring-4', 'ring-green-500');
+                        selectedConcept = null;
+                        selectedDescription = null;
+                    }, 1000);
+                }
+            }
+        }
+
+        // Initialize
+        showLesson(currentLesson);
+    </script>
+
+</body>
+</html>

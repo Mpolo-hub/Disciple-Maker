@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Becoming a Disciple of Christ: A Guided Journey</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #1a3a69; /* Deep Blue */
+            --brand-secondary: #4a7ab8; /* Lighter Blue */
+            --brand-accent: #f2b705; /* Gold/Yellow */
+            --brand-background: #f4f7fa; /* Light Gray-Blue */
+            --brand-text: #2d3748;
+            --brand-success: #2f855a;
+            --brand-error: #c53030;
+        }
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: var(--brand-background);
+            color: var(--brand-text);
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Lora', serif;
+            color: var(--brand-primary);
+        }
+        .lesson-card {
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.07);
+            margin-bottom: 2rem;
+            padding: 2.5rem;
+            border-top: 5px solid var(--brand-accent);
+        }
+        .lesson-section.hidden {
+            display: none;
+        }
+        .option {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .option:hover {
+            border-color: var(--brand-accent);
+            background-color: #fefcbf;
+        }
+        .option.correct {
+            background-color: #f0fff4;
+            border-color: var(--brand-success);
+            color: var(--brand-success);
+            font-weight: bold;
+        }
+        .option.incorrect {
+            background-color: #fff5f5;
+            border-color: var(--brand-error);
+            color: var(--brand-error);
+        }
+        .progress-bar-inner {
+            transition: width 0.5s ease-in-out;
+        }
+        .sticky-sidebar {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+        }
+        .btn-primary {
+            background-color: var(--brand-primary);
+            color: white;
+            font-weight: bold;
+            padding: 0.8rem 1.75rem;
+            border-radius: 8px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(26, 58, 105, 0.2);
+        }
+        .btn-primary:hover {
+            background-color: #122b51;
+            box-shadow: 0 6px 12px rgba(26, 58, 105, 0.3);
+            transform: translateY(-2px);
+        }
+        .btn-primary:disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        .lesson-menu-item {
+            border-left: 4px solid transparent;
+            transition: all 0.2s ease;
+        }
+        .lesson-menu-item.active {
+            border-left-color: var(--brand-accent);
+            background-color: #edf2f7;
+            font-weight: bold;
+        }
+        .lesson-menu-item.locked {
+            color: #a0aec0;
+            cursor: not-allowed;
+        }
+        .lesson-menu-item.completed .status-icon {
+            color: var(--brand-success);
+        }
+        .illustration {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .gamification-points {
+            background-color: var(--brand-accent);
+            color: var(--brand-primary);
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .call-to-action-card {
+            background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+            color: white;
+        }
+        .badge {
+            background-color: var(--brand-accent);
+            color: var(--brand-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-family: 'Lora', serif;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+    <header class="max-w-7xl mx-auto mb-8 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold">Becoming a Disciple of Christ</h1>
+        <p class="text-lg text-gray-600 mt-2">Your Journey to a Deeper, More Impactful Faith</p>
+    </header>
+    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Lesson Content -->
+        <main id="main-content" class="lg:col-span-2">
+            <!-- Content will be dynamically loaded here -->
+        </main>
+
+        <!-- Sticky Sidebar -->
+        <aside class="lg:col-span-1">
+            <div class="sticky-sidebar">
+                <div class="bg-white rounded-xl shadow-lg p-6 h-full flex flex-col">
+                    <!-- Overall Progress -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Overall Progress</h3>
+                        <div class="bg-gray-200 rounded-full h-4">
+                            <div id="overallProgressBar" class="progress-bar-inner h-4 rounded-full" style="width: 0%; background-color: var(--brand-accent);"></div>
+                        </div>
+                        <p id="overallProgressText" class="text-right text-sm text-gray-500 mt-1">0% Complete</p>
+                    </div>
+                    <hr class="my-6">
+                    
+                    <!-- Lesson Menu -->
+                    <div id="lesson-menu">
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Course Lessons</h3>
+                        <!-- Menu items will be dynamically loaded here -->
+                    </div>
+                    <hr class="my-6">
+
+                    <!-- AI Coach Chatbot -->
+                    <div class="flex-grow flex flex-col min-h-0">
+                         <h3 class="text-lg font-semibold text-gray-800 mb-2">AI Coach Assistant</h3>
+                         <div id="chatbotBody" class="chatbot-body p-3 rounded-lg border mb-4 flex-grow" style="background-color: var(--brand-light-gray);">
+                            <div class="flex"><span class="flex-shrink-0 text-white h-8 w-8 rounded-full flex items-center justify-center mr-3" style="background-color: var(--brand-primary);">AI</span><div class="bg-white text-gray-800 p-2 rounded-lg"><p class="text-sm">Welcome! Select a lesson to begin your journey.</p></div></div>
+                         </div>
+                         <div class="flex">
+                            <input type="text" id="chatInput" class="flex-grow border rounded-l-md p-2 text-sm focus:ring-2 focus:outline-none" style="border-color: #ccc; focus:ring-color: var(--brand-accent);" placeholder="Ask your coach...">
+                            <button onclick="sendChatMessage()" class="text-white px-4 rounded-r-md hover:bg-opacity-90 transition" style="background-color: var(--brand-primary);">Send</button>
+                         </div>
+                    </div>
+                    <hr class="my-6">
+                    <!-- Contact Coach -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-3">Contact a Human Coach</h3>
+                        <div class="space-y-2">
+                            <a href="https://wa.me/1234567890" target="_blank" class="flex items-center p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" class="w-6 h-6 mr-3"><path d="M16.75,13.96C17,14.26 17.07,14.78 16.74,15.11L15.69,16.16C15.36,16.5 14.84,16.57 14.54,16.27C14.54,16.27 13.03,15.34 11.5,13.81C9.97,12.28 9.04,10.77 9.04,10.77C8.74,10.47 8.8,9.95 9.14,9.62L10.19,8.57C10.52,8.24 11.04,8.17 11.34,8.47L12.53,9.66C12.83,9.96 12.9,10.47 12.6,10.78L11.96,11.42C11.66,11.72 11.73,12.24 12.04,12.54C12.34,12.84 12.86,13.31 13.46,13.91C14.06,14.51 14.53,15.03 14.83,15.33C15.14,15.64 15.66,15.71 15.96,15.4L16.75,14.61C17.05,14.31 17.56,14.38 17.86,14.68L19.05,15.87C19.35,16.17 19.28,16.68 18.98,16.98L18.98,16.98Z"/></svg><span class="font-medium text-gray-700">WhatsApp</span></a>
+                            <a href="https://signal.group/#" target="_blank" class="flex items-center p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#3a76f0" class="w-6 h-6 mr-3"><path d="M12,2C17.52,2 22,6.48 22,12C22,17.52 17.52,22 12,22C6.48,22 2,17.52 2,12C2,6.48 6.48,2 12,2M10,7V17H14V7H10Z"/></svg><span class="font-medium text-gray-700">Signal</span></a>
+                            <a href="https://t.me/yourusername" target="_blank" class="flex items-center p-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#2AABEE" class="w-6 h-6 mr-3"><path d="M9.78,18.65L11.5,16.9C11.67,16.73 11.67,16.45 11.5,16.28L10.06,14.84C9.89,14.67 9.61,14.67 9.44,14.84L8,16.28V12.5C8,12.22 7.78,12 7.5,12H6.5C6.22,12 6,12.22 6,12.5V16.28L4.56,14.84C4.39,14.67 4.11,14.67 3.94,14.84L2.5,16.28C2.33,16.45 2.33,16.73 2.5,16.9L9.22,23.65C9.42,23.85 9.72,23.88 9.96,23.74L22,12L19,10L9.78,18.65Z"/></svg><span class="font-medium text-gray-700">Telegram</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Quiz Result Modal -->
+    <div id="quizModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
+            <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
+            <p id="modalMessage" class="text-gray-600 mb-6"></p>
+            <div id="badge-container" class="mb-6"></div>
+            <button id="modalButton" class="btn-primary w-full">Close</button>
+        </div>
+    </div>
+
+    <script>
+    // --- Course Data ---
+    const courseData = [
+        {
+            title: "1. Deepening Your Communion",
+            badge: "Communion Key",
+            isLocked: false, isCompleted: false,
+            content: `
+                <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=The+Father's+Embrace" alt="A weary figure being embraced by a loving father figure on a long road." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 1: Deepening Your Communion with God</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if the greatest reunion isn't just about forgiveness, but discovering a love so profound it transforms every moment?</p>
+                </div>
+                
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                    <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: The Father's Embrace</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>EXT. DUST-SWEPT ROAD - DAY</strong><br>
+                            A lone, weary figure walks away from a grand house in the distance, head lowered in regret. Music is melancholic.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            He walked away from everything, convinced he knew better... He believed he was beyond hope, too far gone to ever return.<br><br>
+                            [SCENE SHIFT] The grand house's door swings open. A figure, radiating warmth, rushes down the road, arms wide open. The weary traveler, astonished, runs into a loving embrace. The music becomes triumphant, overflowing with joy.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            This isn't just a story. It's the echo of your journey... Prepare to unlock the depths of His relentless affection and learn how to walk in it daily.<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                    <p class="text-sm text-gray-500 mb-6"><strong class="font-bold">Platform Tip:</strong> Use a LearnDash video progression to ensure this is watched before continuing.</p>
+                    
+                    <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">In the video, what was the father's surprising reaction when the son returned?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(0, 0, 'B')">B) He ran to meet him with an embrace.</div>
+                        <div class="option" onclick="checkAnswer(0, 0, 'B')">A) He ignored him.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+                
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">The Journey Map: Your Objectives</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <img src="https://placehold.co/64x64/f2b705/1a3a69?text=???" class="rounded-full">
+                            <div><h4 class="font-semibold">Understand the Father's Unconditional Love</h4><p class="text-gray-600">Grasp the depth of God's love in choosing and adopting you. <span class="gamification-points">+70 PTS</span></p></div>
+                        </div>
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <img src="https://placehold.co/64x64/f2b705/1a3a69?text=???" class="rounded-full">
+                            <div><h4 class="font-semibold">Embrace Your Adopted Sonship</h4><p class="text-gray-600">Realize the privileges that come with being an adopted child of God. <span class="gamification-points">+95 PTS</span></p></div>
+                        </div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-6">Continue</button>
+                </div></div>
+
+                <div id="section-2" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Discovering the Love of My Heavenly Father</h3>
+                    <p class="text-gray-700 mb-4">God initiated His love for us by choosing and adopting us as His children through Christ, granting us redemption and forgiveness of sins, all according to His glorious grace.</p>
+                    <blockquote class="border-l-4 pl-4 py-2 my-4" style="border-color: var(--brand-accent); background-color: #fffbeb;">"For he chose us in him before the creation of the world to be holy and blameless in his sight. In love he predestined us for adoption to sonship through Jesus Christ..." (Ephesians 1:4-5 NIV)</blockquote>
+                    <div id="q1" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">True or False: According to Ephesians 1:4-5, God adopted us because we earned it.</p><div class="option" onclick="checkAnswer(0, 1, 'B')">A) True</div><div class="option" id="q1-B" onclick="checkAnswer(0, 1, 'B')">B) False</div></div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue to Final Quiz</button>
+                </div></div>
+
+                <div id="section-3" class="lesson-section hidden"><div class="lesson-card">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Lesson 1: Final Quiz</h2>
+                    <p class="text-gray-600 mb-6">You must score at least 75% to unlock the next lesson.</p>
+                    <form id="finalQuiz">
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. According to Ephesians 1:7, what two things do we have through Christ's blood?</p><label class="block option"><input type="radio" name="quiz1" value="C" class="mr-2">C) Redemption and the forgiveness of sins.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) Wealth and power.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. What is our appropriate response to God's initiating love?</p><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) To demonstrate our love for Him through communion and obedience.</label><label class="block option"><input type="radio" name="quiz2" value="B" class="mr-2">B) To take His love for granted.</label></div>
+                        <button type="button" onclick="submitQuiz(0)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'C', quiz2: 'A' }
+        },
+        {
+            title: "2. Our New Life in Christ",
+            badge: "New Creation",
+            isLocked: true, isCompleted: false,
+            content: `
+                <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=Radical+Transformation" alt="A dilapidated workshop transforming into a gleaming, new structure." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 2: Our New Life in Christ</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if becoming a Christian was just the beginning of a radical transformation, making you an entirely new creation?</p>
+                </div>
+                
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                    <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: The Radical Transformation</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>INT. DILAPIDATED WORKSHOP - DAY</strong><br>
+                            A figure tries to force old, crumbling parts together. The music is discordant.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            We try so hard to fix ourselves... building on a crumbling foundation.<br><br>
+                            [SCENE SHIFT] A radiant light dissolves the old pieces. The figure stands confident as new, vibrant structures build themselves. The music swells with majesty.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            "If anyone is in Christ, he is a new creation." This isn't a minor renovation; it's a complete spiritual revolution! Prepare to explore who you truly are in Christ.<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                     <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">In the video's analogy, what does the "old, dilapidated workshop" represent?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(1, 0, 'B')">B) Our attempts to fix ourselves with old methods.</div>
+                        <div class="option" onclick="checkAnswer(1, 0, 'B')">A) A place of great potential.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Final Quiz</h3>
+                    <form id="finalQuiz">
+                         <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. According to 2 Corinthians 5:17, what happens to someone who is "in Christ"?</p><label class="block option"><input type="radio" name="quiz1" value="B" class="mr-2">B) They become a new creation.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) They become wealthy.</label></div>
+                         <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. According to Colossians 3:1-2, where should we set our hearts and minds?</p><label class="block option"><input type="radio" name="quiz2" value="B" class="mr-2">B) On things above, where Christ is seated.</label><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) On our earthly possessions.</label></div>
+                        <button type="button" onclick="submitQuiz(1)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'B', quiz2: 'B' }
+        },
+        {
+            title: "3. The Christian's Walk & Warfare",
+            badge: "Victorious Warrior",
+            isLocked: true, isCompleted: false,
+            content: `
+                <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=Armored+for+Victory" alt="A triumphant soldier in gleaming armor, standing in a peaceful camp that was once a dark jungle." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 3: The Christian's Walk and Warfare</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if your greatest battles aren't against flesh and blood, but against unseen forces, and you've already been given the ultimate victory?</p>
+                </div>
+                
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                    <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: Armored for Victory</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>EXT. DARK JUNGLE - NIGHT</strong><br>
+                            A lone, weary soldier scavenges in fear. The music is tense.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            For years, he fought alone, convinced the enemy lurked everywhere... His existence was defined by survival.<br><br>
+                            [SCENE SHIFT] The jungle recedes into a radiant, peaceful camp. Other soldiers embrace him, showing him a declaration of victory. The music swells with liberating triumph.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            You are not fighting alone, and the war for your soul has been won! Prepare to discover the unseen enemy, the divine armor gifted to you, and how to walk in the victorious power that is already yours.<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                    <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">In the video, what shocking truth did the weary soldier discover?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(2, 0, 'B')">B) The war had ended long ago, and his side had won.</div>
+                        <div class="option" onclick="checkAnswer(2, 0, 'B')">A) His enemies had multiplied.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Assignment Review</h3>
+                    <div id="q1" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">In the last lesson, you reflected on your new identity in Christ. Share one way you experienced Christ living through you this week.</p>
+                        <div class="option" onclick="markComplete(2,1)">A) I showed patience when I normally wouldn't.</div>
+                        <div class="option" onclick="markComplete(2,1)">B) I felt a new sense of peace about my future.</div>
+                        <div class="option" onclick="markComplete(2,1)">C) I had a new desire to read the Bible.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+
+                <div id="section-2" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Armor Up: Your Objectives</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <img src="https://placehold.co/64x64/f2b705/1a3a69?text=???" class="rounded-full">
+                            <div><h4 class="font-semibold">Recognize the Spiritual Battlefield</h4><p class="text-gray-600">Identify the nature of the battle against unseen forces. <span class="gamification-points">+90 PTS</span></p></div>
+                        </div>
+                        <div class="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                            <img src="https://placehold.co/64x64/f2b705/1a3a69?text=???" class="rounded-full">
+                            <div><h4 class="font-semibold">Understand the Full Armor of God</h4><p class="text-gray-600">Learn the purpose of each piece of spiritual armor. <span class="gamification-points">+115 PTS</span></p></div>
+                        </div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-6">Continue</button>
+                </div></div>
+
+                <div id="section-3" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">The Nature of the Battle</h3>
+                    <p class="text-gray-700 mb-4">The Christian life involves a constant spiritual battle, not against physical enemies, but against spiritual forces of evil. We are called to be strong in the Lord and in His mighty power.</p>
+                    <blockquote class="border-l-4 pl-4 py-2 my-4" style="border-color: var(--brand-accent); background-color: #fffbeb;">"For our struggle is not against flesh and blood, but against the rulers, against the authorities, against the powers of this dark world and against the spiritual forces of evil in the heavenly realms." (Ephesians 6:12 NIV)</blockquote>
+                    <div id="q2" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">Fill-in-the-Blank: "Finally, be _______ in the Lord and in his _______ power." (Ephesians 6:10)</p>
+                         <div class="option" id="q2-C" onclick="checkAnswer(2, 2, 'C')">C) strong, mighty</div>
+                         <div class="option" onclick="checkAnswer(2, 2, 'C')">A) rich, financial</div>
+                         <div class="option" onclick="checkAnswer(2, 2, 'C')">B) smart, intellectual</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue to Final Quiz</button>
+                </div></div>
+
+                <div id="section-4" class="lesson-section hidden"><div class="lesson-card">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Lesson 3: Final Quiz</h2>
+                    <p class="text-gray-600 mb-6">You must score at least 75% to unlock the next lesson.</p>
+                    <form id="finalQuiz">
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. The "belt of truth" primarily represents:</p><label class="block option"><input type="radio" name="quiz1" value="B" class="mr-2">B) Holding firm to God's Word.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) Financial stability.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. What is the purpose of the "shield of faith"?</p><label class="block option"><input type="radio" name="quiz2" value="B" class="mr-2">B) To extinguish the flaming arrows of the evil one.</label><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) To attract attention.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">3. What is the "sword of the Spirit"?</p><label class="block option"><input type="radio" name="quiz3" value="A" class="mr-2">A) The Word of God.</label><label class="block option"><input type="radio" name="quiz3" value="B" class="mr-2">B) Our own clever arguments.</label></div>
+                        <button type="button" onclick="submitQuiz(2)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'B', quiz2: 'B', quiz3: 'A' }
+        },
+        {
+            title: "4. The Ministry of Reconciliation",
+            badge: "Bridge Builder",
+            isLocked: true, isCompleted: false,
+            content: `
+                <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=Bridging+the+Divide" alt="Two hands reaching across a chasm to connect, forming a bridge." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 4: The Ministry of Reconciliation</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if your true calling is to be a bridge-builder, bringing alienated hearts back to the greatest Love story ever told?</p>
+                </div>
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                    <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: The Cure</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>INT. LABORATORY - NIGHT</strong><br>
+                            An aging scientist works frantically to find a cure for a global pandemic. The music is intense.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            He pursued the impossible... a cure for a disease that silently devoured lives... He alone held the key.<br><br>
+                            [SCENE SHIFT] A breakthrough! The cure is real. As the scientist's strength fades, he passes the responsibility to a young assistant. "I'm counting on you," he whispers. The assistant now stands before crowds, sharing the cure, and people are healed. The music is triumphant.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            God, the ultimate Physician, discovered the cure for humanity's deepest ailment – sin. And now, He counts on *you*. You are commissioned with the "Ministry of Reconciliation."<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                    <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">In the video, why did the scientist work so hard to find a cure?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(3, 0, 'B')">B) To cure a global pandemic killing millions.</div>
+                        <div class="option" onclick="checkAnswer(3, 0, 'B')">A) For personal fame.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Final Quiz</h3>
+                    <form id="finalQuiz">
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. According to 2 Corinthians 5:9-10, what was Paul's ultimate aim?</p><label class="block option"><input type="radio" name="quiz1" value="B" class="mr-2">B) To be pleasing to Christ.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) To build a large church.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. What is our primary role as Christians in the ministry of reconciliation?</p><label class="block option"><input type="radio" name="quiz2" value="B" class="mr-2">B) To be Christ's ambassadors.</label><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) To be spiritual advisors.</label></div>
+                        <button type="button" onclick="submitQuiz(3)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'B', quiz2: 'B' }
+        },
+        {
+            title: "5. Expanding Your Trust",
+            badge: "Frontier Explorer",
+            isLocked: true, isCompleted: false,
+            content: `
+                <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=Expanding+Your+Frontier" alt="A vintage car on a desert road, with a glowing compass guiding it towards an unseen oasis." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 5: Expanding Your Frontier of Trust</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if the greatest adventures lie just beyond the edge of your comfort zone, waiting for you to take a courageous step of faith?</p>
+                </div>
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                     <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: The Unseen Oasis</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>EXT. DESERT ROAD - DAY</strong><br>
+                            A vintage car runs out of gas. A sign reads "DOUALA 500 Km," with a "CLOSED" gas station. The driver is dejected. Music is forlorn.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            Trapped. Isolated. Believing the only way forward is a path that's now closed. Fear whispers: "You can't do it. This is the end of the road."<br><br>
+                            [SCENE SHIFT] A radiant, unseen hand places a glowing compass on the dashboard. The car hums with supernatural energy. The desert reveals verdant paths. The driver's eyes widen with hope as music swells.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            This journey demands more than just fuel; it demands a radical trust in a God who expands horizons. Prepare to discover your "frontier of trust," and step into the impossible.<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                    <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">What does the "empty gas tank" in the video represent?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(4, 0, 'B')">B) A complete lack of resources in one's own strength.</div>
+                        <div class="option" onclick="checkAnswer(4, 0, 'B')">A) A temporary inconvenience.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Final Quiz</h3>
+                    <form id="finalQuiz">
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. What does your "frontier of trust" represent?</p><label class="block option"><input type="radio" name="quiz1" value="B" class="mr-2">B) The limits of activities where you feel comfortable and confident in God.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) The maximum amount of money you are willing to give.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. How did David respond to Goliath?</p><label class="block option"><input type="radio" name="quiz2" value="C" class="mr-2">C) With unwavering confidence in God's proven character.</label><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) He fled in fear.</label></div>
+                        <button type="button" onclick="submitQuiz(4)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'B', quiz2: 'C' }
+        },
+        {
+            title: "6. Making Christ Known",
+            badge: "Faith Sharer",
+            isLocked: true, isCompleted: false,
+            content: `
+                 <div class="lesson-card">
+                    <img src="https://placehold.co/800x400/1a3a69/f4f7fa?text=Your+Unforgettable+Commission" alt="Two people conversing in a bustling city, with a glowing light connecting them." class="illustration">
+                    <h2 class="text-3xl font-bold mb-4">Lesson 6: Making Christ Known</h2>
+                    <p class="text-lg text-gray-600 italic mb-6">What if the greatest injustice isn't a lack of resources, but the silence of those who hold the cure for eternal despair?</p>
+                </div>
+                <div id="section-0" class="lesson-section"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Introduction</h3>
+                    <div class="bg-gray-800 rounded-lg p-6 text-white mb-6">
+                        <h4 class="text-xl font-bold mb-2" style="color: var(--brand-accent);">Video Script: The Unforgettable Commission</h4>
+                        <p class="font-mono text-sm">
+                            [SCENE START]<br>
+                            <strong>EXT. CITYSCAPE - NIGHT</strong><br>
+                            A solitary figure stands apart in a bustling crowd, their face etched with sadness. Music is melancholic.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            In a world of fleeting connections, millions walk through life haunted by an unseen burden, searching for a peace they can't define.<br><br>
+                            [SCENE SHIFT] The lonely figure is approached by someone with a warm smile. A radiant light begins to glow around them, expanding to touch others. The music swells with hope.<br><br>
+                            <strong style="color: var(--brand-accent);">NARRATOR (V.O.)</strong><br>
+                            "There is no greater honor than to be an instrument in God's hand..." This isn't just sharing information; it's an invitation to eternal life. Prepare to discover the power of your witness.<br>
+                            [SCENE END]
+                        </p>
+                    </div>
+                    <div id="q0" class="interactive-question mt-6"><p class="font-semibold text-gray-700 mb-2">What is the "unseen burden" many people carry, as hinted in the video?</p>
+                        <div class="option" id="q0-B" onclick="checkAnswer(5, 0, 'B')">B) A profound sadness and search for peace.</div>
+                        <div class="option" onclick="checkAnswer(5, 0, 'B')">A) Financial problems.</div>
+                    </div>
+                    <button onclick="proceedToNextSection()" class="btn-primary w-full mt-4 hidden">Continue</button>
+                </div></div>
+                <div id="section-1" class="lesson-section hidden"><div class="lesson-card">
+                    <h3 class="text-2xl font-bold mb-4">Final Quiz</h3>
+                    <form id="finalQuiz">
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">1. What problem was highlighted by the story of the two roommates?</p><label class="block option"><input type="radio" name="quiz1" value="B" class="mr-2">B) An exemplary life, without verbal proclamation, can leave others unaware of Christ.</label><label class="block option"><input type="radio" name="quiz1" value="A" class="mr-2">A) The importance of living a flawless life.</label></div>
+                        <div class="mb-6"><p class="font-semibold text-gray-700 mb-2">2. What is God's attitude towards people per 2 Peter 3:9?</p><label class="block option"><input type="radio" name="quiz2" value="C" class="mr-2">C) He is patient, not wanting anyone to perish.</label><label class="block option"><input type="radio" name="quiz2" value="A" class="mr-2">A) He is slow to act and uninterested.</label></div>
+                        <button type="button" onclick="submitQuiz(5)" class="btn-primary w-full">Submit Quiz</button>
+                    </form>
+                </div></div>
+            `,
+            quizAnswers: { quiz1: 'B', quiz2: 'C' }
+        },
+    ];
+
+    // --- State Management ---
+    let currentLessonIndex = -1;
+    let currentSectionIndex = 0;
+    const mainContent = document.getElementById('main-content');
+    const lessonMenu = document.getElementById('lesson-menu');
+
+    // --- Initial Load ---
+    window.onload = () => {
+        renderLessonMenu();
+        showCourseIntro();
+    };
+
+    function showCourseIntro() {
+        mainContent.innerHTML = `
+            <div class="lesson-card text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4">Welcome to Your Guided Journey</h2>
+                <p class="text-lg text-gray-600 mb-6">This course is designed to guide you through the core principles of a vibrant Christian life. Complete each lesson to unlock the next. Your path begins now!</p>
+                <button onclick="loadLesson(0)" class="btn-primary">Start Course</button>
+            </div>`;
+    }
+
+    function renderLessonMenu() {
+        lessonMenu.innerHTML = '<h3 class="text-lg font-semibold text-gray-800 mb-3">Course Lessons</h3>';
+        courseData.forEach((lesson, index) => {
+            const isLocked = lesson.isLocked;
+            const isCompleted = lesson.isCompleted;
+            const isActive = index === currentLessonIndex;
+
+            const lockIcon = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-3 flex-shrink-0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>`;
+            const statusIcon = isCompleted 
+                ? `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="status-icon mr-3 flex-shrink-0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>` 
+                : `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="status-icon mr-3 flex-shrink-0"><circle cx="12" cy="12" r="10"></circle></svg>`;
+
+            const menuItem = document.createElement('div');
+            menuItem.className = `lesson-menu-item p-3 rounded-md flex items-center cursor-pointer mb-1 ${isActive ? 'active' : ''} ${isLocked ? 'locked' : 'hover:bg-gray-100'}`;
+            menuItem.innerHTML = `
+                ${isLocked ? lockIcon : statusIcon}
+                <span class="font-medium truncate">${lesson.title}</span>
+            `;
+            if (!isLocked) {
+                menuItem.onclick = () => loadLesson(index);
+            }
+            lessonMenu.appendChild(menuItem);
+        });
+    }
+
+    function loadLesson(index) {
+        if (courseData[index].isLocked) return;
+        currentLessonIndex = index;
+        currentSectionIndex = 0;
+        mainContent.innerHTML = courseData[index].content;
+        const sections = mainContent.querySelectorAll('.lesson-section');
+        if(sections.length > 0) {
+            sections.forEach(s => s.classList.add('hidden'));
+            sections[0].classList.remove('hidden');
+        }
+        renderLessonMenu();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function proceedToNextSection() {
+        const sections = mainContent.querySelectorAll('.lesson-section');
+        if (currentSectionIndex < sections.length - 1) {
+            sections[currentSectionIndex].classList.add('hidden');
+            currentSectionIndex++;
+            sections[currentSectionIndex].classList.remove('hidden');
+            sections[currentSectionIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+
+    function checkAnswer(lessonIdx, questionIdx, correctAnswer) {
+        const questionEl = document.getElementById(`q${questionIdx}`);
+        if (questionEl.classList.contains('answered')) return;
+
+        const correctOption = document.getElementById(`q${questionIdx}-${correctAnswer}`);
+        correctOption.classList.add('correct');
+        
+        const options = questionEl.getElementsByClassName('option');
+        for(let opt of options) {
+            if (!opt.classList.contains('correct')) opt.classList.add('incorrect');
+            opt.style.pointerEvents = 'none';
+        }
+        
+        questionEl.classList.add('answered');
+        questionEl.parentElement.querySelector('.btn-primary').classList.remove('hidden');
+    }
+    
+    function markComplete(lessonIdx, questionIdx) {
+        const questionEl = document.getElementById(`q${questionIdx}`);
+        if (questionEl.classList.contains('answered')) return;
+        questionEl.classList.add('answered');
+        const button = questionEl.parentElement.querySelector('.btn-primary');
+        if(button) button.classList.remove('hidden');
+    }
+
+    function submitQuiz(lessonIndex) {
+        const form = document.getElementById('finalQuiz');
+        const userAnswers = {};
+        const questions = form.querySelectorAll('input[type="radio"]:checked');
+        questions.forEach(q => {
+             userAnswers[q.name] = q.value;
+        });
+
+        let score = 0;
+        const correctAnswers = courseData[lessonIndex].quizAnswers;
+        const totalQuestions = Object.keys(correctAnswers).length;
+        for (const q in correctAnswers) {
+            if (userAnswers[q] === correctAnswers[q]) score++;
+        }
+        
+        const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 100;
+        const modal = document.getElementById('quizModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalMessage = document.getElementById('modalMessage');
+        const modalButton = document.getElementById('modalButton');
+        const badgeContainer = document.getElementById('badge-container');
+
+        if (percentage >= 75) {
+            courseData[lessonIndex].isCompleted = true;
+            if (lessonIndex + 1 < courseData.length) {
+                courseData[lessonIndex + 1].isLocked = false;
+            }
+            modalTitle.innerText = `Congratulations! You Passed!`;
+            modalTitle.style.color = 'var(--brand-success)';
+            modalMessage.innerText = `You scored ${percentage.toFixed(0)}%. You have unlocked the next lesson.`;
+            badgeContainer.innerHTML = `<div class="badge">Badge Unlocked: ${courseData[lessonIndex].badge}</div>`;
+            modalButton.innerText = 'Continue Journey';
+            modalButton.onclick = () => {
+                closeModal();
+                if (lessonIndex + 1 < courseData.length) {
+                    loadLesson(lessonIndex + 1);
+                } else {
+                    showCourseCompletion();
+                }
+            };
+        } else {
+            modalTitle.innerText = `Keep Trying!`;
+            modalTitle.style.color = 'var(--brand-error)';
+            modalMessage.innerText = `You scored ${percentage.toFixed(0)}%. Please review the lesson and try again. You need 75% to pass.`;
+            badgeContainer.innerHTML = '';
+            modalButton.innerText = 'Close';
+            modalButton.onclick = closeModal;
+        }
+        updateOverallProgress();
+        renderLessonMenu();
+        modal.classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('quizModal').classList.add('hidden');
+    }
+
+    function updateOverallProgress() {
+        const completedCount = courseData.filter(l => l.isCompleted).length;
+        const progress = (completedCount / courseData.length) * 100;
+        document.getElementById('overallProgressBar').style.width = `${progress}%`;
+        document.getElementById('overallProgressText').innerText = `${Math.round(progress)}% Complete`;
+    }
+    
+    function showCourseCompletion() {
+        mainContent.innerHTML = `
+            <div class="lesson-card text-center">
+                <h2 class="text-3xl md:text-4xl font-bold mb-4" style="color: var(--brand-success);">Course Complete!</h2>
+                <p class="text-lg text-gray-600 mb-6">Congratulations on completing The Unshakeable Path! You have taken a huge step in your spiritual journey. May you continue to grow in grace and knowledge.</p>
+                <button onclick="showCourseIntro()" class="btn-primary">Review Course</button>
+            </div>`;
+        currentLessonIndex = -1;
+        renderLessonMenu();
+    }
+
+    // --- AI Coach Chatbot ---
+    const chatInput = document.getElementById('chatInput');
+    const chatbotBody = document.getElementById('chatbotBody');
+    function sendChatMessage() {
+        const userMessage = chatInput.value.trim();
+        if (userMessage === '') return;
+        const userBubble = document.createElement('div');
+        userBubble.className = 'flex justify-end mb-2';
+        userBubble.innerHTML = `<div class="p-2 rounded-lg max-w-xs text-white" style="background-color: var(--brand-accent);"><p class="text-sm">${userMessage}</p></div>`;
+        chatbotBody.appendChild(userBubble);
+        const aiResponse = getAiResponse(userMessage);
+        const aiBubble = document.createElement('div');
+        aiBubble.className = 'flex mb-2';
+        aiBubble.innerHTML = `<span class="flex-shrink-0 text-white h-8 w-8 rounded-full flex items-center justify-center mr-3" style="background-color: var(--brand-primary);">AI</span><div class="bg-white text-gray-800 p-2 rounded-lg"><p class="text-sm">${aiResponse}</p></div>`;
+        setTimeout(() => { chatbotBody.appendChild(aiBubble); chatbotBody.scrollTop = chatbotBody.scrollHeight; }, 500);
+        chatInput.value = '';
+    }
+    chatInput.addEventListener('keypress', (e) => e.key === 'Enter' && sendChatMessage());
+    function getAiResponse(message) {
+        const msg = message.toLowerCase();
+        if (msg.includes('confess')) return "Confession is a key part of restoring communion. Remember 1 John 1:9. It involves recognizing, thanking, and repenting.";
+        if (msg.includes('prayer')) return "Prayer is our direct line to God! It involves Adoration, Thanksgiving, Confession, and Specific Requests.";
+        if (msg.includes('stuck') || msg.includes('help')) return "I'm here to help! Make sure you've completed all interactive questions in the current section. If you're stuck on a quiz, review the lesson material. You can do it!";
+        if (msg.includes('bible') || msg.includes('study')) return "The 3-step method is powerful: Observation (What does it say?), Interpretation (What does it mean?), and Application (What does it mean for me?).";
+        return "That's a great question. All the lessons build on each other. Try to find the answer in the current lesson, or ask a human coach for deeper insight!";
+    }
+    </script>
+</body>
+</html>

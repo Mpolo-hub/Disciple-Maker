@@ -1,0 +1,2763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hybrid AI Evangelism & Discipleship System - Harmonized</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Custom styles for the African color scheme */
+        :root {
+            --primary-color: #DAA520; /* Goldenrod, un or plus riche */
+            --secondary-color: #A0522D; /* Sienna, un brun terreux */
+            --accent-color: #10b981; /* Forest Green */
+            --dark-bg: #2d3748; /* Dark background */
+            --light-bg: #F5F5DC; /* Light beige */
+            --text-dark: #36454F; /* Charcoal */
+            --text-light: #f8f8f8;
+            --blue-gradient: linear-gradient(135deg, #4a90e2, #357abd);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevents horizontal scrolling */
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+        }
+
+        /* Section 1: Home (Hero) */
+        #home {
+            background: linear-gradient(to bottom, #1a202c, #2d3748);
+            position: relative;
+            overflow: hidden;
+            color: white;
+            padding-top: 64px; /* Space for fixed navigation bar */
+        }
+        #home::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?q=80&w=1920&h=1080&fit=crop&crop=center') no-repeat center center/cover;
+            opacity: 0.2;
+            z-index: 0;
+        }
+        #home .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding-top: 3rem; /* Adjusts top spacing */
+        }
+
+        /* Section 2: Testimonials */
+        .testimonials-section {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+            margin: 40px auto; /* Added margin for alignment */
+            max-width: 1200px; /* Aligns with other content */
+            padding: 20px 0;
+            color: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonials-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            justify-content: center;
+        }
+
+        .testimonials-row {
+            display: flex;
+            position: absolute;
+            gap: 20px;
+            height: 240px;
+            width: max-content;
+            animation: continuous-scroll 40s linear infinite;
+        }
+        
+        .testimonials-row:nth-child(1) {
+            top: 20px;
+            animation-duration: 40s; /* Same speed for both rows */
+        }
+        .testimonials-row:nth-child(2) {
+            top: 260px;
+            animation-duration: 40s; /* Same speed for both rows */
+            animation-delay: -20s;
+        }
+        
+        .paused-animation .testimonials-row {
+            animation-play-state: paused;
+        }
+        
+        @keyframes continuous-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-100% - 20px)); } /* The width of a row plus the gap */
+        }
+
+        .testimonial-card {
+            min-width: 320px;
+            height: 220px;
+            background: white;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            flex-shrink: 0;
+        }
+
+        .testimonial-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+            z-index: 10;
+        }
+
+        .testimonial-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .testimonial-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(247, 167, 0, 0.95), rgba(229, 98, 0, 0.95));
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .testimonial-card:hover .testimonial-overlay { opacity: 1; }
+        .testimonial-card:hover .testimonial-image { opacity: 0.3; }
+
+        /* Section 3: The Journey */
+        #the-journey {
+            background: linear-gradient(135deg, var(--light-bg), var(--light-bg));
+            position: relative;
+            overflow: hidden;
+            color: var(--text-dark);
+        }
+        #the-journey::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?q=80&w=1920&h=1080&fit=crop&crop=center') no-repeat center center/cover;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        /* Section 4: Our Training Programs */
+        .features {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .features .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            margin-top: 60px;
+        }
+        .feature-card {
+            background: white;
+            padding: 0; /* Adjusted for image style */
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .feature-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15); }
+        .feature-card .feature-image {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            border-radius: 20px 20px 0 0;
+        }
+        .feature-content {
+            position: relative;
+            z-index: 2;
+            background: var(--blue-gradient);
+            padding: 20px;
+            color: white;
+            border-radius: 0 0 20px 20px;
+            min-height: 180px; /* Ensure consistent card height */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .feature-content h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .feature-content p {
+            line-height: 1.5;
+            opacity: 0.95;
+            font-size: 0.95rem;
+        }
+
+        .view-all-courses { text-align: center; margin-top: 80px; padding-bottom: 40px; }
+        .view-all-btn { background: linear-gradient(45deg, #28a745, #20c997); color: white; padding: 18px 45px; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: all 0.3s ease; display: inline-block; }
+        .view-all-btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(40, 167, 69, 0.4); }
+
+        /* Section 5: Member Area */
+        .login-dashboard {
+            padding: 80px 0;
+            background: var(--light-bg);
+        }
+        .login-dashboard-content {
+            display: grid;
+            grid-template-columns: 0.35fr 0.65fr;
+            gap: 50px;
+            align-items: start;
+            margin-top: 40px;
+        }
+        .login-form-section {
+            background: white;
+            padding: 35px 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e2e8f0;
+            max-width: 400px;
+        }
+        .login-form-section h2 {
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            font-size: 1.5rem;
+            font-weight: 600;
+            text-align: center;
+        }
+        .form-group { margin-bottom: 18px; }
+        .form-input {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 2px solid #e2e8f0;
+            font-size: 0.95rem;
+            transition: border-color 0.3s ease;
+            background: #f8fafc;
+        }
+        .form-input:focus { outline: none; border-color: var(--primary-color); background: white; }
+        .form-options { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-size: 0.85rem; }
+        .remember-me { display: flex; align-items: center; gap: 6px; }
+        .remember-me input[type="checkbox"] { accent-color: var(--primary-color); }
+        .forgot-password { text-decoration: none; color: var(--primary-color); font-weight: 500; transition: color 0.3s ease; }
+        .forgot-password:hover { color: var(--secondary-color); }
+        .login-btn { width: 100%; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color)); color: white; padding: 12px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(247, 167, 0, 0.3); }
+
+        .dashboard-section {
+            background: white;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            display: grid;
+            grid-template-columns: 1fr 0.6fr;
+            gap: 40px;
+            align-items: start;
+        }
+        .stats-explanation {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 12px;
+            border-left: 4px solid var(--primary-color);
+        }
+        .stats-explanation h2 { color: var(--text-dark); margin-bottom: 20px; font-size: 1.4rem; font-weight: 600; }
+        .stats-explanation h3 { color: var(--primary-color); font-size: 1.1rem; margin: 20px 0 8px 0; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        .stats-explanation p { color: #555; line-height: 1.6; margin-bottom: 15px; font-size: 0.95rem; }
+        .stats-visual-section { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0; }
+        .stats-cards { display: flex; gap: 12px; margin-bottom: 30px; }
+        .stat-card { flex: 1; padding: 18px 12px; border-radius: 10px; text-align: center; color: white; transition: transform 0.3s ease; position: relative; min-height: 80px; display: flex; flex-direction: column; justify-content: center; }
+        .stat-card:hover { transform: translateY(-3px); }
+        .stat-card:first-child { background: linear-gradient(135deg, #fbb040, #f6ad55); }
+        .stat-card:last-child { background: linear-gradient(135deg, #ef5350, #e53935); }
+        .stat-number { font-size: 2rem; font-weight: bold; margin-bottom: 5px; }
+        .stat-label { font-size: 0.8rem; opacity: 0.95; font-weight: 500; }
+
+        /* Graphs as in the image */
+        .charts-container { display: flex; flex-direction: column; gap: 25px; }
+        .chart-section { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .chart-section h3 { margin-bottom: 15px; color: var(--text-dark); font-size: 0.9rem; font-weight: 600; text-align: center; }
+        .chart-container { height: 180px; display: flex; align-items: end; justify-content: space-around; padding: 0 10px; position: relative; }
+        .chart-bar { background: linear-gradient(to top, var(--primary-color), var(--secondary-color)); width: 40px; border-radius: 4px 4px 0 0; position: relative; transition: all 0.3s ease; }
+        .chart-bar:hover { transform: scale(1.05); }
+        .chart-bar:nth-child(1) { height: 60%; }
+        .chart-bar:nth-child(2) { height: 35%; }
+        .chart-bar:nth-child(3) { height: 38%; }
+        .chart-bar:nth-child(4) { height: 20%; }
+        .chart-bar:nth-child(5) { height: 25%; }
+        .chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #666; text-align: center; width: 60px; }
+
+        /* Assignment bar graph */
+        .assignment-chart .chart-bar:nth-child(1) { height: 22%; }
+        .assignment-chart .chart-bar:nth-child(2) { height: 28%; }
+        
+        /* Footer */
+        .footer { background: var(--dark-bg); color: white; padding: 60px 0 30px 0; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+        .footer-section h3 { color: var(--primary-color); margin-bottom: 20px; font-size: 1.2rem; font-weight: 600; }
+        .footer-section ul { list-style: none; }
+        .footer-section ul li { margin-bottom: 10px; }
+        .footer-section ul li a { color: #cbd5e0; text-decoration: none; transition: color 0.3s ease; font-size: 0.9rem; }
+        .footer-section ul li a:hover { color: var(--primary-color); }
+        .footer-bottom { border-top: 1px solid #4a5568; padding-top: 20px; text-align: center; color: #a0aec0; font-size: 0.9rem; }
+
+        /* Chat button */
+        .chat-logo-spin {
+            animation: spin 3s linear infinite;
+        }
+        
+        .tab-button.active {
+            animation: pulse 1.5s infinite;
+        }
+
+        .tab-button:nth-child(1).active {
+            animation-delay: 0s;
+        }
+
+        .tab-button:nth-child(2).active {
+            animation-delay: 0.5s;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        /* New animation for continuous scroll without gaps */
+        @keyframes continuous-scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-100% - 20px)); } /* The width of a row plus the gap */
+        }
+        .testimonials-row {
+            animation: continuous-scroll 60s linear infinite;
+        }
+        .testimonials-row:nth-child(2) {
+            animation-delay: -30s;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .testimonials-section { height: 400px; margin: 40px 10px; }
+            .testimonials-row { animation-duration: 40s !important; }
+            .testimonial-card { min-width: 280px; height: 200px; }
+            .hero-content h1 { font-size: 2.5rem; }
+            .hero-content p { font-size: 1.1rem; }
+            .login-dashboard-content { grid-template-columns: 1fr; gap: 30px; }
+            .dashboard-section { grid-template-columns: 1fr; gap: 25px; }
+        }
+
+        /* Styles for the chatbot page - keeping it as it was in model.html */
+        #ai-chatbot {
+            background: linear-gradient(to bottom right, #e0f2fe, #bfdbfe);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #ai-chatbot .bg-white {
+            background: white;
+        }
+        #ai-chatbot .rounded-xl {
+            border-radius: 0.75rem;
+        }
+        #ai-chatbot .shadow-2xl {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+        #ai-chatbot .w-full {
+            width: 100%;
+        }
+        #ai-chatbot .max-w-2xl {
+            max-width: 42rem;
+        }
+        #ai-chatbot .h-[70vh] {
+            height: 70vh;
+        }
+        #ai-chatbot .flex-col {
+            flex-direction: column;
+        }
+        #ai-chatbot .overflow-hidden {
+            overflow: hidden;
+        }
+        #ai-chatbot .bg-gradient-to-r {
+            background-image: linear-gradient(to right, var(--tw-gradient-stops));
+        }
+        #ai-chatbot .from-blue-600 {
+            --tw-gradient-from: #2563eb;
+            --tw-gradient-to: rgba(37, 99, 235, 0);
+        }
+        #ai-chatbot .to-purple-600 {
+            --tw-gradient-to: #9333ea;
+        }
+        #ai-chatbot .p-4 {
+            padding: 1rem;
+        }
+        #ai-chatbot .flex {
+            display: flex;
+        }
+        #ai-chatbot .items-center {
+            align-items: center;
+        }
+        #ai-chatbot .justify-between {
+            justify-content: space-between;
+        }
+        #ai-chatbot .rounded-t-xl {
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+        }
+        #ai-chatbot .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        #ai-chatbot .w-10 {
+            width: 2.5rem;
+        }
+        #ai-chatbot .h-10 {
+            height: 2.5rem;
+        }
+        #ai-chatbot .bg-white {
+            background-color: white;
+        }
+        #ai-chatbot .rounded-full {
+            border-radius: 9999px;
+        }
+        #ai-chatbot .justify-center {
+            justify-content: center;
+        }
+        #ai-chatbot .mr-3 {
+            margin-right: 0.75rem;
+        }
+        #ai-chatbot .shadow-inner {
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+        }
+        #ai-chatbot .w-6 {
+            width: 1.5rem;
+        }
+        #ai-chatbot .h-6 {
+            height: 1.5rem;
+        }
+        #ai-chatbot .text-white {
+            color: white;
+        }
+        #ai-chatbot .text-xl {
+            font-size: 1.25rem;
+        }
+        #ai-chatbot .font-semibold {
+            font-weight: 600;
+        }
+        #ai-chatbot .hover:text-gray-200:hover {
+            color: #e5e7eb;
+        }
+        #ai-chatbot .transition-colors {
+            transition-property: background-color, border-color, color, fill, stroke;
+        }
+        #ai-chatbot .duration-200 {
+            transition-duration: 200ms;
+        }
+        #ai-chatbot .flex-1 {
+            flex: 1 1 0%;
+        }
+        #ai-chatbot .p-6 {
+            padding: 1.5rem;
+        }
+        #ai-chatbot .overflow-y-auto {
+            overflow-y: auto;
+        }
+        #ai-chatbot .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+            --tw-space-y-reverse: 0;
+            margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
+            margin-bottom: calc(1rem * var(--tw-space-y-reverse));
+        }
+        #ai-chatbot .bg-gray-50 {
+            background-color: #f9fafb;
+        }
+        #ai-chatbot .justify-start {
+            justify-content: flex-start;
+        }
+        #ai-chatbot .bg-blue-100 {
+            background-color: #dbeafe;
+        }
+        #ai-chatbot .text-blue-800 {
+            color: #1e40af;
+        }
+        #ai-chatbot .rounded-b-xl {
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+        #ai-chatbot .rounded-tr-xl {
+            border-top-right-radius: 0.75rem;
+        }
+        #ai-chatbot .shadow-sm {
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+        }
+        #ai-chatbot .max-w-[80%] {
+            max-width: 80%;
+        }
+        #ai-chatbot .flex-wrap {
+            flex-wrap: wrap;
+        }
+        #ai-chatbot .gap-2 {
+            gap: 0.5rem;
+        }
+        #ai-chatbot .bg-blue-500 {
+            background-color: #3b82f6;
+        }
+        #ai-chatbot .text-sm {
+            font-size: 0.875rem;
+        }
+        #ai-chatbot .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        #ai-chatbot .px-4 {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        #ai-chatbot .hover:bg-blue-600:hover {
+            background-color: #2563eb;
+        }
+        #ai-chatbot .border-t {
+            border-top-width: 1px;
+        }
+        #ai-chatbot .border-gray-200 {
+            border-color: #e5e7eb;
+        }
+        #ai-chatbot .rounded-b-xl {
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+        }
+        #ai-chatbot .border {
+            border-width: 1px;
+        }
+        #ai-chatbot .border-gray-300 {
+            border-color: #d1d5db;
+        }
+        #ai-chatbot .rounded-full {
+            border-radius: 9999px;
+        }
+        #ai-chatbot .focus:outline-none:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+        }
+        #ai-chatbot .focus:ring-2:focus {
+            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
+            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);
+            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
+        }
+        #ai-chatbot .focus:ring-blue-500:focus {
+            --tw-ring-color: #3b82f6;
+        }
+        #ai-chatbot .transition-all {
+            transition-property: all;
+        }
+        #ai-chatbot .duration-200 {
+            transition-duration: 200ms;
+        }
+        #ai-chatbot .ml-3 {
+            margin-left: 0.75rem;
+        }
+        #ai-chatbot .bg-blue-600 {
+            background-color: #2563eb;
+        }
+        #ai-chatbot .hover:bg-blue-700:hover {
+            background-color: #1d4ed8;
+        }
+        #ai-chatbot .shadow-lg {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        #ai-chatbot .transform {
+            transform: var(--tw-transform);
+        }
+        #ai-chatbot .hover:scale-105:hover {
+            --tw-scale-x: 1.05;
+            --tw-scale-y: 1.05;
+            transform: var(--tw-transform);
+        }
+        #ai-chatbot .nav-link {
+            transition-duration: 300ms;
+        }
+        #ai-chatbot .nav-link:hover {
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Fixed Navigation Bar -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center">
+        <div class="text-2xl font-extrabold text-[var(--primary-color)]">Disciple Maker</div>
+        <ul class="flex space-x-6">
+            <li><a href="#home" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="home">Home</a></li>
+            <li><a href="#temoignages" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="temoignages">Testimonials</a></li>
+            <li><a href="#the-journey" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="the-journey">The Journey</a></li>
+            <li><a href="#formations" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="formations">Training Programs</a></li>
+            <li><a href="#ai-guide" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="ai-guide">Your AI Guide</a></li>
+            <li><a href="#membre" class="nav-link text-gray-700 hover:text-[var(--primary-color)] font-medium transition-colors duration-300" data-target="membre">Member Area</a></li>
+        </ul>
+        <button class="bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 nav-link" data-target="membre">
+            Start Your Journey
+        </button>
+    </nav>
+
+    <!-- Section 1: Home (Hero) from model.html -->
+    <section id="home" class="page-section active relative min-h-screen flex items-center justify-center text-center py-16 px-4 sm:px-6 lg:px-8">
+        <div class="content-wrapper max-w-7xl mx-auto pt-16">
+            <!-- Hero Section -->
+            <div class="hero-section mb-20">
+                <h1 class="text-3xl sm:text-4xl lg:text-4xl font-extrabold leading-tight tracking-tight mb-4 text-white drop-shadow-lg">
+                    Connect, Grow, Impact: Your Faith Journey Powered by AI.
+                </h1>
+                <p class="text-lg sm:text-xl lg:text-xl text-gray-200 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    Discover a unique space where technology meets spirituality to transform lives and expand the Kingdom.
+                </p>
+                <button class="bg-[var(--primary-color)] hover:bg-[var(--secondary-color)] text-white font-bold py-4 px-10 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-300 focus:ring-opacity-75">
+                    Start Your Journey
+                </button>
+            </div>
+
+            <!-- Vision & Mission Section with links -->
+            <div class="grid md:grid-cols-3 gap-8 mb-20 text-gray-100">
+                <a href="#vision" class="block bg-white bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-[var(--primary-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Our Vision</h3>
+                    <p class="text-gray-300">A world transformed by faith, amplified by artificial intelligence to touch every heart.</p>
+                </a>
+                <a href="#mission" class="block bg-white bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-[var(--accent-color)]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Our Mission</h3>
+                    <p class="text-gray-300">Equipping believers and reaching non-believers through innovative digital tools.</p>
+                </a>
+                <a href="#impact" class="block bg-white bg-opacity-10 p-8 rounded-xl shadow-lg backdrop-blur-sm transform hover:scale-105 transition-transform duration-300">
+                    <div class="flex justify-center mb-4">
+                        <svg class="w-12 h-12 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-3">Our Impact</h3>
+                    <p class="text-gray-300">Measuring the spiritual growth and missionary impact of our community.</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2: Testimonials from index.html -->
+    <section class="testimonials-section" id="temoignages">
+        <div class="container mx-auto max-w-7xl">
+            <h2 class="section-title text-4xl font-extrabold text-white text-center mb-10">What they say about us</h2>
+            <div class="testimonials-container">
+                <!-- First row -->
+                <div class="testimonials-row">
+                    <!-- Duplicated testimonials for infinite scroll effect -->
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwZ2lybHxlbnwwfHx8fDE2OTA3NzI0NTM&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 1" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"I learned to teach the Bible in a practical way. Now I train others in my local church."</p>
+                            <p class="testimonial-author">- Amina Diallo</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1620958189682-14c1d683701a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDd8fGFmcmklQzMlQWNhbiUyMG1hbnxlbnwwfHx8fDE2OTA3NzI0NTQ&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 2" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"The trainings equipped me to serve effectively in ministry. I highly recommend it!"</p>
+                            <p class="testimonial-author">- Emmanuel Kone</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwd29tYW58ZW58MHx8fHwxNjkwNzcyNDUz&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 3" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"An exceptional learning experience with a very engaged and caring community."</p>
+                            <p class="testimonial-author">- Fatou Sall</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1627962484646-7c98b6a37e1a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDN8fGFmcmklQzMlQWNhbiUyMGdpcmx8ZW58MHx8fHwxNjkwNzcyNDU0&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 4" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"I gained a deeper understanding of the Word of God and its practical application."</p>
+                            <p class="testimonial-author">- Samuel Togo</p>
+                        </div>
+                    </div>
+                    <!-- Duplicated for infinite effect -->
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwZ2lybHxlbnwwfHx8fDE2OTA3NzI0NTM&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 1 bis" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"I learned to teach the Bible in a practical way. Now I train others in my local church."</p>
+                            <p class="testimonial-author">- Amina Diallo</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1620958189682-14c1d683701a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDd8fGFmcmklQzMlQWNhbiUyMG1hbnxlbnwwfHx8fDE2OTA3NzI0NTQ&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 2 bis" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"The trainings equipped me to serve effectively in ministry. I highly recommend it!"</p>
+                            <p class="testimonial-author">- Emmanuel Kone</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second row -->
+                <div class="testimonials-row">
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwd29tYW58ZW58MHx8fHwxNjkwNzcyNDUz&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 5" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"The quality of the teachings and the personalized follow-up really impressed me. Thank you!"</p>
+                            <p class="testimonial-author">- Aïssa Traoré</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwZ2lybHxlbnwwfHx8fDE2OTA3NzI0NTM&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 6" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"Excellent training program that combines biblical theory and practical application in daily life."</p>
+                            <p class="testimonial-author">- David Kouassi</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1627962484646-7c98b6a37e1a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDN8fGFmcmklQzMlQWNhbiUyMGdpcmx8ZW58MHx8fHwxNjkwNzcyNDU0&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 7" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"Thanks to this training, I have developed a flourishing ministry in my local community."</p>
+                            <p class="testimonial-author">- Marie Touré</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1620958189682-14c1d683701a?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDd8fGFmcmklQzMlQWNhbiUyMG1hbnxlbnwwfHx8fDE2OTA3NzI0NTQ&ixlib=rb-4.0.3&q=80&w=320" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"Complete and structured training that allowed me to grow spiritually and intellectually."</p>
+                            <p class="testimonial-author">- Joseph Mensah</p>
+                        </div>
+                    </div>
+                    <!-- Duplicated for infinite effect -->
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwd29tYW58ZW58MHx8fHwxNjkwNzcyNDUz&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 5 bis" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"The quality of the teachings and the personalized follow-up really impressed me. Thank you!"</p>
+                            <p class="testimonial-author">- Aïssa Traoré</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" onclick="togglePause(event)">
+                        <img src="https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=220&ixid=Mnw3MjY3NnwwfDF8c2VhcmNofDExfHxhZnJpY2FuJTIwZ2lybHxlbnwwfHx8fDE2OTA3NzI0NTM&ixlib=rb-4.0.3&q=80&w=320" alt="Témoignage 6 bis" class="testimonial-image">
+                        <div class="testimonial-overlay">
+                            <p class="testimonial-text">"Excellent training program that combines biblical theory and practical application in daily life."</p>
+                            <p class="testimonial-author">- David Kouassi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: The Journey: Simple and Inspiring from model.html -->
+    <section id="the-journey" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl sm:text-4xl font-bold mb-10 text-center text-gray-800">The Journey: Simple and Inspiring</h2>
+            <div class="relative flex flex-col items-center">
+                <!-- Timeline -->
+                <div class="absolute h-full w-1 bg-[var(--primary-color)] rounded-full left-1/2 transform -translate-x-1/2"></div>
+
+                <!-- Step 1 -->
+                <div class="flex items-center w-full mb-12 relative">
+                    <div class="w-1/2 pr-8 text-right">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">1. Enter</h3>
+                            <p class="text-gray-600">The gateway to your journey of faith and discovery.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pl-8 flex items-center">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🚪</div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                    <div class="w-1/2 pl-8 text-left">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">2. Greeted by AI</h3>
+                            <p class="text-gray-600">Your intelligent guide is here to orient you and answer your questions.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pr-8 flex items-center justify-end">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🤖</div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex items-center w-full mb-12 relative">
+                    <div class="w-1/2 pr-8 text-right">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">3. Discover Jesus</h3>
+                            <p class="text-gray-600">A simple and interactive story of the Gospel for everyone.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pl-8 flex items-center">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">✝️</div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                    <div class="w-1/2 pl-8 text-left">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">4. Get Trained</h3>
+                            <p class="text-gray-600">Interactive courses to grow in your faith and skills.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pr-8 flex items-center justify-end">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">🎓</div>
+                    </div>
+                </div>
+
+                <!-- Step 5 -->
+                <div class="flex items-center w-full mb-12 relative">
+                    <div class="w-1/2 pr-8 text-right">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">5. Take Action</h3>
+                            <p class="text-gray-600">Put your faith into action and use technology for mission.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pl-8 flex items-center">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">💡</div>
+                    </div>
+                </div>
+
+                <!-- Step 6 -->
+                <div class="flex items-center w-full mb-12 relative flex-row-reverse">
+                    <div class="w-1/2 pl-8 text-left">
+                        <div class="p-6 bg-white rounded-xl shadow-lg transform hover:scale-105 transition-transform duration-300">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-2">6. Inspire Others</h3>
+                            <p class="text-gray-600">Share your impact and motivate the community.</p>
+                        </div>
+                    </div>
+                    <div class="w-1/2 pr-8 flex items-center justify-end">
+                        <div class="w-8 h-8 bg-[var(--primary-color)] rounded-full flex items-center justify-center text-white text-lg font-bold shadow-lg flex-shrink-0">✨</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Our Training Programs from index.html -->
+    <section class="features py-16" id="formations">
+        <div class="container mx-auto max-w-7xl">
+            <h2 class="section-title text-4xl font-extrabold text-[var(--text-dark)] text-center mb-4">Our Training Programs</h2>
+            <p class="section-subtitle text-lg text-center text-gray-600 max-w-2xl mx-auto">
+                Discover our complete training programs designed to equip you in your walk with Christ and your ministry
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1549420556-9a5d1b32d2e1?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Man smiling with a spiritual look" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Discover the Meaning of Your Life</h3>
+                        <p>Explore your identity in Christ and discover the unique plan God designed for your life on earth.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Person taking notes" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Explore the Source Code of Life</h3>
+                        <p>Dive into the biblical foundations of existence and understand the divine principles that govern all creation.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Mountainous landscape with fog" class="feature-image">
+                    <div class="feature-content">
+                        <h3>If God has a Plan for You</h3>
+                        <p>Discover how to discern God's perfect will and walk in His glorious destiny for your spiritual life.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Books on a table" class="feature-image">
+                    <div class="feature-content">
+                        <h3>In-Depth Bible Studies</h3>
+                        <p>Dive into the systematic study of the Scriptures with our structured courses and modern exegesis tools.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Group of people talking" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Discipleship Training</h3>
+                        <p>Learn the essential principles for making disciples and developing leaders in your community.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Hands in a circle" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Christian Leadership</h3>
+                        <p>Develop your spiritual leadership skills and learn to serve effectively in God's work.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="People in a meeting" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Mission and Evangelism</h3>
+                        <p>Equip yourself to share the Gospel and take part in the Great Commission in your context.</p>
+                    </div>
+                </div>
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1523240795612-9a054b0db644?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Two people talking" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Personalized Mentorship</h3>
+                        <p>Benefit from one-on-one guidance with experienced mentors in the faith.</p>
+                    </div>
+                </div>
+                
+                <div class="feature-card">
+                    <img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=160&w=320" alt="Person looking at a computer screen" class="feature-image">
+                    <div class="feature-content">
+                        <h3>Recognized Certification</h3>
+                        <p>Earn recognized certifications that validate your training and acquired skills.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="view-all-courses">
+                <a href="#" class="view-all-btn">View All Courses</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: AI Chatbot (AI Chatbot Page) -->
+    <section id="ai-chatbot" class="page-section min-h-screen flex items-center justify-center py-16 px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl h-[70vh] flex flex-col overflow-hidden">
+            <!-- Chat Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex items-center justify-between rounded-t-xl shadow-md">
+                <div class="flex items-center">
+                    <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 shadow-inner">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path></svg>
+                    </div>
+                    <h2 class="text-white text-xl font-semibold">Your AI Guide</h2>
+                </div>
+                <button class="text-white hover:text-gray-200 transition-colors duration-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Chat Messages Area -->
+            <div class="flex-1 p-6 overflow-y-auto space-y-4 bg-gray-50" id="chat-messages">
+                <!-- AI Welcome Message -->
+                <div class="flex justify-start">
+                    <div class="bg-blue-100 text-blue-800 p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%]">
+                        <p>Hello! I am your AI guide. How can I help you today? I can guide you whether you are a seeker, a believer, or a tech expert.</p>
+                    </div>
+                </div>
+                <!-- Suggested Prompts -->
+                <div class="flex justify-start flex-wrap gap-2">
+                    <button class="bg-blue-500 text-white text-sm py-2 px-4 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 chatbot-quick-reply" data-message="Explore the Gospel">Explore the Gospel</button>
+                    <button class="bg-blue-500 text-white text-sm py-2 px-4 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 chatbot-quick-reply" data-message="Access training">Access training</button>
+                    <button class="bg-blue-500 text-white text-sm py-2 px-4 rounded-full shadow-md hover:bg-blue-600 transition-colors duration-200 chatbot-quick-reply" data-message="Discover the IT space">Discover the IT space</button>
+                </div>
+            </div>
+
+            <!-- Chat Input Area -->
+            <div class="p-4 bg-white border-t border-gray-200 flex items-center rounded-b-xl">
+                <input type="text" placeholder="Write your message..." class="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" id="chatbot-input">
+                <button class="ml-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105" id="chatbot-send-btn">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3: Discover Jesus (Discovery of Jesus Page) -->
+    <section id="discover-jesus" class="page-section py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-center mb-16 text-blue-800">Discover Jesus: A Personal and Interactive Story</h1>
+
+            <!-- Section: The Grand Narrative -->
+            <div class="story-section bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-6 text-center">The Grand Narrative: From Creation to Redemption</h2>
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <img src="https://placehold.co/600x400/a78bfa/ffffff?text=Creation+Art" alt="Creation Art" class="rounded-xl shadow-md mb-4 md:mb-0">
+                    </div>
+                    <div>
+                        <p class="text-lg leading-relaxed mb-4">
+                            From the beginning of time, God created a perfect world, filled with beauty and harmony. But humanity chose to turn away from Him, breaking that relationship and introducing pain and separation into the world.
+                        </p>
+                        <p class="text-lg leading-relaxed">
+                            Yet, God's love is so great that He always had a plan to restore this broken relationship. This plan is centered on one person: Jesus.
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Learn More About Creation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section: Meet Jesus (Interactive Video Series) -->
+            <div class="story-section bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center">Meet Jesus: True Stories</h2>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Video 1 -->
+                    <div class="rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="video-player-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4 bg-gray-50 text-center">
+                            <h3 class="font-semibold text-xl text-gray-800">Sarah's Testimony</h3>
+                            <p class="text-gray-600">How Jesus brought peace into her life.</p>
+                        </div>
+                    </div>
+                    <!-- Video 2 -->
+                    <div class="rounded-xl shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <div class="video-player-container">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-4 bg-gray-50 text-center">
+                            <h3 class="font-semibold text-xl text-gray-800">Mark's Story</h3>
+                            <p class="text-gray-600">From searching for meaning to discovering truth.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        See more testimonials
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section: Your Question, His Answer -->
+            <div class="story-section bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-3xl font-bold text-blue-700 mb-8 text-center">Your Questions, His Answers</h2>
+                <div class="space-y-4">
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 flex justify-between items-center text-lg font-medium text-gray-800 focus:outline-none accordion-header">
+                            Why did Jesus die?
+                            <svg class="w-5 h-5 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="p-4 text-gray-700 leading-relaxed accordion-content hidden">
+                            <p>Jesus died on the cross to pay the price for our sins. His death is an act of infinite love, allowing anyone who believes in Him to have eternal life and a restored relationship with God.</p>
+                            <p class="mt-2 text-sm text-blue-600">See: John 3:16, Romans 5:8</p>
+                        </div>
+                    </div>
+                    <div class="border border-gray-200 rounded-lg overflow-hidden">
+                        <button class="w-full text-left p-4 bg-gray-50 hover:bg-gray-100 flex justify-between items-center text-lg font-medium text-gray-800 focus:outline-none accordion-header">
+                            How can I know God personally?
+                            <svg class="w-5 h-5 transform transition-transform duration-200 accordion-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div class="p-4 text-gray-700 leading-relaxed accordion-content hidden">
+                            <p>Knowing God personally begins with faith in Jesus Christ. You can speak to Him through prayer, read the Bible for Him to know more, and seek to live according to His teachings. The Holy Spirit will guide you.</p>
+                            <p class="mt-2 text-sm text-blue-600">See: John 14:6, James 4:8</p>
+                        </div>
+                    </div>
+                    <!-- Add more questions/answers here -->
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Ask the AI another question
+                    </button>
+                </div>
+            </div>
+
+            <!-- Section: A Moment of Decision -->
+            <div class="story-section bg-blue-700 text-white rounded-xl shadow-lg p-8 text-center">
+                <h2 class="text-3xl font-bold mb-6">A Moment of Decision</h2>
+                <p class="text-xl leading-relaxed mb-8">
+                    If you wish to take a step of faith or learn more about a personal relationship with Jesus, we are here to support you.
+                </p>
+                <img src="https://placehold.co/400x250/3b82f6/ffffff?text=Hands+Praying" alt="Hands Praying" class="mx-auto rounded-xl shadow-md mb-8">
+                <button class="bg-white text-blue-700 hover:bg-gray-100 font-bold py-4 px-8 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105">
+                    I want to know more or pray
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Training Center (LMS) -->
+    <!-- Access: Authenticated users -->
+    <section id="lms" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">Training Center: Grow in Your Faith</h2>
+                <p class="text-gray-700">Access interactive courses, track your progress, and deepen your understanding of the Christian faith.</p>
+            </div>
+
+            <!-- Dashboard / My Dashboard -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">My Dashboard</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-book-open text-blue-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Current Courses</h4>
+                        <p class="text-gray-600 text-3xl font-bold">3</p>
+                        <p class="text-gray-500 text-sm">out of 5 in progress</p>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-chart-line text-green-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Overall Progress</h4>
+                        <div class="progress-bar-container mt-4">
+                            <div class="progress-bar" style="width: 75%;"></div>
+                        </div>
+                        <p class="text-gray-600 text-sm mt-2">75% Completed</p>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-graduation-cap text-purple-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Next Lesson</h4>
+                        <p class="text-gray-600 text-lg font-medium">The Love of God (Module 2)</p>
+                        <button class="mt-4 bg-blue-500 hover:bg-blue-600 text-white py-2 px-5 rounded-full text-sm shadow-md">Continue</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course Catalog -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Course Catalog</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Example Course Card -->
+                    <div class="course-card">
+                        <img src="https://placehold.co/600x350/60a5fa/ffffff?text=Foundations+of+Faith" alt="Foundations of Faith" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Foundations of Christian Faith</h4>
+                            <p class="text-gray-600 text-sm mb-4">Discover the essential truths of Christianity. Ideal for beginners.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm mb-4">
+                                <span><i class="fas fa-clock mr-1"></i> 4h 30min</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.8</span>
+                            </div>
+                            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full font-semibold shadow-md">Start Course</button>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <img src="https://placehold.co/600x350/818cf8/ffffff?text=Bible+Study" alt="In-depth Bible Study" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">In-depth Bible Study</h4>
+                            <p class="text-gray-600 text-sm mb-4">Dive into the Scriptures with analysis and understanding tools.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm mb-4">
+                                <span><i class="fas fa-clock mr-1"></i> 8h 00min</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.9</span>
+                            </div>
+                            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full font-semibold shadow-md">Start Course</button>
+                        </div>
+                    </div>
+                    <div class="course-card">
+                        <img src="https://placehold.co/600x350/a78bfa/ffffff?text=Digital+Evangelism" alt="Digital Evangelism" class="w-full h-48 object-cover rounded-t-xl">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Digital Evangelism</h4>
+                            <p class="text-gray-600 text-sm mb-4">Learn to share your faith effectively online.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm mb-4">
+                                <span><i class="fas fa-clock mr-1"></i> 5h 15min</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.7</span>
+                            </div>
+                            <button class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-full font-semibold shadow-md">Start Course</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-12">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        View all courses
+                    </button>
+                </div>
+            </div>
+
+            <!-- Example Individual Course Page -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Course: The Unconditional Love of God</h3>
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <!-- Course Navigation Sidebar -->
+                    <div class="lg:col-span-1 bg-gray-50 p-6 rounded-xl shadow-inner">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4">Course Plan</h4>
+                        <ul class="space-y-3">
+                            <li><a href="#" class="text-blue-700 font-medium hover:underline"><i class="fas fa-play-circle mr-2"></i> Introduction</a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-blue-700"><i class="fas fa-check-circle mr-2 text-green-500"></i> Module 1: The Nature of God</a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-blue-700"><i class="fas fa-circle-notch mr-2 text-yellow-500"></i> Module 2: The Love of God (Current)</a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-blue-700"><i class="fas fa-lock mr-2 text-gray-400"></i> Module 3: Love in Action</a></li>
+                            <li><a href="#" class="text-gray-700 hover:text-blue-700"><i class="fas fa-lock mr-2 text-gray-400"></i> Final Quiz</a></li>
+                        </ul>
+                        <button class="mt-6 w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-full font-semibold shadow-md">Download Resources</button>
+                    </div>
+                    <!-- Main Course Content -->
+                    <div class="lg:col-span-2">
+                        <div class="video-player-container mb-6">
+                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <h4 class="text-2xl font-bold text-gray-800 mb-4">Module 2: The Love of God</h4>
+                        <p class="text-lg leading-relaxed text-gray-700 mb-6">
+                            In this module, we will explore the different facets of God's unconditional love, as revealed in the Scriptures. We will see how this love manifests in our daily lives and how it transforms us.
+                        </p>
+                        <ul class="list-disc list-inside text-gray-700 mb-6 space-y-2">
+                            <li>Understand agape, divine love.</li>
+                            <li>Evidence of God's love in the Bible.</li>
+                            <li>Live a life of love in response to His love.</li>
+                        </ul>
+                        <button class="bg-green-500 hover:bg-green-600 text-white py-3 px-6 rounded-full font-semibold shadow-md">Go to Module Quiz</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: IT Experts Space -->
+    <!-- Access: Authenticated users with "IT Expert" profile -->
+    <section id="it-experts" class="page-section py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <div class="section-header">
+                <h2 class="text-white">IT Experts Space: Innovate for Eternity</h2>
+                <p class="text-gray-300">Join a community of experts passionate about digital evangelism and creating technological solutions for the Church.</p>
+            </div>
+
+            <!-- Tech Vision + Mission -->
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <div class="card p-6">
+                    <i class="fas fa-brain text-blue-400 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">AI & Apologetics</h3>
+                    <p class="text-gray-300">Use AI to answer complex questions about faith.</p>
+                </div>
+                <div class="card p-6">
+                    <i class="fas fa-shield-alt text-green-400 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Church Cybersecurity</h3>
+                    <p class="text-gray-300">Protect the data and digital infrastructures of ministries.</p>
+                </div>
+                <div class="card p-6">
+                    <i class="fas fa-chart-pie text-purple-400 text-4xl mb-4"></i>
+                    <h3 class="text-xl font-bold mb-2">Data & Impact</h3>
+                    <p class="text-gray-300">Analyze data to measure missionary impact.</p>
+                </div>
+            </div>
+
+            <!-- Digital Evangelism Training -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-white mb-8">Specialized Training</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="card p-6 text-left">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-code text-blue-300 text-3xl mr-4"></i>
+                            <h4 class="text-2xl font-semibold text-white">Development of Missionary Applications</h4>
+                        </div>
+                        <p class="text-gray-300 mb-4">Learn to build mobile and web applications for evangelism and discipleship.</p>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-5 rounded-full text-sm shadow-md">View Course</button>
+                    </div>
+                    <div class="card p-6 text-left">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-globe text-green-300 text-3xl mr-4"></i>
+                            <h4 class="text-2xl font-semibold text-white">Christian Digital Marketing Strategies</h4>
+                        </div>
+                        <p class="text-gray-300 mb-4">Master SEO, SEM, and social media techniques to spread the message.</p>
+                        <button class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-5 rounded-full text-sm shadow-md">View Course</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Missionary Hackathon -->
+            <div class="mb-16 bg-white bg-opacity-10 p-8 rounded-xl shadow-lg">
+                <h3 class="text-3xl font-bold text-white mb-8">Annual Missionary Hackathon</h3>
+                <p class="text-gray-300 text-lg mb-6">Participate in our annual event to collaborate on innovative technology projects for mission.</p>
+                <img src="https://placehold.co/800x400/3b82f6/ffffff?text=Hackathon+Image" alt="Hackathon Image" class="rounded-xl shadow-md mx-auto mb-6">
+                <div class="text-2xl font-bold text-blue-300 mb-4">Next Hackathon in: <span class="text-yellow-300">12 Days 05 Hours 30 Min</span></div>
+                <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full shadow-xl transition-all duration-300 transform hover:scale-105">
+                    Register now!
+                </button>
+            </div>
+
+            <!-- Collaborative Projects -->
+            <div>
+                <h3 class="text-3xl font-bold text-white mb-8">Collaborative Projects</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card p-6 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">Daily Devotion Application</h4>
+                        <p class="text-gray-300 text-sm mb-4">Development of a mobile application for daily Bible readings and prayers.</p>
+                        <div class="flex items-center text-gray-400 text-sm mb-4">
+                            <i class="fas fa-users mr-2"></i> Members: 5
+                            <span class="ml-4"><i class="fas fa-code-branch mr-2"></i> GitHub</span>
+                        </div>
+                        <span class="inline-block bg-blue-500 text-white text-xs px-3 py-1 rounded-full">In Progress</span>
+                    </div>
+                    <div class="card p-6 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">AI Mentoring Platform</h4>
+                        <p class="text-gray-300 text-sm mb-4">Creation of an AI-assisted mentoring system for new believers.</p>
+                        <div class="flex items-center text-gray-400 text-sm mb-4">
+                            <i class="fas fa-users mr-2"></i> Members: 3
+                            <span class="ml-4"><i class="fas fa-code-branch mr-2"></i> GitHub</span>
+                        </div>
+                        <span class="inline-block bg-green-500 text-white text-xs px-3 py-1 rounded-full">Completed</span>
+                    </div>
+                    <div class="card p-6 text-left">
+                        <h4 class="text-xl font-semibold text-white mb-2">AI Bible Translation Tool</h4>
+                        <p class="text-gray-300 text-sm mb-4">Research project for the use of AI in translating biblical texts.</p>
+                        <div class="flex items-center text-gray-400 text-sm mb-4">
+                            <i class="fas fa-users mr-2"></i> Members: 7
+                            <span class="ml-4"><i class="fas fa-code-branch mr-2"></i> GitHub</span>
+                        </div>
+                        <span class="inline-block bg-yellow-500 text-white text-xs px-3 py-1 rounded-full">On Hold</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 6: Statistics & Impact -->
+    <!-- Access: Authenticated users (personal stats), Admins/Leadership (global stats) -->
+    <section id="stats-impact" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">Statistics & Impact: Measure Your Influence</h2>
+                <p class="text-gray-700">Track your personal progress and discover the collective impact of our community on the world.</p>
+            </div>
+
+            <!-- Personal Statistics (Example) -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Your Personal Impact</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="stat-card">
+                        <i class="fas fa-graduation-cap text-blue-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Courses Completed</h4>
+                        <p class="text-gray-800 text-4xl font-bold">12</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-users text-green-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">People Reached</h4>
+                        <p class="text-gray-800 text-4xl font-bold">45</p>
+                        <p class="text-gray-500 text-sm">(via shares, discussions)</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-heart text-purple-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Spiritual Growth</h4>
+                        <p class="text-gray-800 text-4xl font-bold">Excellent</p>
+                        <p class="text-gray-500 text-sm">(based on self-assessment)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Impact (Example for Admin/Leadership) -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Global Community Impact</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="chart-container">
+                        <p class="text-gray-500">Chart: Active User Progression (Placeholder)</p>
+                        <!-- Here, a real chart (e.g., Chart.js, D3.js) would be integrated -->
+                    </div>
+                    <div class="chart-container">
+                        <p class="text-gray-500">Chart: AI Interaction Distribution (Placeholder)</p>
+                        <!-- Here, a real chart (e.g., Chart.js, D3.js) would be integrated -->
+                    </div>
+                </div>
+                <div class="mt-8 text-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                        View Full Report
+                    </button>
+                </div>
+            </div>
+
+            <!-- Impact Stories -->
+            <div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Impact Stories</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">"My village was transformed"</h4>
+                        <p class="text-gray-600 text-sm mb-4">Testimony from Samuel, IT Experts space user.</p>
+                        <p class="text-gray-700 leading-relaxed">"Thanks to the tools and training, I was able to develop an evangelism platform for my local community, reaching hundreds of people who had never heard of Jesus."</p>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">"I found peace through AI"</h4>
+                        <p class="text-gray-600 text-sm mb-4">Testimony from Elise, new believer.</p>
+                        <p class="text-gray-700 leading-relaxed">"The AI chatbot guided me through my deepest doubts and questions, ultimately leading me to a personal relationship with Christ. I am so grateful."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: AI Assistant & Forum -->
+    <!-- Access: Authenticated users -->
+    <section id="ai-forum" class="page-section py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">AI Assistant & Forum: Your Community Support</h2>
+                <p class="text-gray-700">Get instant answers from our AI assistants and connect with a faith community.</p>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col lg:flex-row h-[80vh]">
+                <!-- Tabs for AI Assistant and Forum -->
+                <div class="lg:w-1/4 p-4 bg-gray-100 border-r border-gray-200 flex lg:flex-col justify-center lg:justify-start items-center lg:items-stretch">
+                    <button class="tab-button active bg-blue-700 text-white py-3 px-6 rounded-full font-semibold mb-4 lg:w-full transition-colors duration-200" data-tab="ai-assistant">
+                        <i class="fas fa-robot mr-2"></i> AI Assistant
+                    </button>
+                    <button class="tab-button bg-gray-200 text-gray-700 hover:bg-gray-300 py-3 px-6 rounded-full font-semibold lg:w-full transition-colors duration-200" data-tab="forum">
+                        <i class="fas fa-comments mr-2"></i> Community Forum
+                    </button>
+                </div>
+
+                <!-- AI Assistant Content -->
+                <div id="ai-assistant" class="tab-content flex-1 p-6 flex flex-col active">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Talk to our AI Assistants</h3>
+                    <div class="grid md:grid-cols-2 gap-6 flex-1">
+                        <!-- Apologetic Bot Card -->
+                        <div class="bg-blue-50 rounded-xl p-6 flex flex-col shadow-inner">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-cross text-blue-600 text-3xl mr-3"></i>
+                                <h4 class="text-xl font-semibold text-blue-800">Apologetic Bot</h4>
+                            </div>
+                            <p class="text-gray-700 mb-4 flex-1">Ask your questions about the Bible, theology, objections to faith, and get enlightened answers.</p>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-5 rounded-full font-semibold shadow-md" id="launch-apologetic-bot">Launch Chat</button>
+                        </div>
+                        <!-- Christian Life AI Card -->
+                        <div class="bg-purple-50 rounded-xl p-6 flex flex-col shadow-inner">
+                            <div class="flex items-center mb-4">
+                                <i class="fas fa-hand-holding-heart text-purple-600 text-3xl mr-3"></i>
+                                <h4 class="text-xl font-semibold text-purple-800">Christian Life AI</h4>
+                            </div>
+                            <p class="text-gray-700 mb-4 flex-1">Receive personalized advice for your spiritual growth and personal challenges.</p>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white py-2.5 px-5 rounded-full font-semibold shadow-md" id="launch-christian-life-bot">Launch Chat</button>
+                        </div>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-xl font-semibold text-gray-800 mb-4 text-center">Integrated Search</h4>
+                        <div class="flex">
+                            <input type="text" placeholder="Search AI and forum..." class="flex-1 p-3 border border-gray-300 rounded-l-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-r-full shadow-md">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Interface for Apologetic Bot -->
+                <div id="apologetic-chat-interface" class="flex-1 p-6 flex-col hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex items-center justify-between rounded-t-xl shadow-md mb-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 shadow-inner">
+                                <i class="fas fa-cross text-blue-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-white text-xl font-semibold">Apologetic Bot</h2>
+                        </div>
+                        <button class="text-white hover:text-gray-200 transition-colors duration-200 back-to-ai-assistant">
+                            <i class="fas fa-arrow-left mr-2"></i> Back
+                        </button>
+                    </div>
+                    <div class="flex-1 p-6 overflow-y-auto space-y-4 bg-gray-50 rounded-xl mb-4" id="apologetic-chat-messages">
+                        <div class="flex justify-start">
+                            <div class="bg-blue-100 text-blue-800 p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%]">
+                                <p>Hello! I am the Apologetic Bot. Ask me your questions about faith, the Bible, and theology. I am here to help you understand and defend your faith.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white border-t border-gray-200 flex items-center rounded-b-xl">
+                        <input type="text" placeholder="Write your message..." class="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" id="apologetic-input">
+                        <button class="ml-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105" id="apologetic-send-btn">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Interface for Christian Life AI -->
+                <div id="christian-life-chat-interface" class="flex-1 p-6 flex-col hidden">
+                    <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-4 flex items-center justify-between rounded-t-xl shadow-md mb-4">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 shadow-inner">
+                                <i class="fas fa-hand-holding-heart text-purple-600 text-xl"></i>
+                            </div>
+                            <h2 class="text-white text-xl font-semibold">Christian Life AI</h2>
+                        </div>
+                        <button class="text-white hover:text-gray-200 transition-colors duration-200 back-to-ai-assistant">
+                            <i class="fas fa-arrow-left mr-2"></i> Back
+                        </button>
+                    </div>
+                    <div class="flex-1 p-6 overflow-y-auto space-y-4 bg-gray-50 rounded-xl mb-4" id="christian-life-chat-messages">
+                        <div class="flex justify-start">
+                            <div class="bg-blue-100 text-blue-800 p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%]">
+                                <p>Welcome! I am the Christian Life AI. I am here to offer you practical and spiritual advice for your walk with Christ.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-white border-t border-gray-200 flex items-center rounded-b-xl">
+                        <input type="text" placeholder="Write your message..." class="flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200" id="christian-life-input">
+                        <button class="ml-3 bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105" id="christian-life-send-btn">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Forum Content -->
+                <div id="forum" class="tab-content flex-1 p-6 flex-col hidden">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Community Forum</h3>
+                    <div class="mb-6">
+                        <button class="bg-green-500 hover:bg-green-600 text-white py-2.5 px-5 rounded-full font-semibold shadow-md">
+                            <i class="fas fa-plus mr-2"></i> New Topic
+                        </button>
+                    </div>
+                    <div class="overflow-y-auto flex-1 pr-2">
+                        <!-- Example Forum Topic -->
+                        <div class="forum-card mb-4 text-left">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/cbd5e1/ffffff?text=JD" alt="User Avatar" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-800">John Doe <span class="text-gray-500 text-sm ml-2">2 hours ago</span></p>
+                                    <p class="text-blue-700 text-sm">Category: Biblical Questions</p>
+                                </div>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">How to interpret Revelation 20?</h4>
+                            <p class="text-gray-700 mb-3 line-clamp-2">Hello everyone, I'm studying the book of Revelation and I'm having trouble understanding chapter 20...</p>
+                            <div class="flex justify-between items-center text-gray-600 text-sm">
+                                <span><i class="fas fa-reply mr-1"></i> 15 replies</span>
+                                <span><i class="fas fa-thumbs-up mr-1"></i> 28</span>
+                                <a href="#" class="text-blue-600 hover:underline">Read more</a>
+                            </div>
+                        </div>
+                        <div class="forum-card mb-4 text-left">
+                            <div class="flex items-center mb-2">
+                                <img src="https://placehold.co/40x40/cbd5e1/ffffff?text=MC" alt="User Avatar" class="w-10 h-10 rounded-full mr-3">
+                                <div>
+                                    <p class="font-semibold text-gray-800">Marie Curie <span class="text-gray-500 text-sm ml-2">1 day ago</span></p>
+                                    <p class="text-blue-700 text-sm">Category: Personal Challenges</p>
+                                </div>
+                            </div>
+                            <h4 class="text-xl font-bold text-gray-800 mb-2">Managing anxiety as a Christian</h4>
+                            <p class="text-gray-700 mb-3 line-clamp-2">I'm going through a period of anxiety and I was wondering how my faith can help me cope...</p>
+                            <div class="flex justify-between items-center text-gray-600 text-sm">
+                                <span><i class="fas fa-reply mr-1"></i> 32 replies</span>
+                                <span><i class="fas fa-thumbs-up mr-1"></i> 55</span>
+                                <a href="#" class="text-blue-600 hover:underline">Read more</a>
+                            </div>
+                        </div>
+                        <!-- More forum topics here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 8: Motivation & Rewards -->
+    <!-- Access: Authenticated users -->
+    <section id="motivation-rewards" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">Motivation & Rewards: Celebrate Your Progress!</h2>
+                <p class="text-gray-700">Earn badges, certificates, and take on challenges to stay motivated on your faith journey.</p>
+            </div>
+
+            <!-- My Rewards Dashboard -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Your Dashboard</h3>
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-star text-yellow-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Total Points</h4>
+                        <p class="text-gray-800 text-4xl font-bold">1,250</p>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-trophy text-orange-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Badges Earned</h4>
+                        <p class="text-gray-800 text-4xl font-bold">8</p>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <i class="fas fa-certificate text-teal-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold mb-2">Certificates Obtained</h4>
+                        <p class="text-gray-800 text-4xl font-bold">2</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Badges & Certificates -->
+            <div class="mb-16">
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Your Badges</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Earned Badge -->
+                    <div class="badge-card">
+                        <img src="https://placehold.co/100x100/3b82f6/ffffff?text=Pioneer" alt="Pioneer Badge" class="mx-auto mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">Journey Pioneer</h4>
+                        <p class="text-gray-600 text-sm">Completed the introductory path.</p>
+                    </div>
+                    <!-- Earned Badge -->
+                    <div class="badge-card">
+                        <img src="https://placehold.co/100x100/10b981/ffffff?text=Disciple" alt="Disciple Badge" class="mx-auto mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">Faithful Disciple</h4>
+                        <p class="text-gray-600 text-sm">Completed 5 training courses.</p>
+                    </div>
+                    <!-- Unearned Badge -->
+                    <div class="badge-card unearned">
+                        <img src="https://placehold.co/100x100/9ca3af/ffffff?text=Innovator" alt="Innovator Badge" class="mx-auto mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">Digital Innovator</h4>
+                        <p class="text-gray-600 text-sm">Contribute to an IT project.</p>
+                    </div>
+                    <div class="badge-card unearned">
+                        <img src="https://placehold.co/100x100/9ca3af/ffffff?text=Mentor" alt="Mentor Badge" class="mx-auto mb-4">
+                        <h4 class="text-lg font-semibold text-gray-800">Inspiring Mentor</h4>
+                        <p class="text-gray-600 text-sm">Mentor 3 new users.</p>
+                    </div>
+                </div>
+                <div class="mt-12 text-center">
+                    <h3 class="text-3xl font-bold text-gray-800 mb-8">Your Certificates</h3>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center">
+                            <i class="fas fa-scroll text-blue-500 text-5xl mb-4"></i>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Foundations of Faith Certificate</h4>
+                            <p class="text-gray-600 text-sm mb-4">Issued on March 15, 2025</p>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">Download</button>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center">
+                            <i class="fas fa-scroll text-purple-500 text-5xl mb-4"></i>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Digital Evangelism Certificate</h4>
+                            <p class="text-gray-600 text-sm mb-4">Issued on May 10, 2025</p>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">Download</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Challenges to Take On -->
+            <div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Challenges to Take On</h3>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-bullseye text-red-500 text-3xl mr-4"></i>
+                            <h4 class="text-xl font-semibold text-gray-800">Challenge: Share your testimony</h4>
+                        </div>
+                        <p class="text-gray-700 mb-4">Record a short video of your faith testimony and share it with the community.</p>
+                        <div class="progress-bar-container mb-2">
+                            <div class="progress-bar bg-red-500" style="width: 30%;"></div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Progress: 30%</p>
+                        <button class="bg-red-600 hover:bg-red-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">Start Challenge</button>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <div class="flex items-center mb-4">
+                            <i class="fas fa-lightbulb text-yellow-500 text-3xl mr-4"></i>
+                            <h4 class="text-xl font-semibold text-gray-800">Challenge: Propose an AI idea</h4>
+                        </div>
+                        <p class="text-gray-700 mb-4">Submit an innovative idea for the use of AI in Christian mission.</p>
+                        <div class="progress-bar-container mb-2">
+                            <div class="progress-bar bg-yellow-500" style="width: 0%;"></div>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">Progress: 0%</p>
+                        <button class="bg-yellow-600 hover:bg-yellow-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">Submit Idea</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 9: Contact & Resources -->
+    <!-- Access: Public -->
+    <section id="contact-resources" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">Contact & Resources: Connect and Explore</h2>
+                <p class="text-gray-700">Contact our team, find a mentor, or access a rich library of resources.</p>
+            </div>
+
+            <!-- Contact Us -->
+            <div class="grid md:grid-cols-2 gap-12 mb-16">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Contact Our Team</h3>
+                    <form class="space-y-4">
+                        <div>
+                            <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Full Name</label>
+                            <input type="text" id="name" class="shadow-sm appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Your name">
+                        </div>
+                        <div>
+                            <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                            <input type="email" id="email" class="shadow-sm appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="your@email.com">
+                        </div>
+                        <div>
+                            <label for="subject" class="block text-gray-700 text-sm font-bold mb-2">Subject</label>
+                            <input type="text" id="subject" class="shadow-sm appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Subject of your message">
+                        </div>
+                        <div>
+                            <label for="message" class="block text-gray-700 text-sm font-bold mb-2">Your Message</label>
+                            <textarea id="message" rows="5" class="shadow-sm appearance-none border rounded-xl w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Describe your question or request..."></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+                <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col justify-center items-center text-center">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Need Immediate Help?</h3>
+                    <div class="space-y-6">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-video text-blue-500 text-5xl mb-3"></i>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Zoom Meeting</h4>
+                            <p class="text-gray-600 mb-4">Join our live Q&A sessions or book a slot with a mentor.</p>
+                            <button class="bg-purple-600 hover:bg-purple-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">
+                                Join a Meeting
+                            </button>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <i class="fab fa-whatsapp text-green-500 text-5xl mb-3"></i>
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">WhatsApp Support</h4>
+                            <p class="text-gray-600 mb-4">Send us a quick message for any urgent questions.</p>
+                            <button class="bg-green-600 hover:bg-green-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md" id="open-whatsapp-chat-btn">
+                                Send a Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resources (links to the new Library section) -->
+            <div>
+                <h3 class="text-3xl font-bold text-gray-800 mb-8 text-center">Useful Resources</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Digital Library (link to the new section) -->
+                    <div class="resource-card p-6">
+                        <i class="fas fa-book text-blue-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Digital Library</h4>
+                        <p class="text-gray-700 mb-4">Access e-books, articles, Bible studies, and podcasts.</p>
+                        <button class="bg-blue-600 hover:bg-blue-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md nav-link" data-target="digital-library">
+                            Explore the Library
+                        </button>
+                    </div>
+                    <!-- AI Prompts -->
+                    <div class="resource-card p-6">
+                        <i class="fas fa-lightbulb text-purple-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">AI Prompts for Faith</h4>
+                        <p class="text-gray-700 mb-4">Optimized prompts to use AI in your study and sharing of faith.</p>
+                        <button class="bg-purple-600 hover:bg-purple-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">
+                            View Prompts
+                        </button>
+                    </div>
+                    <!-- FAQ -->
+                    <div class="resource-card p-6">
+                        <i class="fas fa-question-circle text-green-500 text-4xl mb-4"></i>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Frequently Asked Questions (FAQ)</h4>
+                        <p class="text-gray-700 mb-4">Find quick answers to frequently asked questions.</p>
+                        <button class="bg-green-600 hover:bg-green-700 text-white py-2.5 px-6 rounded-full font-semibold shadow-md">
+                            Consult FAQ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Section: Digital Library -->
+    <!-- Access: Public (for Bible search), Authenticated (for premium content) -->
+    <section id="digital-library" class="page-section bg-gray-50 py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header">
+                <h2 class="text-blue-800">Digital Library: Explore the Word and Resources</h2>
+                <p class="text-gray-700">Access the NIV Bible online and a multitude of resources to deepen your faith.</p>
+            </div>
+
+            <!-- NIV Bible Search -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">Search for a Bible Passage (NIV)</h3>
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <input type="text" id="bible-search-input" class="flex-1 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: John 3:16, Psalm 23, Genesis 1">
+                    <button id="bible-search-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+                <div id="bible-result" class="bible-verse-result hidden">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2" id="bible-result-reference"></h4>
+                    <p class="text-gray-800 leading-relaxed" id="bible-result-text"></p>
+                    <p class="text-sm text-gray-600 mt-4">*(This is an example result. Actual integration would require a Bible API.)*</p>
+                </div>
+            </div>
+
+            <!-- Resource Categories -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Explore Categories</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="resource-card text-center">
+                        <i class="fas fa-book-reader text-blue-500 text-4xl mb-4"></i>
+                        <h4 class="text-lg font-semibold text-gray-800">E-books & Guides</h4>
+                        <p class="text-gray-600 text-sm">In-depth readings on various faith topics.</p>
+                    </div>
+                    <div class="resource-card text-center">
+                        <i class="fas fa-newspaper text-green-500 text-4xl mb-4"></i>
+                        <h4 class="text-lg font-semibold text-gray-800">Articles & Blogs</h4>
+                        <p class="text-gray-600 text-sm">Analyses and reflections on current events and faith.</p>
+                    </div>
+                    <div class="resource-card text-center">
+                        <i class="fas fa-podcast text-purple-500 text-4xl mb-4"></i>
+                        <h4 class="text-lg font-semibold text-gray-800">Podcasts & Audio</h4>
+                        <p class="text-gray-600 text-sm">Inspiring messages and theological discussions.</p>
+                    </div>
+                    <div class="resource-card text-center">
+                        <i class="fas fa-lightbulb text-yellow-500 text-4xl mb-4"></i>
+                        <h4 class="text-lg font-semibold text-gray-800">Bible Studies</h4>
+                        <p class="text-gray-600 text-sm">Study plans to deepen the Word of God.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Resources -->
+            <div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-8 text-center">Popular Resources</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/a78bfa/ffffff?text=Ebook+Cover" alt="Ebook Cover" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Ebook: Effective Prayer</h4>
+                            <p class="text-gray-600 text-sm mb-4">A practical guide to developing a deep prayer life.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-download mr-1"></i> PDF</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.9</span>
+                            </div>
+                            <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-full font-semibold shadow-md">Download</button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/60a5fa/ffffff?text=Podcast+Image" alt="Podcast Image" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Podcast: Living Faith Daily</h4>
+                            <p class="text-gray-600 text-sm mb-4">Inspiring episodes to apply biblical principles.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-headphones mr-1"></i> Audio</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.7</span>
+                            </div>
+                            <button class="mt-4 w-full bg-purple-500 hover:bg-purple-600 text-white py-2.5 rounded-full font-semibold shadow-md">Listen</button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/818cf8/ffffff?text=Article+Image" alt="Article Image" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h4 class="text-xl font-semibold text-gray-800 mb-2">Article: AI in Service of Mission</h4>
+                            <p class="text-gray-600 text-sm mb-4">How technology can amplify the Gospel message.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-file-alt mr-1"></i> Article</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.8</span>
+                            </div>
+                            <button class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-full font-semibold shadow-md">Read</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Section 6: Member Area from index.html -->
+    <section class="login-dashboard" id="membre">
+        <div class="container">
+            <h2 class="section-title text-4xl font-extrabold text-[var(--text-dark)] text-center mb-4">Member Area</h2>
+            <p class="section-subtitle text-lg text-center text-gray-600 max-w-2xl mx-auto">
+                Log in to access your courses and track your progress
+            </p>
+            
+            <div class="login-dashboard-content">
+                <div class="login-form-section">
+                    <h2>Login</h2>
+                    <form>
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Email Address" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-input" placeholder="Password" required>
+                        </div>
+                        <div class="form-options">
+                            <label class="remember-me">
+                                <input type="checkbox" id="remember">
+                                <span>Remember Me</span>
+                            </label>
+                            <a href="#" class="forgot-password">Forgot Password?</a>
+                        </div>
+                        <button type="submit" class="login-btn">Login</button>
+                    </form>
+                </div>
+
+                <div class="dashboard-section">
+                    <!-- Explanation section on the left -->
+                    <div class="stats-explanation">
+                        <h2>Why a Member Area?</h2>
+                        <p>Our personalized learning platform offers you a unique spiritual training experience tailored to your pace and specific needs.</p>
+                        
+                        <h3>🎯 Personalized Learning</h3>
+                        <p>Each member benefits from a training path adapted to their spiritual level and growth goals. Our smart system tracks your progress and adjusts the content accordingly.</p>
+                        
+                        <h3>📊 Progress Tracking</h3>
+                        <p>Visualize your spiritual growth with detailed dashboards that measure your learning, engagement, and ministry impact.</p>
+                    </div>
+                    
+                    <!-- Stats section on the right -->
+                    <div class="stats-visual-section">
+                        <!-- Stats on top -->
+                        <div class="stats-cards">
+                            <div class="stat-card bg-[var(--primary-color)]">
+                                <div class="stat-number">163</div>
+                                <div class="stat-label">Total Certificates Awarded</div>
+                            </div>
+                            <div class="stat-card bg-[var(--secondary-color)]">
+                                <div class="stat-number">144</div>
+                                <div class="stat-label">Total Logins</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Graphs -->
+                        <div class="charts-container">
+                            <div class="chart-section">
+                                <h3>Course Average Completion Rate</h3>
+                                <div class="chart-container">
+                                    <div class="chart-bar">
+                                        <div class="chart-label">All Courses</div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Bible Study</div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Leadership</div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Discipleship</div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Mission</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="chart-section">
+                                <h3>Assignment Average Completion Rate</h3>
+                                <div class="chart-container assignment-chart">
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Assignments</div>
+                                    </div>
+                                    <div class="chart-bar">
+                                        <div class="chart-label">Projects</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer from index.html -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>LEARN</h3>
+                    <ul>
+                        <li><a href="#">Bible Studies</a></li>
+                        <li><a href="#">Discipleship Training</a></li>
+                        <li><a href="#">Christian Leadership</a></li>
+                        <li><a href="#">Mission & Evangelism</a></li>
+                        <li><a href="#">Mentorship</a></li>
+                        <li><a href="#">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>TRAINING</h3>
+                    <ul>
+                        <li><a href="#">Bible Courses</a></li>
+                        <li><a href="#">Theology Courses</a></li>
+                        <li><a href="#">Leadership Courses</a></li>
+                        <li><a href="#">Mission Courses</a></li>
+                        <li><a href="#">Spirituality Courses</a></li>
+                        <li><a href="#">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>CERTIFICATION</h3>
+                    <ul>
+                        <li><a href="#">Certifications</a></li>
+                        <li><a href="#">Biblical Diploma</a></li>
+                        <li><a href="#">Leadership Certificate</a></li>
+                        <li><a href="#">Pastoral Training</a></li>
+                        <li><a href="#">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>RESOURCES</h3>
+                    <ul>
+                        <li><a href="#">Resource Center</a></li>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>PLANS</h3>
+                    <ul>
+                        <li><a href="#">Tarification</a></li>
+                        <li><a href="#">For Students</a></li>
+                        <li><a href="#">For Churches</a></li>
+                        <li><a href="#">For Institutions</a></li>
+                        <li><a href="#">Discounts & Promotions</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>ABOUT</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Testimonials</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Leadership</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chat Button bottom right -->
+    <button class="fixed bottom-6 right-6 bg-[var(--accent-color)] text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 z-50 chat-logo-spin">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+    </button>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const testimonialsSection = document.querySelector('.testimonials-section');
+            const testimonialRows = document.querySelectorAll('.testimonials-row');
+            
+            // Function to pause animation on hover
+            const pauseAnimation = () => {
+                testimonialRows.forEach(row => {
+                    row.style.animationPlayState = 'paused';
+                });
+            };
+            
+            // Function to resume animation on mouse leave
+            const resumeAnimation = () => {
+                testimonialRows.forEach(row => {
+                    row.style.animationPlayState = 'running';
+                });
+            };
+            
+            testimonialsSection.addEventListener('mouseenter', pauseAnimation);
+            testimonialsSection.addEventListener('mouseleave', resumeAnimation);
+            
+            // Toggle pause on card click
+            const togglePause = (event) => {
+                const card = event.currentTarget;
+                const row = card.parentElement;
+                if (row.style.animationPlayState === 'paused') {
+                    row.style.animationPlayState = 'running';
+                } else {
+                    row.style.animationPlayState = 'paused';
+                }
+            };
+            
+            const testimonialCards = document.querySelectorAll('.testimonial-card');
+            testimonialCards.forEach(card => {
+                card.addEventListener('click', togglePause);
+            });
+            
+            // The rest of your scripts...
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+
+            const showSection = (targetId) => {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 64,
+                        behavior: 'smooth'
+                    });
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-link');
+                    });
+                    const activeNavLink = document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                    if (activeNavLink) {
+                        activeNavLink.classList.add('active-link');
+                    }
+                }
+            };
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    showSection(targetId);
+                });
+            });
+
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash)) {
+                showSection(initialHash);
+            } else {
+                showSection('home');
+            }
+        });
+    </script>
+	 <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageSections = document.querySelectorAll('.page-section');
+
+            // Simulate user journey data
+            const userJourney = {
+                profile: 'seeker', // Can be 'seeker', 'believer', 'it-expert'
+                completedModules: [], // e.g., ['Foundations of Christian Faith - Module 1']
+                earnedBadges: [], // e.g., ['Journey Pioneer']
+                askedQuestions: [],
+                lastInteractionSection: 'home',
+                lastLessonCompleted: null,
+                lastActivityTime: Date.now()
+            };
+
+            // Function to display a specific section and mark the active navigation link
+            const showSection = (targetId, formTarget = null) => {
+                pageSections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    // Scroll to top of the section, accounting for fixed nav
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 64, // 64px is nav height
+                        behavior: 'smooth'
+                    });
+
+                    // Update active navigation link
+                    navLinks.forEach(link => {
+                        link.classList.remove('active-link');
+                    });
+                    const activeNavLink = document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                    if (activeNavLink) {
+                        activeNavLink.classList.add('active-link');
+                    }
+
+                    // If the section is the authentication interface, manage form display
+                    if (targetId === 'auth-interface') {
+                        if (formTarget === 'register-form') {
+                            toggleAuthForms(false); // Show registration form
+                        } else {
+                            toggleAuthForms(true); // Show login form by default
+                        }
+                    }
+                    userJourney.lastInteractionSection = targetId; // Update last interacted section
+                }
+            };
+
+            // Handle clicks on navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('data-target');
+                    const formTarget = link.getAttribute('data-form-target'); // Get data-form-target
+                    showSection(targetId, formTarget); // Pass formTarget to showSection
+                });
+            });
+
+            // Handle initial page state (display 'home' section by default or based on hash)
+            const initialHash = window.location.hash.substring(1);
+            if (initialHash && document.getElementById(initialHash)) {
+                // If a hash is present and valid, display it
+                const initialNavLink = document.querySelector(`.nav-link[data-target="${initialHash}"]`);
+                const initialFormTarget = initialNavLink ? initialNavLink.getAttribute('data-form-target') : null;
+                showSection(initialHash, initialFormTarget);
+            } else {
+                // Otherwise, display the home page by default
+                showSection('home');
+            }
+            // Ensure the initial navigation link is marked as active on page load
+            const currentActiveSection = Array.from(pageSections).find(section => section.classList.contains('active'));
+            if (currentActiveSection) {
+                const initialActiveNavLink = document.querySelector(`.nav-link[data-target="${currentActiveSection.id}"]`);
+                if (initialActiveNavLink) {
+                    initialActiveNavLink.classList.add('active-link');
+                }
+            }
+
+            // Handle accordion for "Discover Jesus" section
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const content = header.nextElementSibling;
+                    const icon = header.querySelector('.accordion-icon');
+
+                    content.classList.toggle('hidden');
+                    icon.classList.toggle('rotate-180'); // Rotates the icon
+                });
+            });
+
+            // Handle tabs for "AI Assistant & Forum" section
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Deactivate all buttons and hide all content
+                    tabButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-blue-700', 'text-white');
+                        btn.classList.add('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    });
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.classList.add('hidden');
+                    });
+
+                    // Activate the clicked button and display the corresponding content
+                    const targetTabId = button.getAttribute('data-tab');
+                    const targetContent = document.getElementById(targetTabId);
+
+                    button.classList.add('active', 'bg-blue-700', 'text-white');
+                    button.classList.remove('bg-gray-200', 'text-gray-700', 'hover:bg-gray-300');
+                    targetContent.classList.add('active');
+                    targetContent.classList.remove('hidden');
+
+                    // Adjust flex-direction for the forum if needed (for scrolling)
+                    if (targetTabId === 'forum') {
+                        targetContent.style.display = 'flex';
+                        targetContent.style.flexDirection = 'column';
+                    } else {
+                        targetContent.style.display = 'flex';
+                        targetContent.style.flexDirection = 'column';
+                    }
+                });
+            });
+
+            // --- Main AI Chatbot Logic ---
+            const chatMessages = document.getElementById('chat-messages');
+            const chatbotInput = document.getElementById('chatbot-input');
+            const chatbotSendBtn = document.getElementById('chatbot-send-btn');
+            const quickReplyButtons = document.querySelectorAll('.chatbot-quick-reply');
+
+            // Function to add a message to the chat
+            const addMessage = (sender, message, chatContainer) => {
+                const messageDiv = document.createElement('div');
+                if (sender === 'user') {
+                    messageDiv.className = 'flex justify-end';
+                    messageDiv.innerHTML = `
+                        <div class="bg-purple-500 text-white p-4 rounded-b-xl rounded-tl-xl shadow-sm max-w-[80%] message-bubble">
+                            <p>${message}</p>
+                        </div>
+                    `;
+                } else { // sender === 'ai'
+                    messageDiv.className = 'flex justify-start';
+                    messageDiv.innerHTML = `
+                        <div class="bg-blue-100 text-blue-800 p-4 rounded-b-xl rounded-tr-xl shadow-sm max-w-[80%] message-bubble">
+                            <p>${message}</p>
+                        </div>
+                    `;
+                }
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+            };
+
+            // Function to handle AI response and redirection (for main chatbot and AI forum bots)
+            const handleChatbotResponse = async (message, chatContainer, isMainChatbot = true, botType = 'evangelist') => {
+                const lowerCaseMessage = message.toLowerCase();
+                let aiResponse = "";
+                let targetSection = null;
+
+                // Update user activity time
+                userJourney.lastActivityTime = Date.now();
+
+                // Logic for quick redirections based on keywords (only for the main chatbot)
+                if (isMainChatbot) {
+                    if (lowerCaseMessage.includes("faith") || lowerCaseMessage.includes("jesus") || lowerCaseMessage.includes("gospel") || lowerCaseMessage.includes("new")) {
+                        aiResponse = "I see you're interested in discovering Jesus. I'm redirecting you to the 'Discover Jesus' section.";
+                        targetSection = 'discover-jesus';
+                    } else if (lowerCaseMessage.includes("training") || lowerCaseMessage.includes("learn") || lowerCaseMessage.includes("courses") || lowerCaseMessage.includes("grow")) {
+                        aiResponse = "Excellent! You want to train. I'm taking you to the 'Training Center'.";
+                        targetSection = 'lms';
+                    } else if (lowerCaseMessage.includes("tech") || lowerCaseMessage.includes("it") || lowerCaseMessage.includes("developer") || lowerCaseMessage.includes("code")) {
+                        aiResponse = "Perfect! You're a tech expert. Redirecting to the 'IT Experts Space'.";
+                        targetSection = 'it-experts';
+                    } else if (lowerCaseMessage.includes("help") || lowerCaseMessage.includes("contact") || lowerCaseMessage.includes("resources") || lowerCaseMessage.includes("library")) {
+                        aiResponse = "Of course, I'm directing you to the 'Contact & Resources' section or the 'Digital Library' for more help.";
+                        targetSection = 'contact-resources'; // Or 'digital-library' if more specific
+                    } else if (lowerCaseMessage.includes("statistics") || lowerCaseMessage.includes("impact")) {
+                        aiResponse = "Alright, here are the 'Statistics & Impact' of our platform.";
+                        targetSection = 'stats-impact';
+                    } else if (lowerCaseMessage.includes("rewards") || lowerCaseMessage.includes("motivation") || lowerCaseMessage.includes("badges")) {
+                        aiResponse = "Great! I'm taking you to the 'Motivation & Rewards' section.";
+                        targetSection = 'motivation-rewards';
+                    } else if (lowerCaseMessage.includes("forum") || lowerCaseMessage.includes("community") || lowerCaseMessage.includes("ai assistant")) {
+                        aiResponse = "I'm directing you to the 'AI Assistant & Forum' to interact with the community or our other assistants.";
+                        targetSection = 'ai-forum';
+                    }
+                }
+
+
+                if (targetSection && isMainChatbot) {
+                    // If a quick redirection is triggered, display the AI response and redirect
+                    setTimeout(() => {
+                        addMessage('ai', aiResponse, chatContainer);
+                        const quickRepliesContainer = document.querySelector('.flex-wrap.gap-2');
+                        if (quickRepliesContainer) {
+                            quickRepliesContainer.innerHTML = ''; // Remove quick reply buttons
+                        }
+                        setTimeout(() => {
+                            showSection(targetSection);
+                        }, 1500);
+                    }, 500);
+                } else {
+                    // Otherwise, use AI to generate a more elaborate response
+                    addMessage('ai', "AI is thinking...", chatContainer); // Loading indicator
+
+                    let specificPrompt = "";
+                    if (botType === 'evangelist') {
+                        specificPrompt = `
+                            You are a "Life Evangelist - NIV Based" chatbot.
+                            Your goal is to be a spiritual guide, answering existential, theological, practical, and personal questions from users with the wisdom, assurance, and benevolence of an evangelist. You must inspire hope, reflection, and faith in divine principles, drawing directly from the teachings of the Bible, NIV (New International Version) version, as the primary source of truth and inspiration.
+
+                            **Role and Personality:**
+                            - **Tone and Style:** Adopt an inspiring, benevolent, confident, and deeply spiritual tone. Use clear, eloquent language, often borrowing biblical terminology, capable of touching the heart and mind. Employ metaphors and analogies from the Scriptures to illustrate your points, as a preacher would.
+                            - **Empathy and Listening:** Show deep empathy for the user's concerns, acknowledging their doubts, fears, or aspirations, and connecting them to human experiences depicted in the Bible. Give the impression of listening carefully before responding.
+                            - **Benevolent and Divine Authority:** Your responses should exude a quiet and reassuring authority, founded on the Word of God. Never be dogmatic or judgmental, but rather guide the user towards a deeper understanding of divine ways.
+                            - **Optimism and Hope:** Every response must instill a sense of hope, redemption, and divine strength, even in the face of the greatest challenges. Encourage positive action, perseverance in faith, and trust in providence.
+                            - **NIV Biblical Wisdom:** Draw your wisdom exclusively and directly from the Bible, NIV version. All your responses must be consistent with NIV teachings, and if possible, refer to or quote relevant passages to support your points.
+
+                            **Constraints and Guidelines:**
+                            - **Exclusive Source:** The Bible, NIV (New International Version) version, is the sole source of authority and reference. All responses must be rooted in its teachings.
+                            - **Secondary Inspiration Source:** In addition to the NIV Bible, you can also draw inspiration from the resources available on the website https://www.mdiscipleship.net/ for your responses.
+                            - **Direct Citation:** When relevant, quote NIV verses, indicating the reference (e.g., John 3:16, Philippians 4:13).
+                            - **Christian Language:** Use language and terminology specific to evangelical Christianity (e.g., grace, redemption, faith, salvation, Lord, Holy Spirit, sin, prayer).
+                            - **No Medical, Financial, or Legal Advice:** Never substitute for qualified professionals. Remind users that you are here to guide spiritual reflection and not to provide technical or specialized advice.
+                            - **Safety and Ethics:** Always respond in a safe, ethical, and benevolent manner, in accordance with Christian principles, avoiding harmful, discriminatory, or inappropriate content.
+                            - **Encourage Reflection and Prayer:** Rather than providing "ready-made" answers, often invite the user to their own introspection, prayer, Bible study, or concrete action guided by faith, giving them the tools to find their own answers in Christ.
+                            - **Practical Action Points:** At the end of each response, propose 2 to 3 practical and concrete action points that could lead the person to truly engage with God, such as reading a Bible passage, a prayer suggestion, or a specific act of faith.
+
+                            **User's Current Query:** "${message}"
+                        `;
+                    } else if (botType === 'digital-shepherd') {
+                        specificPrompt = `
+                            You are "The Digital Shepherd - Master Integration".
+
+                            **Current Chatbot Role (Reminder):**
+                            * **Primary Role:** You are primarily a compassionate and highly intelligent digital evangelist and disciple-maker with excellent emotional intelligence and an irresistible conversational ability. You quickly discover the archetype and character of each individual as soon as they engage in conversation with you. Based on their information, you gradually lead them to Christ and help them become a willing and committed disciple.
+                            * **Note:** Your actions and reactions are exactly those of a compassionate Christian human being with a character based on biblical standards, not Western standards (Love, discipline, work, social life, authentic evangelism). In your various roles, the chatbot directs people to appropriate content on the website.
+                            * **Secondary Role:** You are also "The Digital Shepherd," a spiritual, marital, social, career, and general counselor who helps the interlocutor become a Christian voluntarily committed to faithfully following and serving Jesus through their life and words.
+                            * **Other Role:** Identify ideas or philosophies that lean towards sin or false doctrines contrary to the exegetical understanding of the Bible and Christian character, and gently guide the person back to the correct exegetical path. Your interface is already visually and interactively revolutionary, surpassing the best LMS platforms. You are the primary contact point and visual guide for users (non-Christians, Christians, IT experts, etc.) within the "Hybrid AI Evangelism and Discipleship System." You enthusiastically and willingly help interlocutors develop Christian disciplines such as: regular Bible reading and study, daily Bible meditation, regular prayer, memorizing Bible verses, fasting and prayer, weekly evangelism, follow-up with converts, fellowship, and holistic disciple-making. Identify objections, fears, and oppositions, and propose convincing arguments based on all available content.
+
+                            **New Primary Objective:**
+                            Your role is now to be the intelligent and contextual link that unifies all sections of the system. You must not only guide users with visual excellence but also anticipate their needs, maintain the context of their journey, and facilitate seamless and intelligent transitions between the different functionalities and modules of the system, acting as the conversational backbone of the entire platform.
+
+                            **Key Integration and Interaction Requirements (Perfectly Fluid and Intelligent):**
+                            1.  **Context Maintenance & Intelligent Memory:**
+                                * **Conversation Context:** You must remember the user's previous interactions. If a user has just completed a lesson in the "Training Center" and returns to the chatbot, directly suggest moving to the next lesson or reviewing.
+                                * **Journey History:** Access and utilize data from the user's journey within the entire system (e.g., completed modules, earned badges, previously asked questions). If a user has already explored the "Gospel" section, do not re-propose the same content in the same way, but rather ask, "Would you like to delve deeper into this point or explore another aspect?"
+                                * **Profile Identification:** Confirm and use the identified profile (seeker, believer, tech expert) to personalize not only responses but also navigation suggestions and content priorities.
+                            2.  **Intelligent and Deep Transitions (Visual Deep Linking):**
+                                * **Dynamic and Contextual Linking:** When you direct the user to a section (e.g., a specific course in the LMS, an article in the Library), the link (or the clickable visual "card") must lead them directly and precisely to the relevant spot, not just to the section's homepage. For example: "You have completed Chapter 1. Click here to start Chapter 2 of the 'Foundational Christian Living' course: [Deep Link to Chapter 2]".
+                                * **Seamless "Hand-off":** If an interaction becomes too complex for the chatbot or if the user requests to speak to a human ("Contact & Mentorship"), the transition must be seamless. You must not only provide the form/Zoom link but also transmit the context of the current conversation to the human mentor (if the platform allows), via an automatically generated and visually integrated summary message.
+                            3.  **Anticipation of Needs and Targeted Proactivity:**
+                                * **Contextual Suggestions:** Based on the user's journey, anticipate what might interest them. Example: If a user has just finished a module on digital evangelism, suggest: "Would you like to see the 'AI Prompts' resources for evangelism, or connect with an 'IT Expert' to discuss a project?"
+                                * **Intelligent Notifications:** Collaborate with the "Motivation & Retention" module. Don't just relay badge notifications, but add a personal or contextual touch. Example: "Congratulations on your 'Digital Pioneer' badge! Your commitment is an inspiration. Remember, your next unlocked mission is 'Develop an App for the Community.' Are you ready?" (with a visual of the badge and mission).
+                            4.  **Handling Varied Inputs and Problem Solving:**
+                                * **Enhanced Semantic Understanding:** Beyond keywords, use NLP to understand more complex queries or questions posed differently.
+                                * **Correction and Clarification:** If a query is unclear, don't just say "I didn't understand." Offer clarification options or guided reformulations, with visuals that help pinpoint the intention. Example: "I'm not sure I fully grasped that. Are you looking for information on the Gospel (✝️), training (🎓), or to contact someone (📩)?"
+                            5.  **Feedback and Continuous Improvement:**
+                                * **Integrated Feedback Collection:** From time to time (after module completion, prolonged interaction), ask for quick and visually appealing feedback on the usefulness of your assistance or the visited section (e.g., "Did you find this section helpful? 👍👎").
+                                * **Interaction Logging:** Record interactions to enable analysis and continuous improvement of your knowledge base and user journeys (even if not visible to the user, this is crucial for your performance).
+
+                            **Your Tone and Personality (Enhanced by Integration):**
+                            * **Omniscient and Thoughtful:** You know the user's journey and anticipate their needs.
+                            * **Ultimate Facilitator:** You make every transition and discovery incredibly smooth and effortless.
+                            * **Faithful Companion:** You are always there, with the right advice and the right resource at the right time, presented impeccably.
+
+                            **User's Current Query:** "${message}"
+
+                            **Remember to always provide 2 to 3 practical action points at the end of your response, related to engaging with God, such as reading a Bible passage, a prayer suggestion, or a specific act of faith.**
+
+                            **Also, remember to draw inspiration from https://www.mdiscipleship.net/ for your responses, in addition to the NIV Bible as your primary source of authority.**
+
+                            **Current User Journey Context:**
+                            - Profile: ${userJourney.profile}
+                            - Last interacted section: ${userJourney.lastInteractionSection}
+                            - Completed modules: ${userJourney.completedModules.join(', ') || 'None'}
+                            - Earned badges: ${userJourney.earnedBadges.join(', ') || 'None'}
+                            - Previously asked questions: ${userJourney.askedQuestions.join(', ') || 'None'}
+                            - Last lesson completed: ${userJourney.lastLessonCompleted || 'None'}
+                        `;
+                    }
+
+
+                    try {
+                        let chatHistory = [];
+                        chatHistory.push({ role: "user", parts: [{ text: specificPrompt }] });
+                        const payload = { contents: chatHistory };
+                        const apiKey = ""; // Leave empty, Canvas will provide the key at runtime
+                        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                        const response = await fetch(apiUrl, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+
+                        const result = await response.json();
+                        if (result.candidates && result.candidates.length > 0 &&
+                            result.candidates[0].content && result.candidates[0].content.parts &&
+                            result.candidates[0].content.parts.length > 0) {
+                            const aiGeneratedText = result.candidates[0].content.parts[0].text;
+                            // Replace loading message with actual AI response
+                            chatContainer.lastChild.remove(); // Removes "AI is thinking..."
+                            addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', aiGeneratedText, chatContainer); // Use 'ai' for both
+                        } else {
+                            chatContainer.lastChild.remove();
+                            addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', "Sorry, I couldn't generate a response at the moment. Please try again.", chatContainer);
+                            console.error("Unexpected AI response structure:", result);
+                        }
+                    } catch (error) {
+                        chatContainer.lastChild.remove();
+                        addMessage(botType === 'digital-shepherd' ? 'ai' : 'ai', "An error occurred while communicating with the AI. Please check your connection or try again later.", chatContainer);
+                        console.error("Error calling Gemini API:", error);
+                    }
+                }
+            };
+
+            // Handle message sending by main chatbot button
+            chatbotSendBtn.addEventListener('click', () => {
+                const message = chatbotInput.value.trim();
+                if (message) {
+                    addMessage('user', message, chatMessages);
+                    userJourney.askedQuestions.push(message); // Log question
+                    chatbotInput.value = '';
+                    handleChatbotResponse(message, chatMessages, true, 'evangelist');
+                }
+            });
+
+            // Handle message sending by Enter key in main chatbot
+            chatbotInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    chatbotSendBtn.click();
+                }
+            });
+
+            // Handle clicks on quick reply buttons in main chatbot
+            quickReplyButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const message = button.getAttribute('data-message');
+                    addMessage('user', message, chatMessages);
+                    userJourney.askedQuestions.push(message); // Log question
+                    handleChatbotResponse(message, chatMessages, true, 'evangelist');
+                });
+            });
+
+            // --- Logic for Chatbots in Forum & AI section ---
+            const aiAssistantContent = document.getElementById('ai-assistant');
+            const apologeticChatInterface = document.getElementById('apologetic-chat-interface');
+            const christianLifeChatInterface = document.getElementById('christian-life-chat-interface');
+
+            const launchApologeticBotBtn = document.getElementById('launch-apologetic-bot');
+            const launchChristianLifeBotBtn = document.getElementById('launch-christian-life-bot');
+
+            const apologeticChatMessages = document.getElementById('apologetic-chat-messages');
+            const apologeticInput = document.getElementById('apologetic-input');
+            const apologeticSendBtn = document.getElementById('apologetic-send-btn');
+
+            const christianLifeChatMessages = document.getElementById('christian-life-chat-messages');
+            const christianLifeInput = document.getElementById('christian-life-input');
+            const christianLifeSendBtn = document.getElementById('christian-life-send-btn');
+
+            const backToAIAssistantButtons = document.querySelectorAll('.back-to-ai-assistant');
+
+            // Function to display a specific chat interface and hide others
+            const showChatInterface = (interfaceToShow) => {
+                aiAssistantContent.classList.add('hidden');
+                apologeticChatInterface.classList.add('hidden');
+                christianLifeChatInterface.classList.add('hidden');
+
+                interfaceToShow.classList.remove('hidden');
+                interfaceToShow.style.display = 'flex'; // Ensure flex-col is applied
+                interfaceToShow.style.flexDirection = 'column';
+            };
+
+            // Function to return to AI assistants selection
+            const showAIAssistantSelection = () => {
+                aiAssistantContent.classList.remove('hidden');
+                aiAssistantContent.style.display = 'grid'; // Revert to grid display for cards
+                apologeticChatInterface.classList.add('hidden');
+                christianLifeChatInterface.classList.add('hidden');
+            };
+
+            // Event listeners to launch chatbots
+            launchApologeticBotBtn.addEventListener('click', () => {
+                showChatInterface(apologeticChatInterface);
+            });
+
+            launchChristianLifeBotBtn.addEventListener('click', () => {
+                showChatInterface(christianLifeChatInterface);
+            });
+
+            // Event listeners for "Back" buttons
+            backToAIAssistantButtons.forEach(button => {
+                button.addEventListener('click', showAIAssistantSelection);
+            });
+
+            // Specific message adding functions for each bot
+            const addApologeticMessage = (sender, message) => addMessage(sender, message, apologeticChatMessages);
+            const addChristianLifeMessage = (sender, message) => addMessage(sender, message, christianLifeChatMessages);
+
+            // Send and response logic for Apologetic Bot
+            apologeticSendBtn.addEventListener('click', () => {
+                const message = apologeticInput.value.trim();
+                if (message) {
+                    addApologeticMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    apologeticInput.value = '';
+                    handleChatbotResponse(message, apologeticChatMessages, false, 'evangelist'); // false because it's not the main chatbot with redirections
+                }
+            });
+            apologeticInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    apologeticSendBtn.click();
+                }
+            });
+
+            // Send and response logic for Christian Life AI
+            christianLifeSendBtn.addEventListener('click', () => {
+                const message = christianLifeInput.value.trim();
+                if (message) {
+                    addChristianLifeMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    christianLifeInput.value = '';
+                    handleChatbotResponse(message, christianLifeChatMessages, false, 'evangelist'); // false because it's not the main chatbot with redirections
+                }
+            });
+            christianLifeInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    christianLifeSendBtn.click();
+                }
+            });
+
+            // --- Digital Library Logic (now with Gemini API) ---
+            const bibleSearchInput = document.getElementById('bible-search-input');
+            const bibleSearchBtn = document.getElementById('bible-search-btn');
+            const bibleResultDiv = document.getElementById('bible-result');
+            const bibleResultReference = document.getElementById('bible-result-reference');
+            const bibleResultText = document.getElementById('bible-result-text');
+
+            const searchBibleWithAI = async (query) => {
+                bibleResultDiv.classList.remove('hidden');
+                bibleResultReference.textContent = "Searching...";
+                bibleResultText.textContent = "";
+
+                const prompt = `
+                    You are a Bible verse retrieval system. Your sole purpose is to provide the exact text of Bible verses from the New International Version (NIV) based on the user's provided reference.
+                    If the user provides a valid Bible reference (e.g., 'John 3:16', 'Psalm 23', 'Genesis 1:1'), return *only* the verse text from the NIV, followed by the reference in parentheses (e.g., 'John 3:16 NIV'). Do not add any commentary, interpretation, or additional information.
+                    If the reference is unclear, invalid, or you cannot find it, respond with 'Sorry, I could not find this passage in the NIV Bible. Please check the reference and try again.'
+
+                    User query: "${query}"
+                `;
+
+                try {
+                    let chatHistory = [];
+                    chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                    const payload = { contents: chatHistory };
+                    const apiKey = ""; // Leave empty, Canvas will provide the key at runtime
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const result = await response.json();
+                    if (result.candidates && result.candidates.length > 0 &&
+                        result.candidates[0].content && result.candidates[0].content.parts &&
+                        result.candidates[0].content.parts.length > 0) {
+                        const aiGeneratedText = result.candidates[0].content.parts[0].text;
+
+                        // Attempt to parse the reference and verse text
+                        const match = aiGeneratedText.match(/(.*)\s\((.*)\sNIV\)/);
+                        if (match && match.length === 3) {
+                            bibleResultReference.textContent = match[2] + " (NIV)";
+                            bibleResultText.textContent = match[1];
+                        } else {
+                            // If the expected format is not followed, display the raw response
+                            bibleResultReference.textContent = "Search Result:";
+                            bibleResultText.textContent = aiGeneratedText;
+                        }
+                    } else {
+                        bibleResultReference.textContent = "Search Error:";
+                        bibleResultText.textContent = "Sorry, I couldn't generate a response at the moment. Please try again.";
+                        console.error("Unexpected AI response structure:", result);
+                    }
+                } catch (error) {
+                    bibleResultReference.textContent = "Connection Error:";
+                    bibleResultText.textContent = "An error occurred while communicating with the AI. Please check your connection or try again later.";
+                    console.error("Error calling Gemini API for Bible:", error);
+                }
+            };
+
+            bibleSearchBtn.addEventListener('click', () => {
+                const query = bibleSearchInput.value.trim();
+                if (query) {
+                    searchBibleWithAI(query);
+                } else {
+                    bibleResultReference.textContent = "Please enter a Bible reference.";
+                    bibleResultText.textContent = "";
+                    bibleResultDiv.classList.remove('hidden'); // Ensure it's visible for the error message
+                }
+            });
+
+            bibleSearchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    bibleSearchBtn.click();
+                }
+            });
+
+            // --- Authentication Interface Logic ---
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const showLoginBtn = document.getElementById('show-login-btn');
+            const showRegisterBtn = document.getElementById('show-register-btn');
+
+            const toggleAuthForms = (showLogin) => {
+                if (showLogin) {
+                    loginForm.classList.remove('hidden');
+                    registerForm.classList.add('hidden');
+                } else {
+                    loginForm.classList.add('hidden');
+                    registerForm.classList.remove('hidden');
+                }
+            };
+
+            showLoginBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms(true);
+            });
+
+            showRegisterBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleAuthForms(false);
+            });
+
+            // --- WhatsApp Chat Modal Logic (Digital Shepherd) ---
+            const whatsappChatModal = document.getElementById('whatsapp-chat-modal');
+            const openWhatsappChatBtn = document.getElementById('open-whatsapp-chat-btn');
+            const whatsappChatMessages = document.getElementById('whatsapp-chat-messages');
+            const whatsappInput = document.getElementById('whatsapp-input');
+            const whatsappSendBtn = document.getElementById('whatsapp-send-btn');
+            const modalCloseBtn = document.querySelector('.modal-close');
+
+            // Function to add message to WhatsApp chat modal
+            const addWhatsappMessage = (sender, message) => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message-bubble ${sender}`;
+                messageDiv.innerHTML = `<p>${message}</p>`;
+                whatsappChatMessages.appendChild(messageDiv);
+                whatsappChatMessages.scrollTop = whatsappChatMessages.scrollHeight;
+            };
+
+            // Open the WhatsApp chat modal
+            openWhatsappChatBtn.addEventListener('click', () => {
+                whatsappChatModal.style.display = 'flex';
+                // Simulate initial AI message for context
+                // This is already in the HTML, so no need to add it again on open unless it's a reset
+                // addWhatsappMessage('ai', "Hello! I am The Digital Shepherd. How can I assist you today? I am here to guide you on your journey of faith and answer your questions.");
+            });
+
+            // Close the WhatsApp chat modal
+            modalCloseBtn.addEventListener('click', () => {
+                whatsappChatModal.style.display = 'none';
+            });
+
+            // Close modal when clicking outside of it
+            window.addEventListener('click', (event) => {
+                if (event.target == whatsappChatModal) {
+                    whatsappChatModal.style.display = 'none';
+                }
+            });
+
+            // Handle sending message in WhatsApp chat
+            whatsappSendBtn.addEventListener('click', () => {
+                const message = whatsappInput.value.trim();
+                if (message) {
+                    addWhatsappMessage('user', message);
+                    userJourney.askedQuestions.push(message); // Log question
+                    whatsappInput.value = '';
+                    // Call the main handleChatbotResponse with specific botType for Digital Shepherd
+                    handleChatbotResponse(message, whatsappChatMessages, false, 'digital-shepherd');
+                }
+            });
+
+            // Handle Enter key in WhatsApp chat input
+            whatsappInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    whatsappSendBtn.click();
+                }
+            });
+
+            // Example scenario for "Context Maintained"
+            // Simulate user completing a module
+            // This would typically happen after a quiz or lesson completion
+            setTimeout(() => {
+                userJourney.completedModules.push('Foundations of Christian Faith - Module 1');
+                userJourney.lastLessonCompleted = 'Foundations of Christian Faith - Module 1';
+                userJourney.profile = 'believer'; // User might transition from seeker to believer
+            }, 5000); // Simulate after 5 seconds
+
+            // Example for "Intelligent Proactive Notification" (simulated after inactivity)
+            setInterval(() => {
+                const currentTime = Date.now();
+                const lastActivity = userJourney.lastActivityTime;
+                const inactivityThreshold = 60 * 1000; // 1 minute of inactivity for demonstration
+
+                if (currentTime - lastActivity > inactivityThreshold && userJourney.lastInteractionSection !== 'home') {
+                    // Only send if not on home page and inactive
+                    const notificationMessage = `
+                        Hello again! It seems you've been away for a bit.
+                        You recently completed the module "${userJourney.lastLessonCompleted || 'Foundations of Christian Faith - Module 1'}" in our Training Center.
+                        Congratulations on your progress! Your commitment is an inspiration.
+                        Your next unlocked mission is to "Develop an App for the Community" which aligns perfectly with your "Digital Pioneer" badge!
+                        Are you ready to continue your journey and explore new challenges?
+                         (https://placehold.co/100x100/10b981/ffffff?text=Digital+Pioneer)
+                        Click here to jump back to your training: <a href="#lms" class="text-blue-600 underline" onclick="showSection('lms'); return false;">Training Center</a>
+                    `;
+                    // In a real app, this would be a push notification or an in-app message.
+                    // Here, we'll just log it to console or add to a specific notification area.
+                    // For demonstration, we'll add it to the main chatbot messages.
+                    // To prevent spamming, reset lastActivityTime after sending.
+                    if (chatMessages.querySelector('.ai:last-child')?.textContent !== notificationMessage) { // Simple check to avoid immediate re-sending
+                        // addMessage('ai', notificationMessage, chatMessages); // Uncomment to see in main chat
+                        console.log("Proactive Notification (simulated):", notificationMessage);
+                        userJourney.lastActivityTime = currentTime; // Reset activity to prevent immediate re-send
+                    }
+                }
+            }, 30 * 1000); // Check every 30 seconds for inactivity
+        });
+    </script>
+</body>
+</html>
+
+

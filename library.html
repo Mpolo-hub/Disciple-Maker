@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Library - Disciple Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .page-section {
+            flex: 1;
+        }
+
+        footer {
+            background: #012450 !important;
+            margin-top: auto;
+        }
+
+        .footer-section {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        footer .footer-section h3 {
+            color: #FF3300 !important;
+        }
+
+        footer .footer-section ul li a {
+            color: white !important;
+        }
+
+        footer .footer-section ul li a:hover {
+            color: #93c5fd !important;
+        }
+
+        nav {
+            padding: 10px 10%;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Styles for the library section */
+        .bible-verse-result {
+            background-color: #f8f9fa;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .resource-card {
+            background-color: white;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .video-player-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+        }
+
+        .video-player-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+
+    <!-- Navigation Menu -->
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 p-4 flex justify-between items-center">
+        <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+        <ul class="flex space-x-6">
+            <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Home</a></li>
+            <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Discover Jesus</a></li>
+            <li><a href="index.html#lms" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Training</a></li>
+            <li><a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">IT Experts</a></li>
+            <li><a href="index.html#stats-impact" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Statistics</a></li>
+            <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Forum & AI</a></li>
+            <li><a href="index.html#contact-resources" class="nav-link text-gray-700 hover:text-blue-600 font-medium transition-colors duration-300">Contact</a></li>
+            <li><a href="library.html" class="nav-link text-blue-600 font-medium transition-colors duration-300">Library</a></li>
+            <div id="auth-buttons" class="flex space-x-4">
+                <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+                <a href="login.html" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- Main Content - Library Section -->
+    <main class="page-section pt-20 pb-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="section-header text-center mb-12">
+                <h1 class="text-4xl sm:text-5xl font-extrabold text-blue-800 mb-4">Digital Library</h1>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Explore our collection of Bible resources, e-books, articles, and multimedia content to deepen your faith.</p>
+            </div>
+
+            <!-- Bible Search Section -->
+            <div class="bg-white rounded-xl shadow-lg p-8 mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Search for a Bible Passage (NIV)</h2>
+                <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <input type="text" id="bible-search-input" class="flex-1 p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Ex: John 3:16, Psalm 23, Genesis 1">
+                    <button id="bible-search-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all duration-300 transform hover:scale-105">
+                        <i class="fas fa-search mr-2"></i> Search
+                    </button>
+                </div>
+                <div id="bible-result" class="bible-verse-result hidden">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2" id="bible-result-reference"></h4>
+                    <p class="text-gray-800 leading-relaxed" id="bible-result-text"></p>
+                    <p class="text-sm text-gray-600 mt-4">*(This is an example result. Actual integration would require a Bible API.)*</p>
+                </div>
+            </div>
+
+            <!-- Resource Categories -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Explore Categories</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="resource-card text-center transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-book-reader text-blue-500 text-4xl mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">E-books & Guides</h3>
+                        <p class="text-gray-600 text-sm">In-depth readings on various faith topics.</p>
+                    </div>
+                    <div class="resource-card text-center transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-newspaper text-green-500 text-4xl mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">Articles & Blogs</h3>
+                        <p class="text-gray-600 text-sm">Analyses and reflections on current events and faith.</p>
+                    </div>
+                    <div class="resource-card text-center transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-podcast text-purple-500 text-4xl mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">Podcasts & Audio</h3>
+                        <p class="text-gray-600 text-sm">Inspiring messages and theological discussions.</p>
+                    </div>
+                    <div class="resource-card text-center transform hover:scale-105 transition-transform duration-300">
+                        <i class="fas fa-lightbulb text-yellow-500 text-4xl mb-4"></i>
+                        <h3 class="text-lg font-semibold text-gray-800">Bible Studies</h3>
+                        <p class="text-gray-600 text-sm">Study plans to deepen the Word of God.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Popular Resources -->
+            <div>
+                <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">Popular Resources</h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/a78bfa/ffffff?text=Ebook+Cover" alt="Ebook Cover" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Ebook: Effective Prayer</h3>
+                            <p class="text-gray-600 text-sm mb-4">A practical guide to developing a deep prayer life.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-download mr-1"></i> PDF</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.9</span>
+                            </div>
+                            <button class="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-full font-semibold shadow-md">Download</button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/60a5fa/ffffff?text=Podcast+Image" alt="Podcast Image" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Podcast: Living Faith Daily</h3>
+                            <p class="text-gray-600 text-sm mb-4">Inspiring episodes to apply biblical principles.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-headphones mr-1"></i> Audio</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.7</span>
+                            </div>
+                            <button class="mt-4 w-full bg-purple-500 hover:bg-purple-600 text-white py-2.5 rounded-full font-semibold shadow-md">Listen</button>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-lg overflow-hidden transform hover:scale-105 transition-transform duration-300">
+                        <img src="https://placehold.co/600x350/818cf8/ffffff?text=Article+Image" alt="Article Image" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">Article: AI in Service of Mission</h3>
+                            <p class="text-gray-600 text-sm mb-4">How technology can amplify the Gospel message.</p>
+                            <div class="flex justify-between items-center text-gray-500 text-sm">
+                                <span><i class="fas fa-file-alt mr-1"></i> Article</span>
+                                <span><i class="fas fa-star mr-1"></i> 4.8</span>
+                            </div>
+                            <button class="mt-4 w-full bg-green-500 hover:bg-green-600 text-white py-2.5 rounded-full font-semibold shadow-md">Read</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 w-full py-12 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+                <!-- LEARN Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">LEARN</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <!-- TRAINING Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">TRAINING</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                
+                <!-- CERTIFICATION Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">CERTIFICATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                
+                <!-- RESOURCES Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">RESOURCES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="library.html" class="text-blue-600 hover:text-blue-800 transition-colors">Resource Center</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- PLANS Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">PLANS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tarification</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Institutions</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discounts & Promotions</a></li>
+                    </ul>
+                </div>
+                
+                <!-- ABOUT Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">ABOUT</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">About Us</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Careers</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Press</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+                <p class="text-gray-600">&copy; 2025 Disciple Maker. All rights reserved. | Online Bible Training</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Chat Button -->
+    <button class="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg transition-transform duration-300 transform hover:scale-110 z-50">
+        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+        </svg>
+    </button>
+
+    <script>
+        // Simple Bible search functionality
+        document.getElementById('bible-search-btn').addEventListener('click', function() {
+            const query = document.getElementById('bible-search-input').value.trim();
+            const resultDiv = document.getElementById('bible-result');
+            const reference = document.getElementById('bible-result-reference');
+            const text = document.getElementById('bible-result-text');
+            
+            if (query) {
+                // Simulate a search result
+                reference.textContent = query + " (NIV)";
+                text.textContent = "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life.";
+                resultDiv.classList.remove('hidden');
+            } else {
+                reference.textContent = "Please enter a Bible reference";
+                text.textContent = "";
+                resultDiv.classList.remove('hidden');
+            }
+        });
+
+        // Handle Enter key in Bible search input
+        document.getElementById('bible-search-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('bible-search-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>

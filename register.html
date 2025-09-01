@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - LMS Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .register-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 700px;
+        }
+
+        .register-left {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            color: white;
+            text-align: center;<br>
+
+        }
+
+        .register-left h1 {
+            font-size: 2.5rem;
+            margin-bottom: 100px !important;
+            font-weight: 700;
+        }
+
+        .register-left p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+		
+		.features-list {
+    list-style: none;
+    text-align: left;
+    display: flex;          /* Ajouté pour alignement horizontal */
+    flex-wrap: wrap;       /* Permet le retour à la ligne si nécessaire */
+    gap: 20px;             /* Espacement entre les éléments */
+    margin-bottom: 30px;   /* Conserve la marge existante */
+	}
+	
+	.features-list li {
+		display: flex;         /* Pour aligner la puce et le texte */
+		align-items: center;   /* Alignement vertical */
+		white-space: nowrap;   /* Empêche le retour à la ligne */
+	}
+	
+	 /*.features-list li::before {
+		content: "✓";
+		background: rgba(255, 255, 255, 0.2);
+		border-radius: 50%;
+		width: 25px;
+		height: 25px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-right: 15px;    /* Espacement réduit entre puce et texte */
+		/*font-weight: bold;
+		flex-shrink: 0;        /* Empêche la réduction de la puce */
+	 /*}*/
+         /*.features-list {
+            list-style: none;
+            text-align: left;
+        }*/
+
+        .features-list li::before {
+            content: "✓";
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .register-right {
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .register-header h2 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .register-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .register-form {
+            width: 100%;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 45px;
+            padding: 0 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #e74c3c;
+            background: #fdf2f2;
+        }
+
+        .form-input.success {
+            border-color: #27ae60;
+            background: #f0fff4;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 16px;
+            padding: 5px;
+            border-radius: 4px;
+            transition: color 0.2s;
+        }
+
+        .password-toggle:hover {
+            color: #333;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .password-strength {
+            margin-top: 8px;
+            height: 4px;
+            background: #e1e8ed;
+            border-radius: 2px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .password-strength.show {
+            display: block;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+            border-radius: 2px;
+        }
+
+        .password-strength.weak .password-strength-bar {
+            width: 33%;
+            background: #e74c3c;
+        }
+
+        .password-strength.medium .password-strength-bar {
+            width: 66%;
+            background: #f39c12;
+        }
+
+        .password-strength.strong .password-strength-bar {
+            width: 100%;
+            background: #27ae60;
+        }
+
+        .password-requirements {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #666;
+            display: none;
+        }
+
+        .password-requirements.show {
+            display: block;
+        }
+
+        .password-requirements ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .password-requirements li.valid {
+            color: #27ae60;
+        }
+
+        .password-requirements li.invalid {
+            color: #e74c3c;
+        }
+
+        .terms-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin: 25px 0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .terms-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #667eea;
+            margin-top: 2px;
+        }
+
+        .terms-checkbox a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .terms-checkbox a:hover {
+            text-decoration: underline;
+        }
+
+        .register-btn {
+            width: 100%;
+            height: 50px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .register-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .register-btn:active {
+            transform: translateY(0);
+        }
+
+        .register-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .register-btn.loading {
+            color: transparent;
+        }
+
+        .register-btn.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            z-index: 1000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #27ae60, #2ecc71);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #e74c3c, #c0392b);
+        }
+
+        .notification.info {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .register-container {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+            }
+
+            .register-left {
+                display: none;
+            }
+
+            .register-right {
+                padding: 30px 25px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .register-right {
+                padding: 25px 20px;
+            }
+
+            .register-header h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Animation d'entrée */
+        .register-container {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <!-- Left Section - Information -->
+        <div class="register-left">
+            <h1>Join Us!</h1>
+            <p>Create your account and access our online biblical training platform.</p>
+            
+            <ul class="features-list">
+                <li>Complete biblical courses</li>
+                <li>Training certificates</li>
+                <li>Christian community</li>
+                <li>Theological resources</li>
+                <li>Spiritual guidance</li>
+            </ul>
+        </div>
+
+        <!-- Right Section - Form -->
+        <div class="register-right">
+            <div class="register-header">
+                <h2>Create an account</h2>
+            </div>
+
+            <!-- Registration Form -->
+            <form class="register-form" id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First Name *</label>
+                        <input 
+                            type="text" 
+                            id="firstName" 
+                            class="form-input" 
+                            placeholder="Your first name"
+                            required
+                            autocomplete="given-name"
+                        >
+                        <div class="error-message" id="firstNameError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last Name *</label>
+                        <input 
+                            type="text" 
+                            id="lastName" 
+                            class="form-input" 
+                            placeholder="Your last name"
+                            required
+                            autocomplete="family-name"
+                        >
+                        <div class="error-message" id="lastNameError"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="your@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                        <div class="error-message" id="emailError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password" class="form-label">Password *</label>
+                        <div class="password-field">
+                            <input 
+                                type="password" 
+                                id="password" 
+                                class="form-input" 
+                                placeholder="Create a secure password"
+                                required
+                                autocomplete="new-password"
+                            >
+                            <button type="button" class="password-toggle" id="passwordToggleBtn">
+                                👁️
+                            </button>
+                        </div>
+                        <div class="password-strength" id="passwordStrength">
+                            <div class="password-strength-bar"></div>
+                        </div>
+                        <div class="password-requirements" id="passwordRequirements">
+                            <ul>
+                                <li id="req-length">At least 8 characters</li>
+                                <li id="req-uppercase">One uppercase letter</li>
+                                <li id="req-lowercase">One lowercase letter</li>
+                                <li id="req-number">At least one number</li>
+                            </ul>
+                        </div>
+                        <div class="error-message" id="passwordError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword" class="form-label">Confirm Password *</label>
+                        <div class="password-field">
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                class="form-input" 
+                                placeholder="Confirm your password"
+                                required
+                                autocomplete="new-password"
+                            >
+                            <button type="button" class="password-toggle" id="confirmPasswordToggleBtn">
+                                👁️
+                            </button>
+                        </div>
+                        <div class="error-message" id="confirmPasswordError"></div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city" class="form-label">City</label>
+                            <input 
+                                type="text" 
+                                id="city" 
+                                class="form-input" 
+                                placeholder="Your city"
+                                autocomplete="address-level2"
+                            >
+                            <div class="error-message" id="cityError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="country" class="form-label">Country</label>
+                            <select id="country" class="form-input" autocomplete="country">
+                                <option value="">Select your country</option>
+                                <option value="FR">France</option>
+                                <option value="BE">Belgium</option>
+                                <option value="CH">Switzerland</option>
+                                <option value="CA">Canada</option>
+                                <option value="CI">Ivory Coast</option>
+                                <option value="SN">Senegal</option>
+                                <option value="ML">Mali</option>
+                                <option value="BF">Burkina Faso</option>
+                                <option value="NE">Niger</option>
+                                <option value="TG">Togo</option>
+                                <option value="BJ">Benin</option>
+                                <option value="MG">Madagascar</option>
+                                <option value="CM">Cameroon</option>
+                                <option value="GA">Gabon</option>
+                                <option value="CD">Democratic Republic of Congo</option>
+                                <option value="CG">Republic of Congo</option>
+                                <option value="CF">Central African Republic</option>
+                                <option value="TD">Chad</option>
+                                <option value="DJ">Djibouti</option>
+                                <option value="KM">Comoros</option>
+                                <option value="SC">Seychelles</option>
+                                <option value="MU">Mauritius</option>
+                                <option value="VU">Vanuatu</option>
+                                <option value="NC">New Caledonia</option>
+                                <option value="PF">French Polynesia</option>
+                                <option value="WF">Wallis and Futuna</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <div class="error-message" id="countryError"></div>
+                        </div>
+                    </div>
+
+                    <div class="terms-checkbox">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms">
+                            I accept the <a href="#" id="termsLink">terms of service</a> 
+                            and <a href="#" id="privacyLink">privacy policy</a>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="register-btn" id="registerBtn">
+                        Create my account
+                    </button>
+                </form>
+
+                <div class="login-link">
+                    Already have an account? 
+                    <a href="login.html" id="loginLink">Log in</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Firebase SDKs -->
+        <script type="module">
+           import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInAnonymously, 
+    signInWithCustomToken 
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+import { 
+    getFirestore, 
+    doc, 
+    setDoc,
+    getDoc 
+} from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+
+// Récupération des paramètres d'URL
+const urlParams = new URLSearchParams(window.location.search);
+const courseIdFromUrl = urlParams.get('courseId');
+const redirectFromUrl = urlParams.get('redirect');
+
+// Définition de la redirection par défaut si un courseId est présent
+const DEFAULT_REDIRECT_AFTER_REGISTRATION = courseIdFromUrl ? `course.html?id=${courseIdFromUrl}` : 'orientation-form.html';
+
+// Firebase configuration for localhost
+const firebaseConfig = {
+    apiKey: "AIzaSyCwO2PtRkrbmlIs8QOX_71a6NYBR_FhZc8",
+    authDomain: "disciple-maker.firebaseapp.com",
+    projectId: "disciple-maker",
+    storageBucket: "disciple-maker.firebasestorage.app",
+    messagingSenderId: "202105691136",
+    appId: "1:202105691136:web:9e27bb1d909dd89cba4ce5",
+    measurementId: "G-VBCV8SH3S0"
+};
+
+const appId = firebaseConfig.projectId;
+
+// Initialize Firebase
+let app;
+let auth;
+let db;
+
+if (firebaseConfig.projectId && firebaseConfig.apiKey) {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+    console.log("Firebase initialized with manual config.");
+} else {
+    console.error("Firebase config not found. Please provide your config object.");
+}
+
+
+async function handleRegistration(event) {
+    event.preventDefault();
+
+    const formData = {
+        firstName: document.getElementById('firstName').value.trim(),
+        lastName: document.getElementById('lastName').value.trim(),
+        email: document.getElementById('email').value.trim().toLowerCase(),
+        password: document.getElementById('password').value,
+        confirmPassword: document.getElementById('confirmPassword').value,
+        city: document.getElementById('city').value.trim(),
+        country: document.getElementById('country').value,
+        terms: document.getElementById('terms').checked
+    };
+
+    const registerBtn = document.getElementById('registerBtn');
+
+    if (!validateRegistrationForm(formData)) {
+        return;
+    }
+    if (!auth) {
+        showNotification('Firebase not initialized. Check your config.', 'error');
+        return;
+    }
+
+    registerBtn.classList.add('loading');
+    registerBtn.disabled = true;
+
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+        const user = userCredential.user;
+
+        const userProfileRef = doc(db, `artifacts/${appId}/users/${user.uid}/profile`, 'details'); 
+        await setDoc(userProfileRef, {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            email: formData.email,
+            password: formData.password, 
+            city: formData.city,
+            country: formData.country,
+            role: 'student', 
+            registrationDate: new Date().toISOString(),
+            lastLogin: new Date().toISOString(),
+            profileCompleted: true 
+        });
+
+        // Stocker les informations de l'utilisateur dans localStorage
+        localStorage.setItem('userFirstName', formData.firstName);
+        localStorage.setItem('userLastName', formData.lastName);
+        localStorage.setItem('userUID', user.uid);
+        
+        logUserActivity(formData.email, 'registration', 'success', user.uid);
+
+        showNotification('Account created successfully! Redirecting...', 'success');
+
+        setTimeout(() => {
+            window.location.href = redirectFromUrl || DEFAULT_REDIRECT_AFTER_REGISTRATION;
+        }, 3000);
+
+    } catch (error) {
+        console.error('Registration error:', error);
+        let errorMessage = 'Error creating account. Please try again.';
+        if (error.code === 'auth/email-already-in-use') {
+            errorMessage = 'This email is already in use. Please log in or use another email.';
+            markFieldAsError('email');
+        } else if (error.code === 'auth/weak-password') {
+            errorMessage = 'Password too weak. Please choose a stronger one.';
+            markFieldAsError('password');
+        } else if (error.code === 'auth/invalid-api-key') {
+            errorMessage = 'Invalid Firebase API key. Please update your firebaseConfig.';
+        }
+        showNotification(errorMessage, 'error');
+        logUserActivity(formData.email, 'registration', 'failed', error.code);
+    } finally {
+        registerBtn.classList.remove('loading');
+        registerBtn.disabled = false;
+    }
+}
+
+function validateRegistrationForm(formData) {
+    let isValid = true;
+
+    if (!formData.firstName) {
+        showFieldError('firstName', 'First name is required');
+        isValid = false;
+    } else if (formData.firstName.length < 2) {
+        showFieldError('firstName', 'First name must be at least 2 characters');
+        isValid = false;
+    } else {
+        clearFieldError('firstName');
+    }
+
+    if (!formData.lastName) {
+        showFieldError('lastName', 'Last name is required');
+        isValid = false;
+    } else if (formData.lastName.length < 2) {
+        showFieldError('lastName', 'Last name must be at least 2 characters');
+        isValid = false;
+    } else {
+        clearFieldError('lastName');
+    }
+
+    if (!formData.email) {
+        showFieldError('email', 'Email address is required');
+        isValid = false;
+    } else if (!isValidEmail(formData.email)) {
+        showFieldError('email', 'Invalid email format');
+        isValid = false;
+    } else {
+        clearFieldError('email');
+    }
+
+    const passwordValidation = validatePassword(formData.password);
+    if (!passwordValidation.isValid) {
+        showFieldError('password', passwordValidation.message);
+        isValid = false;
+    } else {
+        clearFieldError('password');
+    }
+
+    if (formData.password !== formData.confirmPassword) {
+        showFieldError('confirmPassword', 'Passwords do not match');
+        isValid = false;
+    } else if (formData.confirmPassword) {
+        clearFieldError('confirmPassword');
+    }
+
+    if (!formData.terms) {
+        showNotification('You must accept the terms of service', 'error');
+        isValid = false;
+    }
+
+    return isValid;
+}
+
+function validatePassword(password) {
+    if (!password) {
+        return { isValid: false, message: 'Password is required' };
+    }
+
+    if (password.length < 8) {
+        return { isValid: false, message: 'Password must be at least 8 characters' };
+    }
+
+    if (!/[A-Z]/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one uppercase letter' };
+    }
+
+    if (!/[a-z]/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one lowercase letter' };
+    }
+
+    if (!/\d/.test(password)) {
+        return { isValid: false, message: 'Password must contain at least one number' };
+    }
+
+    return { isValid: true, message: 'Password is valid' };
+}
+
+function calculatePasswordStrength(password) {
+    let score = 0;
+
+    if (password.length >= 8) score += 25;
+    if (/[A-Z]/.test(password)) score += 25;
+    if (/[a-z]/.test(password)) score += 25;
+    if (/\d/.test(password)) score += 25;
+
+    if (password.length >= 12) score += 10;
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) score += 15;
+
+    if (score < 50) return 'weak';
+    if (score < 80) return 'medium';
+    return 'strong';
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function showFieldError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorDiv = document.getElementById(fieldId + 'Error');
+
+    field.classList.add('error');
+    field.classList.remove('success');
+    errorDiv.textContent = message;
+    errorDiv.classList.add('show');
+}
+
+function clearFieldError(fieldId) {
+    const field = document.getElementById(fieldId);
+    const errorDiv = document.getElementById(fieldId + 'Error');
+
+    field.classList.remove('error');
+    field.classList.add('success');
+    errorDiv.classList.remove('show');
+}
+
+function markFieldAsError(fieldId) {
+    const field = document.getElementById(fieldId);
+    field.classList.add('error');
+    field.classList.remove('success');
+}
+
+function togglePassword(fieldId) {
+    const passwordField = document.getElementById(fieldId);
+    const toggleBtn = passwordField.parentNode.querySelector('.password-toggle');
+
+    if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        toggleBtn.textContent = '🙈';
+    } else {
+        passwordField.type = 'password';
+        toggleBtn.textContent = '👁️';
+    }
+}
+
+function showTerms() {
+    showNotification('Terms of service - To be implemented according to your needs', 'info');
+}
+
+function showPrivacy() {
+    showNotification('Privacy policy - To be implemented according to your needs', 'info');
+}
+
+function logUserActivity(email, action, status, userId = null) {
+    const activityLog = {
+        email: email,
+        userId: userId,
+        action: action,
+        status: status,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        ip: 'localhost'
+    };
+
+    console.log('Activity Log:', activityLog);
+}
+
+function showNotification(message, type = 'info') {
+    const existingNotifications = document.querySelectorAll('.notification');
+    existingNotifications.forEach(notif => notif.remove());
+
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    void notification.offsetWidth; 
+
+    setTimeout(() => {
+        notification.classList.add('show');
+    }, 50); 
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300); 
+    }, 5000); 
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordField = document.getElementById('password');
+    const confirmPasswordField = document.getElementById('confirmPassword');
+    const registerForm = document.getElementById('registerForm');
+    const loginLink = document.getElementById('loginLink');
+    const passwordToggleBtn = document.getElementById('passwordToggleBtn');
+    const confirmPasswordToggleBtn = document.getElementById('confirmPasswordToggleBtn');
+    const termsLink = document.getElementById('termsLink');
+    const privacyLink = document.getElementById('privacyLink');
+
+    // Attach event listeners to buttons and form
+    if (registerForm) {
+        registerForm.addEventListener('submit', handleRegistration);
+    }
+    if (loginLink) {
+        loginLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            window.location.href = 'login.html';
+        });
+    }
+    if (passwordToggleBtn) {
+        passwordToggleBtn.addEventListener('click', () => togglePassword('password'));
+    }
+    if (confirmPasswordToggleBtn) {
+        confirmPasswordToggleBtn.addEventListener('click', () => togglePassword('confirmPassword'));
+    }
+    if (termsLink) {
+        termsLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            showTerms();
+        });
+    }
+    if (privacyLink) {
+        privacyLink.addEventListener('click', (event) => {
+            event.preventDefault();
+            showPrivacy();
+        });
+    }
+
+    if (passwordField) {
+        passwordField.addEventListener('input', function() {
+            // Ces fonctions ne sont pas définies dans le code fourni, mais sont mentionnées.
+            // Il faudrait les ajouter pour la validation en temps réel.
+            // updatePasswordStrength(this.value);
+            // updatePasswordRequirements(this.value);
+        });
+    }
+
+    document.querySelectorAll('.form-input').forEach(input => {
+        input.addEventListener('input', function() {
+            if (this.classList.contains('error')) {
+                clearFieldError(this.id);
+            }
+        });
+    });
+});
+// Dans le code JavaScript de register.html
+const loginLink = document.getElementById('loginLink');
+if (loginLink) {
+    // Récupérer les paramètres d'URL actuels
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = urlParams.get('courseId');
+    const redirect = urlParams.get('redirect');
+    
+    // Construire le nouveau lien avec les paramètres
+    const loginUrl = new URL('login.html', window.location.href);
+    if (courseId) loginUrl.searchParams.set('courseId', courseId);
+    if (redirect) loginUrl.searchParams.set('redirect', redirect);
+    
+    loginLink.setAttribute('href', loginUrl.toString());
+}
+        </script>
+</body>
+</html>

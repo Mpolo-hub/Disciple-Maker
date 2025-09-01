@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Catalog - Disciple Maker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Header styles */
+        header {
+            position: sticky;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: white;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .nav-links-desktop {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-link {
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #667eea;
+        }
+        .nav-link.active {
+            font-weight: 600;
+            color: #2563eb;
+        }
+        
+        /* Mobile menu */
+        .hamburger-menu {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 5px;
+        }
+        .hamburger-menu div {
+            width: 25px;
+            height: 3px;
+            background-color: #333;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links-mobile {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+        }
+        .nav-links-mobile a {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        .nav-links-mobile a:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links-desktop, .auth-buttons-desktop {
+                display: none;
+            }
+            .hamburger-menu {
+                display: flex;
+            }
+            .nav-container {
+                padding: 1rem;
+            }
+            .nav-links-mobile.open {
+                display: flex;
+            }
+        }
+
+        /* Course catalog styles */
+        .course-category {
+            transition: all 0.3s ease;
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .course-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .course-card {
+            transition: all 0.3s ease;
+            border-top: 3px solid transparent;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -5px rgba(0, 0, 0, 0.15);
+            border-top: 3px solid #3b82f6;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .progress-value {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #6366f1);
+            border-radius: 3px;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6, #6366f1);
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        /* Filters */
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+        
+        /* Card animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .course-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        /* Badges */
+        .badge {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
+        
+        .badge-popular {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        
+        .badge-new {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .badge-advanced {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+        
+        footer {
+            background: #012450 !important;
+            margin-top: auto;
+        }
+        
+        .footer-section {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        
+        footer .footer-section h3 {
+            color: #FF3300 !important;
+        }
+        
+        footer .footer-section ul li a {
+            color: white !important;
+        }
+        
+        footer .footer-section ul li a:hover {
+            color: #93c5fd !important;
+        }
+        
+        /* Pagination styles */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .pagination-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            margin: 0 0.25rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        
+        .pagination-btn:hover {
+            background-color: #e5e7eb;
+        }
+        
+        .pagination-btn.active {
+            background-color: #3b82f6;
+            color: white;
+        }
+    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header>
+        <div class="nav-container">
+            <div class="text-2xl font-extrabold text-blue-700">Disciple Maker</div>
+            
+            <!-- Desktop navigation menu -->
+            <ul class="nav-links-desktop">
+                <li><a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a></li>
+                <li><a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a></li>
+                <li><a href="courses.html" class="nav-link active text-blue-600 font-medium">Training</a></li>
+                <li><a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a></li>
+                <li><a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a></li>
+                <li><a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a></li>
+                <li><a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a></li>
+                <li><a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a></li>
+            </ul>
+
+            <!-- Desktop authentication buttons -->
+            <div class="auth-buttons-desktop flex space-x-4">
+                <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105">Sign Up</a>
+                <a href="login.html" class="text-blue-600 hover:text-blue-700 font-bold transition-colors duration-300 py-2 px-5">Login</a>
+            </div>
+
+            <!-- Mobile hamburger menu -->
+            <div class="hamburger-menu" onclick="toggleMobileMenu()">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+        </div>
+
+        <!-- Mobile navigation menu (initially hidden) -->
+        <div class="nav-links-mobile">
+            <a href="index.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Home</a>
+            <a href="discover.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Discover Jesus</a>
+            <a href="#" class="nav-link text-blue-600 font-medium">Training</a>
+            <a href="expert.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">IT Experts</a>
+            <a href="#" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Statistics</a>
+            <a href="forum.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Forum & AI</a>
+            <a href="contact.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+            <a href="library.html" class="nav-link text-gray-700 hover:text-blue-600 font-medium">Library</a>
+            <div class="flex flex-col mt-4">
+                <a href="register.html" class="bg-blue-600 text-white font-bold py-2 px-5 rounded-full text-center mb-2">Sign Up</a>
+                <a href="login.html" class="text-blue-600 font-bold text-center py-2">Login</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main content -->
+    <main class="container mx-auto px-4 py-8 flex-1">
+        <!-- Page header -->
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-800 mb-4">Biblical Training Catalog</h1>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">Discover all our courses designed to help you grow in your faith and knowledge of the Scriptures.</p>
+        </div>
+
+        <!-- Search bar and filters -->
+        <div class="bg-white rounded-xl shadow-md p-6 mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="flex-1">
+                    <div class="relative">
+                        <input type="text" placeholder="Search for a course..." class="w-full p-3 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                    </div>
+                </div>
+                
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn active bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">All</button>
+                    <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">Popular</button>
+                    <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">New</button>
+                    <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">Free</button>
+                </div>
+            </div>
+            
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button class="filter-btn active bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium">All Levels</button>
+                <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">Beginner</button>
+                <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">Intermediate</button>
+                <button class="filter-btn bg-gray-100 text-gray-800 px-4 py-2 rounded-full text-sm font-medium">Advanced</button>
+            </div>
+        </div>
+
+        <!-- Course categories -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Category 1 -->
+            <div class="course-category bg-white rounded-xl shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <div class="category-icon mr-4">
+                        <i class="fas fa-bible"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800">Bible Study</h2>
+                </div>
+                <p class="text-gray-600 mb-4">Deepen your knowledge of the Scriptures with our Bible study courses.</p>
+                <a href="#bible-study" class="text-blue-600 font-medium flex items-center">
+                    View courses <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <!-- Category 2 -->
+            <div class="course-category bg-white rounded-xl shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <div class="category-icon mr-4" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <i class="fas fa-hands-helping"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800">Discipleship</h2>
+                </div>
+                <p class="text-gray-600 mb-4">Learn to make disciples and develop leaders in your community.</p>
+                <a href="#discipleship" class="text-blue-600 font-medium flex items-center">
+                    View courses <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+            
+            <!-- Category 3 -->
+            <div class="course-category bg-white rounded-xl shadow-md p-6">
+                <div class="flex items-center mb-4">
+                    <div class="category-icon mr-4" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);">
+                        <i class="fas fa-microphone"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-gray-800">Evangelism</h2>
+                </div>
+                <p class="text-gray-600 mb-4">Discover how to effectively share your faith in the digital world and beyond.</p>
+                <a href="#evangelism" class="text-blue-600 font-medium flex items-center">
+                    View courses <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Course list by category -->
+        
+        <!-- Bible Study Section -->
+        <section id="bible-study" class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+                <h2 class="text-2xl font-bold text-gray-800 mx-4">Bible Study</h2>
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Course 1 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Introduction to Theology" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-new">New</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.9
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Introduction to Theology</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Discover the foundations of Christian theology and its basic concepts.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80" 
+                             alt="In-depth Bible Study" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-popular">Popular</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.8
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">In-depth Bible Study</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Learn Bible study methods for a deeper understanding of the Scriptures.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Church History" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-advanced">Advanced</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.7
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Christian Church History</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Explore the rich and complex history of the Church through the centuries.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Discipleship Section -->
+
+        <section id="discipleship" class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+                <h2 class="text-2xl font-bold text-gray-800 mx-4">Discipleship</h2>
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Course 1 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Discipleship Training" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-popular">Popular</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.9
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Discipleship Training</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Learn the essential principles for making disciples and developing leaders.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Christian Leadership" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-new">New</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.8
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Christian Leadership</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Develop your spiritual leadership skills and learn to serve effectively.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Personalized Mentorship" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-advanced">Advanced</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.9
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Personalized Mentorship</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Benefit from personalized guidance with experienced mentors.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Evangelism Section -->
+        <section id="evangelism" class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+                <h2 class="text-2xl font-bold text-gray-800 mx-4">Evangelism</h2>
+                <div class="h-0.5 bg-gray-300 flex-1"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Course 1 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1533750349088-cd871a92f312?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Digital Evangelism" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-new">New</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.7
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Digital Evangelism</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Learn to share your faith effectively online and through digital media.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Mission and Evangelism" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-popular">Popular</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.8
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Mission and Evangelism</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Equip yourself to share the Gospel and participate in the Great Commission.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="h-40 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1519070994522-88c6b756330e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
+                             alt="Destiny" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="badge badge-advanced">Advanced</span>
+                            <span class="text-yellow-500 text-sm">
+                                <i class="fas fa-star"></i> 4.9
+                            </span>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Destiny</h3>
+                        <p class="text-gray-600 mb-4 text-sm">Discover how to discern God's perfect will and walk in His destiny.</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-blue-800 font-bold">Free</span>
+                            <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                                View Course
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pagination -->
+        <div class="pagination">
+            <button class="pagination-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="pagination-btn active">1</button>
+            <button class="pagination-btn">2</button>
+            <button class="pagination-btn">3</button>
+            <button class="pagination-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 w-full py-12 border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-8">
+                <!-- LEARN Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">LEARN</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Studies</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discipleship Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Christian Leadership</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission & Evangelism</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mentorship</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                    </ul>
+                </div>
+                
+                <!-- TRAINING Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">TRAINING</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Bible Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Theology Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Mission Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Spirituality Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Apologetics Courses</a></li>
+                    </ul>
+                </div>
+                
+                <!-- CERTIFICATION Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">CERTIFICATION</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certifications</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Biblical Diploma</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Leadership Certificate</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pastoral Training</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Certified Evangelist</a></li>
+                    </ul>
+                </div>
+                
+                <!-- RESOURCES Column -->
+            <div class="footer-section">
+                <h3 class="text-lg font-bold text-gray-800 mb-4">RESOURCES</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Resource Center</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Events</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Blog</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Tutorials</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Documentation</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Testimonials</a></li>
+                    </ul>
+                </div>
+                
+                <!-- PLANS Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">PLANS</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Pricing</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Students</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Churches</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">For Organizations</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Free Courses</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Scholarships</a></li>
+                    </ul>
+                </div>
+                
+                <!-- COMMUNITY Column -->
+                <div class="footer-section">
+                    <h3 class="text-lg font-bold text-gray-800 mb-4">COMMUNITY</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Forum</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discussions</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Code of Conduct</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">FAQ</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Discord</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-blue-600 transition-colors">Telegram</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div class="text-2xl font-extrabold text-blue-700 mr-2">Disciple Maker</div>
+                    <span class="text-gray-500 text-sm">© 2023 All rights reserved.</span>
+                </div>
+                
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="#" class="text-gray-500 hover:text-blue-600 transition-colors">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.nav-links-mobile');
+            mobileMenu.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
