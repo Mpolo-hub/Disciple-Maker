@@ -1,0 +1,25 @@
+{
+  "name": "employee-health-backend",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "gateway",
+    "services/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "start:dev": "concurrently \"npm run dev --workspace gateway\" \"npm run dev --workspace services/auth-service\" \"npm run dev --workspace services/profile-service\" \"npm run dev --workspace services/triage-service\" \"npm run dev --workspace services/appointments-service\" \"npm run dev --workspace services/emergency-service\" \"npm run dev --workspace services/admin-service\"",
+    "start:gateway": "npm run dev --workspace gateway",
+    "start:auth": "npm run dev --workspace services/auth-service",
+    "start:profile": "npm run dev --workspace services/profile-service",
+    "start:triage": "npm run dev --workspace services/triage-service",
+    "start:appointments": "npm run dev --workspace services/appointments-service",
+    "start:emergency": "npm run dev --workspace services/emergency-service",
+    "start:admin": "npm run dev --workspace services/admin-service",
+    "test": "npm --workspaces run test",
+    "lint": "npm --workspaces run lint"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}

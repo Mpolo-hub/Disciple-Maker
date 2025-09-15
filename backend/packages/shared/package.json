@@ -1,0 +1,13 @@
+{
+  "name": "@employee-health/shared",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "joi": "^17.11.0",
+    "jsonwebtoken": "^9.0.2",
+    "winston": "^3.10.0",
+    "pg": "^8.11.5"
+  }
+}

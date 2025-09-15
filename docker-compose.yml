@@ -1,0 +1,121 @@
+version: '3.9'
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: health_user
+      POSTGRES_PASSWORD: health_pass
+      POSTGRES_DB: health
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "health_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    build: ./backend/gateway
+    environment:
+      PORT: 8080
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+    ports:
+      - "8080:8080"
+    depends_on:
+      - auth-service
+      - profile-service
+      - triage-service
+      - appointments-service
+      - emergency-service
+      - admin-service
+    volumes:
+      - ./backend/gateway:/app
+    command: ["npm", "run", "dev"]
+
+  auth-service:
+    build: ./backend/services/auth-service
+    environment:
+      PORT: 4001
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend/services/auth-service:/app
+    ports:
+      - "4001:4001"
+
+  profile-service:
+    build: ./backend/services/profile-service
+    environment:
+      PORT: 4002
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend/services/profile-service:/app
+    ports:
+      - "4002:4002"
+
+  triage-service:
+    build: ./backend/services/triage-service
+    environment:
+      PORT: 4003
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend/services/triage-service:/app
+    ports:
+      - "4003:4003"
+
+  appointments-service:
+    build: ./backend/services/appointments-service
+    environment:
+      PORT: 4004
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend/services/appointments-service:/app
+    ports:
+      - "4004:4004"
+
+  emergency-service:
+    build: ./backend/services/emergency-service
+    environment:
+      PORT: 4005
+      DATA_ENCRYPTION_KEY: ${DATA_ENCRYPTION_KEY}
+      DATABASE_URL: ${DATABASE_URL}
+      SMTP_URL: ${SMTP_URL}
+      REDIS_URL: ${REDIS_URL}
+    volumes:
+      - ./backend/services/emergency-service:/app
+    ports:
+      - "4005:4005"
+
+  admin-service:
+    build: ./backend/services/admin-service
+    environment:
+      PORT: 4006
+      DATABASE_URL: ${DATABASE_URL}
+    volumes:
+      - ./backend/services/admin-service:/app
+    ports:
+      - "4006:4006"
+
+  frontend:
+    build: ./frontend
+    environment:
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - gateway
+    volumes:
+      - ./frontend:/app
+    command: ["npm", "run", "dev"]
+
+volumes:
+  pgdata:

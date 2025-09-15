@@ -1,0 +1,42 @@
+export const translations = {
+  fr: {
+    welcome: 'Bienvenue',
+    dashboard: 'Tableau de bord',
+    profile: 'Profil santé',
+    symptomChecker: 'Assistant Symptômes',
+    appointments: 'Rendez-vous',
+    emergency: 'Urgence',
+    admin: 'Administration',
+    settings: 'Paramètres',
+    startAssessment: 'Démarrer une évaluation',
+    scheduleVisit: 'Planifier un rendez-vous',
+    emergencyCall: 'Bouton d\'urgence',
+    latestReports: 'Rapports récents',
+    compliance: 'Conformité',
+    offlineMode: 'Accessible hors-ligne',
+    notifications: 'Notifications',
+    securityNotice: 'Vos données sont chiffrées et protégées',
+    language: 'Langue',
+    theme: 'Thème'
+  },
+  en: {
+    welcome: 'Welcome',
+    dashboard: 'Dashboard',
+    profile: 'Health Profile',
+    symptomChecker: 'Symptom Checker',
+    appointments: 'Appointments',
+    emergency: 'Emergency',
+    admin: 'Administration',
+    settings: 'Settings',
+    startAssessment: 'Start an assessment',
+    scheduleVisit: 'Schedule a visit',
+    emergencyCall: 'Emergency button',
+    latestReports: 'Latest reports',
+    compliance: 'Compliance',
+    offlineMode: 'Offline ready',
+    notifications: 'Notifications',
+    securityNotice: 'Your data is encrypted and protected',
+    language: 'Language',
+    theme: 'Theme'
+  }
+};
