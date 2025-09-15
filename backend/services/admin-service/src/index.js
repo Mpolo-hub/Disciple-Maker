@@ -1,0 +1,23 @@
+const express = require('express');
+const helmet = require('helmet');
+const cors = require('cors');
+const morgan = require('morgan');
+const routes = require('./routes/adminRoutes');
+const { logger } = require('@employee-health/shared');
+
+const app = express();
+app.use(helmet());
+app.use(cors({ origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3000'], credentials: true }));
+app.use(express.json());
+app.use(morgan('combined'));
+
+app.get('/health', (req, res) => res.json({ status: 'ok', service: 'admin-service' }));
+app.use('/', routes);
+
+app.use((err, req, res, next) => {
+  logger.error('Admin service error', { error: err.message });
+  res.status(err.status || 500).json({ message: err.message || 'Internal error' });
+});
+
+const port = process.env.PORT || 4006;
+app.listen(port, () => logger.info(`Admin service listening on ${port}`));

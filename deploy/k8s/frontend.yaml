@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: health-frontend
+  template:
+    metadata:
+      labels:
+        app: health-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: registry.example.com/health/frontend:1.0.0
+          env:
+            - name: NEXT_PUBLIC_API_URL
+              value: https://api.sante-entreprise.example/v1
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-frontend
+spec:
+  selector:
+    app: health-frontend
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: health-frontend
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  rules:
+    - host: app.sante-entreprise.example
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: health-frontend
+                port:
+                  number: 80
+  tls:
+    - hosts:
+        - app.sante-entreprise.example
+      secretName: health-app-tls

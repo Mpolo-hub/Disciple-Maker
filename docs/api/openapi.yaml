@@ -1,0 +1,296 @@
+openapi: 3.0.3
+info:
+  title: Plateforme Santé Employés API
+  version: 1.0.0
+  description: >-
+    API RESTful exposée par le gateway pour les services Auth, Profil, Symptom Checker,
+    Rendez-vous, Urgence et Administration.
+servers:
+  - url: https://api.example.com/v1
+    description: Passerelle de production
+  - url: http://localhost:8080/v1
+    description: Passerelle locale (Docker Compose)
+security:
+  - bearerAuth: []
+  - oauth2:
+      - openid
+      - profile
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://auth.example.com/oauth/authorize
+          tokenUrl: https://auth.example.com/oauth/token
+          scopes:
+            openid: Identité de base
+            profile: Accès au profil utilisateur
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        role:
+          type: string
+          enum: [employee, medical_staff, admin]
+    HealthProfile:
+      type: object
+      properties:
+        id:
+          type: string
+        userId:
+          type: string
+        allergies:
+          type: array
+          items:
+            type: object
+            properties:
+              substance:
+                type: string
+              reaction:
+                type: string
+              severity:
+                type: string
+    SymptomAssessment:
+      type: object
+      properties:
+        id:
+          type: string
+        triageLevel:
+          type: string
+          enum: [self_care, teleconsultation, emergency]
+        recommendations:
+          type: array
+          items:
+            type: string
+paths:
+  /auth/register:
+    post:
+      summary: Créer un compte utilisateur
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                locale:
+                  type: string
+      responses:
+        '201':
+          description: Utilisateur créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /auth/login:
+    post:
+      summary: Authentifier un utilisateur
+      tags: [Auth]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Jetons retournés
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+  /profiles:
+    get:
+      summary: Lister les profils associés à l'utilisateur
+      tags: [Profils]
+      responses:
+        '200':
+          description: Liste de profils
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/HealthProfile'
+    post:
+      summary: Créer ou mettre à jour le profil de santé
+      tags: [Profils]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HealthProfile'
+      responses:
+        '200':
+          description: Profil mis à jour
+  /profiles/{id}:
+    get:
+      summary: Récupérer un profil de santé
+      tags: [Profils]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Profil détaillé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthProfile'
+  /symptom-checker/sessions:
+    post:
+      summary: Démarrer une session d'évaluation
+      tags: [Symptom Checker]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                symptoms:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Session créée
+  /symptom-checker/sessions/{id}/responses:
+    post:
+      summary: Soumettre une réponse à une étape
+      tags: [Symptom Checker]
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                stepId:
+                  type: string
+                answer:
+                  type: object
+      responses:
+        '200':
+          description: Recommandations mises à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SymptomAssessment'
+  /appointments:
+    get:
+      summary: Rechercher les rendez-vous
+      tags: [Rendez-vous]
+      parameters:
+        - in: query
+          name: status
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Liste des rendez-vous
+    post:
+      summary: Créer un rendez-vous
+      tags: [Rendez-vous]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [scheduledAt, practitionerId]
+              properties:
+                scheduledAt:
+                  type: string
+                  format: date-time
+                practitionerId:
+                  type: string
+                mode:
+                  type: string
+                  enum: [onsite, teleconsultation]
+      responses:
+        '201':
+          description: Rendez-vous créé
+  /emergency/alerts:
+    post:
+      summary: Déclencher une alerte d'urgence
+      tags: [Urgence]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                location:
+                  type: object
+                  properties:
+                    lat:
+                      type: number
+                    lng:
+                      type: number
+                medicalSnapshot:
+                  type: object
+      responses:
+        '202':
+          description: Alerte prise en compte
+  /admin/metrics:
+    get:
+      summary: Obtenir les métriques anonymisées
+      tags: [Administration]
+      parameters:
+        - in: query
+          name: since
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Données agrégées
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  teleconsultations:
+                    type: integer
+                  incidents:
+                    type: integer
